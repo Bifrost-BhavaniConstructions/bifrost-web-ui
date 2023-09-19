@@ -1,0 +1,31 @@
+.open-nav{
+    animation: openNav 0.5s ease-in;
+    animation-fill-mode: forwards;
+}
+
+.close-nav{
+    animation: closeNav 0.5s ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes openNav {
+    0%{
+        width: 0;
+        display: none;
+    }
+    100%{
+        width: 100%;
+        display: flex;
+    }
+}
+
+@keyframes closeNav {
+    100%{
+        width: 0;
+        display: none;
+    }
+    0%{
+        width: 100%;
+        display: flex;
+    }
+}

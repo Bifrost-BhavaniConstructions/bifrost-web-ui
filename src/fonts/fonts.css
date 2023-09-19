@@ -1,0 +1,30 @@
+@font-face {
+    font-family: AirbnbCereal;
+    font-style: normal;
+    font-weight: 300;
+    src: url('./AirbnbCereal_W_Lt.otf');
+}
+@font-face {
+    font-family: AirbnbCereal;
+    font-style: normal;
+    font-weight: 400;
+    src: url('./AirbnbCereal_W_Bk.otf');
+}
+@font-face {
+    font-family: AirbnbCereal;
+    font-style: normal;
+    font-weight: 500;
+    src: url('./AirbnbCereal_W_Md.otf');
+}
+@font-face {
+    font-family: AirbnbCereal;
+    font-style: normal;
+    font-weight: 700;
+    src: url('./AirbnbCereal_W_XBd.otf');
+}
+@font-face {
+    font-family: AirbnbCereal;
+    font-style: normal;
+    font-weight: 900;
+    src: url('./AirbnbCereal_W_Blk.otf');
+}
