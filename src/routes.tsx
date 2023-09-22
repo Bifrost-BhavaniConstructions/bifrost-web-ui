@@ -4,7 +4,7 @@ import SiteManagementHome from "./pages/SiteManagement";
 import React from "react";
 import PR from "./pages/SiteManagement/PR";
 
- const router = createBrowserRouter([
+ export const router = createBrowserRouter([
     {
         path: "/login-redirect",
         element: <LoginRedirect />,

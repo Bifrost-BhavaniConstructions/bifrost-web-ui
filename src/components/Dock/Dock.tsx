@@ -3,6 +3,7 @@ import './Dock.css';
 import {useStoreState} from "../../store/hooks";
 import {Bars3Icon} from "@heroicons/react/24/solid";
 import SideNav from "../SideNav";
+import httpClient from "../../config/AxiosInterceptors";
 
 interface SiteManagementNavBarProps {
 
@@ -21,7 +22,11 @@ const Dock: React.FC<SiteManagementNavBarProps> = () => {
     // Functions
 
     // Hook Functions
-
+    React.useEffect(() => {
+        if(navOpened){
+            httpClient.get('/auth/pulse')
+        }
+    },[navOpened])
 
     return (
         <>

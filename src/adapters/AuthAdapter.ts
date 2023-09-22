@@ -1,11 +1,11 @@
-import axios, {AxiosError} from "axios";
+import {AxiosError} from "axios";
 import {API} from "../constants";
 import httpClient from "../config/AxiosInterceptors";
 import {User} from "../types/User";
 
 export const loginUsingToken = async (token: string) => {
   try{
-    const data = await axios.get(`${API}/auth/login-with-token`, {
+    const data = await httpClient.get(`${API}/auth/login-with-token`, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -13,7 +13,7 @@ export const loginUsingToken = async (token: string) => {
     return data.data;
   }catch (e: any){
     const axiosError = e as AxiosError;
-    console.log(axiosError)
+    console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 }

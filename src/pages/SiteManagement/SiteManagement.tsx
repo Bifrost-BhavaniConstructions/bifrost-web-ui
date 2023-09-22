@@ -29,7 +29,7 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
             loginUserWithToken().then((user) => {
                 setUser(user);
                 setDataFetched(true);
-            });
+            }).catch(() => {})
         }
         if(dataFetched && !user){
             navigate('/login');
