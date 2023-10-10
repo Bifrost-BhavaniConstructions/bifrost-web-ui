@@ -1,6 +1,7 @@
 import FunctionHallManagement from "../index";
-import People from "../People";
+import People from "../../common/People";
 import React from "react";
+import { PlatformEnum } from "../../../enums/PlatformEnum";
 
 const FunctionHallManagementRoutes = {
   path: "/function-hall-management/",
@@ -8,7 +9,7 @@ const FunctionHallManagementRoutes = {
   children: [
     {
       path: "people",
-      element: <People />,
+      element: <People platform={PlatformEnum.FUNCTION_HALL} />,
     },
   ],
 };

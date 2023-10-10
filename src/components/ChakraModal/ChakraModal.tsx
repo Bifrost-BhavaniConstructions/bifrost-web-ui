@@ -79,7 +79,9 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
               variant="solid"
               bg="brand.low-bg"
               className="font-normal text-[12px]"
-              onClick={action()}
+              onClick={() => {
+                action();
+              }}
             >
               {actionText}
             </Button>

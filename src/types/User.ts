@@ -3,6 +3,8 @@ import BankData from "./UserSubTypes/BankData";
 import SupervisorData from "./UserSubTypes/SupervisorData";
 import DriverData from "./UserSubTypes/DriverData";
 import { PlatformEnum } from "../enums/PlatformEnum";
+import ManagerData from "./UserSubTypes/ManagerData";
+import SecurityGuardSecondaryData from "./UserSubTypes/SecurityGuardSecondaryData";
 
 export interface User {
   username: string;
@@ -18,4 +20,6 @@ export interface User {
   dob: string;
   supervisorData?: SupervisorData;
   driverData?: DriverData;
+  managerData?: ManagerData;
+  securityGuardSecondaryData?: SecurityGuardSecondaryData;
 }

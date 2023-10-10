@@ -7,6 +7,7 @@ const colors = {
     "main-bg": "#303041",
     "low-bg": "#3D3A50",
     accent: "#0EA2F6",
+    500: "#0EA2F6",
     "low-accent": "#F4FCFE",
     "text-color": "#F4FCFE",
   },

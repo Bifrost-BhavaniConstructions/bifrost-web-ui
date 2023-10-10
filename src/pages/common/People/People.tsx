@@ -2,27 +2,32 @@ import React from "react";
 import "./People.css";
 import TailwindButton from "../../../components/TailwindButton";
 import Avatar from "react-avatar";
-import { useStoreState } from "../../../store/hooks";
+import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
-import AddPeopleModal from "./AddPeopleModal";
+import AddPeopleModal from "../../../components/AddPeopleModal";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
 
-interface PeopleProps {}
+interface PeopleProps {
+  platform: PlatformEnum;
+}
 
-const People: React.FC<PeopleProps> = () => {
+const People: React.FC<PeopleProps> = ({ platform }) => {
   // Objects
   const users = useStoreState((state) => state.peopleStore.users).filter(
-    (user) => user.platforms.includes(PlatformEnum.FUNCTION_HALL),
+    (user) => user.platforms.includes(platform),
+  );
+  const fetchUsers = useStoreActions(
+    (actions) => actions.peopleStore.fetchUsers,
   );
 
   // Variables
-  const userRoleData = [
+  const functionHallManagementUserRoleData = [
     {
       role: UserRoleEnum.SUPER_ADMIN,
       name: "Super Admins",
     },
     {
-      role: UserRoleEnum.SUPER_ADMIN,
+      role: UserRoleEnum.ADMIN,
       name: "Admins",
     },
     {
@@ -35,6 +40,29 @@ const People: React.FC<PeopleProps> = () => {
     },
   ];
 
+  const siteManagementUserRoleData = [
+    {
+      role: UserRoleEnum.SUPER_ADMIN,
+      name: "Super Admins",
+    },
+    {
+      role: UserRoleEnum.SUPER_ADMIN,
+      name: "Admins",
+    },
+    {
+      role: UserRoleEnum.SUPERVISOR,
+      name: "Supervisors",
+    },
+    {
+      role: UserRoleEnum.DRIVER,
+      name: "Drivers",
+    },
+    {
+      role: UserRoleEnum.SUPER_ADMIN,
+      name: "Vendors",
+    },
+  ];
+
   // State Variables - Hooks
   const [addRoleUser, setAddRoleUser] = React.useState<
     UserRoleEnum | undefined
@@ -43,13 +71,19 @@ const People: React.FC<PeopleProps> = () => {
   // Functions
 
   // Hook Functions
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <div className="h-[calc(100%-90px)] overflow-y-auto overflow-x-hidden">
       <div className="flex flex-col px-[24px] py-[16px]">
         <div className="flex font-airbnb font-black text-[24px]">People</div>
       </div>
-      {userRoleData.map((userRole) => (
+      {(platform === PlatformEnum.FUNCTION_HALL
+        ? functionHallManagementUserRoleData
+        : siteManagementUserRoleData
+      ).map((userRole) => (
         <div key={userRole.role} className="flex flex-col px-[24px] py-[16px]">
           <div className="flex font-airbnb font-bold text-[18px] justify-between">
             <div className="flex justify-center items-center">
@@ -70,7 +104,7 @@ const People: React.FC<PeopleProps> = () => {
               .map((user) => (
                 <div
                   key={user.username}
-                  className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] bg-low-bg rounded-[12px] justify-center items-center"
+                  className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] bg-low-bg rounded-[12px] justify-center items-center mr-[10px]"
                 >
                   <div className="flex flex-[3] justify-center items-center">
                     <Avatar name={user.name} round size="72" />
@@ -93,6 +127,7 @@ const People: React.FC<PeopleProps> = () => {
             setAddRoleUser(undefined);
           }}
           open={addRoleUser !== undefined}
+          platform={platform}
         />
       </div>
     </div>

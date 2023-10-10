@@ -1,6 +1,9 @@
-import { action } from "easy-peasy";
+import { action, thunk } from "easy-peasy";
 import { PeopleStoreModel } from "./peopleStoreModel";
 import { UserRoleEnum } from "../../enums/UserRoleEnum";
+import { PlatformEnum } from "../../enums/PlatformEnum";
+import { getAllUsers } from "../../adapters/PeopleAdapter";
+import { toast } from "react-toastify";
 
 const PeopleStore: PeopleStoreModel = {
   users: [
@@ -21,7 +24,7 @@ const PeopleStore: PeopleStoreModel = {
       pan: "ABCD12345E",
       nickname: "Johnny",
       dob: "1990-01-01",
-      platforms: [],
+      platforms: [PlatformEnum.FUNCTION_HALL],
       supervisorData: {
         companyMobileNumber: "",
         payOT: 1,
@@ -40,6 +43,16 @@ const PeopleStore: PeopleStoreModel = {
   ],
   setUsers: action((state, payload) => {
     state.users = payload;
+  }),
+  fetchUsers: thunk((actions) => {
+    getAllUsers()
+      .then((res) => {
+        actions.setUsers(res);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast("Error Fetching People", { type: "error" });
+      });
   }),
 };
 

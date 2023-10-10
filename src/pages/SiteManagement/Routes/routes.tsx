@@ -1,7 +1,8 @@
 import SiteManagementHome from "../index";
 import PR from "../PR";
-import People from "../People";
+import People from "../../common/People";
 import React from "react";
+import { PlatformEnum } from "../../../enums/PlatformEnum";
 
 const SiteManagementRoutes = {
   path: "/site-management/",
@@ -13,7 +14,7 @@ const SiteManagementRoutes = {
     },
     {
       path: "people",
-      element: <People />,
+      element: <People platform={PlatformEnum.SITE} />,
     },
   ],
 };
