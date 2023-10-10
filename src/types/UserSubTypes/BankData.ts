@@ -1,4 +1,3 @@
-
 interface BankData {
   accountNo: string;
   ifsc: string;

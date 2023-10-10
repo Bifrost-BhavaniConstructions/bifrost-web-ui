@@ -1,10 +1,10 @@
 .open-nav{
-    animation: openNav 0.5s ease-in;
+    animation: openNav 0.3s ease-in;
     animation-fill-mode: forwards;
 }
 
 .close-nav{
-    animation: closeNav 0.5s ease-in;
+    animation: closeNav 0.3s ease-out;
     animation-fill-mode: forwards;
 }
 

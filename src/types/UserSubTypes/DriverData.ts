@@ -1,5 +1,3 @@
-
-
 interface DriverAllowanceData {
   dayShift: number;
   nightShift: number;

@@ -1,3 +1,3 @@
-import SiteManagement from './SiteManagement';
+import SiteManagement from "./SiteManagement";
 
 export default SiteManagement;

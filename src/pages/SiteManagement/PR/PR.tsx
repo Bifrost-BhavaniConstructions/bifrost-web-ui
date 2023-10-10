@@ -1,28 +1,24 @@
-import React from 'react';
-import './PR.css';
+import React from "react";
+import "./PR.css";
 
-interface PRProps {
-
-}
+interface PRProps {}
 
 const PR: React.FC<PRProps> = () => {
+  // Objects
 
-    // Objects
+  // Variables
 
-    // Variables
+  // State Variables - Hooks
 
-    // State Variables - Hooks
+  // Functions
 
-    // Functions
+  // Hook Functions
 
-    // Hook Functions
-
-
-    return (
-        <>
-            <span style={{color: 'black'}}>Hi</span>
-        </>
-    )
+  return (
+    <>
+      <span style={{ color: "black" }}>Hi</span>
+    </>
+  );
 };
 
 export default PR;

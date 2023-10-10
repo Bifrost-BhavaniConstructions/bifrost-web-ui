@@ -1,13 +1,13 @@
-import React from 'react';
-import {StoreProvider} from "easy-peasy";
+import React from "react";
+import { StoreProvider } from "easy-peasy";
 import store from "./store";
 import BifrostRouter from "./routes";
 
 function App() {
   return (
-      <StoreProvider store={store}>
-          <BifrostRouter/>
-      </StoreProvider>
+    <StoreProvider store={store}>
+      <BifrostRouter />
+    </StoreProvider>
   );
 }
 

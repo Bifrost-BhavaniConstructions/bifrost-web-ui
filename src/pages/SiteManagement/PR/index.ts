@@ -1,3 +1,3 @@
-import PR from './PR';
+import PR from "./PR";
 
 export default PR;

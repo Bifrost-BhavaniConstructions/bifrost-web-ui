@@ -1,19 +1,21 @@
-import {UserRoleEnum} from "../enums/UserRoleEnum";
+import { UserRoleEnum } from "../enums/UserRoleEnum";
 import BankData from "./UserSubTypes/BankData";
 import SupervisorData from "./UserSubTypes/SupervisorData";
 import DriverData from "./UserSubTypes/DriverData";
+import { PlatformEnum } from "../enums/PlatformEnum";
 
 export interface User {
-    username: string;
-    password?: string;
-    role: UserRoleEnum;
-    name: string;
-    personalMobileNumber: string;
-    bankAccountPersonal: BankData;
-    aadhaar: string;
-    pan: string;
-    nickname: string;
-    dob: string;
-    supervisorData?: SupervisorData;
-    driverData?: DriverData;
+  username: string;
+  password?: string;
+  role: UserRoleEnum;
+  platforms: PlatformEnum[];
+  name: string;
+  personalMobileNumber: string;
+  bankAccountPersonal: BankData;
+  aadhaar: string;
+  pan: string;
+  nickname: string;
+  dob: string;
+  supervisorData?: SupervisorData;
+  driverData?: DriverData;
 }
