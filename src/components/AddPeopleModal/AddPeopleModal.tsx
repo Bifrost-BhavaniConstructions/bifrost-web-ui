@@ -18,12 +18,16 @@ interface AddPeopleModalProps {
   open: boolean;
   roleToAdd: UserRoleEnum;
   platform: PlatformEnum;
+  isEdit: boolean;
+  editUser?: User;
 }
 
 const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
   open,
   closeCallback,
   roleToAdd,
+  isEdit,
+  editUser,
 }) => {
   // Objects
   const emptyUser: User = {
@@ -90,7 +94,6 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
 
   // Functions
   const createUser = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
       driverData,
       managerData,
@@ -131,6 +134,47 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
     });
   };
 
+  const updateUser = () => {
+    const {
+      driverData,
+      managerData,
+      supervisorData,
+      securityGuardSecondaryData,
+      ...basicData
+    } = user;
+    console.log(basicData);
+    let data: User;
+    switch (roleToAdd) {
+      case UserRoleEnum.SUPER_ADMIN:
+        data = basicData;
+        break;
+      case UserRoleEnum.ADMIN:
+        data = basicData;
+        break;
+      case UserRoleEnum.SUPERVISOR:
+        data = { ...basicData, supervisorData };
+        break;
+      case UserRoleEnum.DRIVER:
+        data = { ...basicData, driverData };
+        break;
+      case UserRoleEnum.FH_MANAGER:
+        data = { ...basicData, managerData };
+        break;
+      case UserRoleEnum.FH_SECURITY:
+        data = { ...basicData, securityGuardSecondaryData };
+        break;
+      default:
+        data = basicData;
+    }
+    httpClient.put("/users/", data).then(() => {
+      fetchUsers();
+      toast(`User updated`, {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+      closeCallback();
+    });
+  };
+
   // Hook Functions
   React.useEffect(() => {
     let platforms: PlatformEnum[];
@@ -159,13 +203,23 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
     setUser({ ...user, role: roleToAdd, platforms: platforms });
   }, [roleToAdd]);
 
+  React.useEffect(() => {
+    if (isEdit && editUser) {
+      console.log(editUser);
+      setUser(editUser!);
+    }
+  }, [isEdit]);
+
   return (
     <ChakraModal
-      closeCallback={closeCallback}
+      closeCallback={() => {
+        setUser(emptyUser);
+        closeCallback();
+      }}
       open={open}
-      title="Add User"
+      title={isEdit ? "Edit User" : "Add User"}
       action={() => {
-        createUser();
+        isEdit ? updateUser() : createUser();
       }}
       actionText={"Submit"}
     >

@@ -7,6 +7,7 @@ import ManagerData from "./UserSubTypes/ManagerData";
 import SecurityGuardSecondaryData from "./UserSubTypes/SecurityGuardSecondaryData";
 
 export interface User {
+  _id?: string;
   username: string;
   password?: string;
   role: UserRoleEnum;

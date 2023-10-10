@@ -6,6 +6,7 @@ import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import AddPeopleModal from "../../../components/AddPeopleModal";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
+import { User } from "../../../types/User";
 
 interface PeopleProps {
   platform: PlatformEnum;
@@ -67,6 +68,7 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
   const [addRoleUser, setAddRoleUser] = React.useState<
     UserRoleEnum | undefined
   >();
+  const [editUser, setEditUser] = React.useState<User | undefined>();
 
   // Functions
 
@@ -104,6 +106,10 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
               .map((user) => (
                 <div
                   key={user.username}
+                  onClick={() => {
+                    setAddRoleUser(userRole.role);
+                    setEditUser(user);
+                  }}
                   className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] bg-low-bg rounded-[12px] justify-center items-center mr-[10px]"
                 >
                   <div className="flex flex-[3] justify-center items-center">
@@ -125,9 +131,12 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
           roleToAdd={addRoleUser!}
           closeCallback={() => {
             setAddRoleUser(undefined);
+            setEditUser(undefined);
           }}
-          open={addRoleUser !== undefined}
+          open={addRoleUser !== undefined || editUser !== undefined}
           platform={platform}
+          isEdit={editUser !== undefined}
+          editUser={editUser}
         />
       </div>
     </div>
