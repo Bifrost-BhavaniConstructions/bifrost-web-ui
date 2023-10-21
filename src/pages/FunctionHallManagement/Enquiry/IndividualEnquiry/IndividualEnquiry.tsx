@@ -200,21 +200,6 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
           >
             Check In
           </div>
-          <AddEnquiryModal
-            closeCallback={() => {
-              setAddEstimate(false);
-            }}
-            open={addEstimate}
-            addEstimate={addEstimate}
-            enquiryId={enquiry._id}
-          />
-          <AcceptBookingModal
-            closeCallback={() => {
-              setAcceptBooking(false);
-            }}
-            open={acceptBooking}
-            enquiryId={enquiry._id}
-          />
           <AcceptPaymentModal
             closeCallback={() => {
               setAcceptPayment(false);
@@ -228,6 +213,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
             }}
             open={checkIn}
             enquiryId={enquiry._id}
+            functionHall={enquiry.functionHall}
           />
         </div>
       )}

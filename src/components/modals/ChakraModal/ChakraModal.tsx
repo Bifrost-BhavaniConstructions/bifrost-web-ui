@@ -70,7 +70,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
         <ModalContent bg="brand.main-bg">
           <ModalHeader className="font-bold text-[16px]">{title}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody minH="300px">{children}</ModalBody>
+          <ModalBody minH="400px">{children}</ModalBody>
           <ModalFooter>
             <Button
               variant="ghost"

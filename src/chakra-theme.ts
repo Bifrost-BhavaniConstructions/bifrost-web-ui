@@ -1,5 +1,6 @@
 // 1. Import the extendTheme function
 import { extendTheme } from "@chakra-ui/react";
+import { MultiSelectTheme } from "chakra-multiselect";
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -23,6 +24,8 @@ const config = {
   useSystemColorMode: false,
 };
 
-const theme = extendTheme({ colors, config, fonts });
+const components = { MultiSelect: MultiSelectTheme };
+
+const theme = extendTheme({ colors, config, fonts, components });
 
 export default theme;

@@ -26,11 +26,11 @@ const TabSelect: React.FC<TabSelectProps> = ({
 
   return (
     <div className="flex w-full p-[8px]">
-      <div className="flex w-full bg-low-bg rounded-[8px] p-[8px]">
+      <div className="flex w-full bg-low-bg rounded-[8px] flex-wrap p-[8px]">
         {options.map((option, index) => (
           <div
             key={option.text}
-            className={`flex flex-1 justify-center py-[8px] rounded-[4px] ${
+            className={`flex justify-center py-[8px] rounded-[4px] w-[50%] ${
               tabIndex === index ? "bg-main-bg" : "bg-low-bg"
             }`}
             onClick={() => {
