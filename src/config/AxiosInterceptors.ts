@@ -8,7 +8,6 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use(function (config) {
   const token = localStorage.getItem("token");
-  console.log(config.headers.Authorization);
   if (
     config.headers.Authorization === undefined ||
     config.headers.Authorization === ""
@@ -40,7 +39,6 @@ function createAxiosResponseInterceptor() {
           refreshToken: localStorage.getItem("refreshToken"),
         })
         .then((response) => {
-          console.log("hiiii");
           localStorage.getItem("refreshToken");
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("refreshToken", response.data.refreshToken);

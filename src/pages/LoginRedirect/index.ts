@@ -1,3 +1,3 @@
-import LoginRedirect from './LoginRedirect';
+import LoginRedirect from "./LoginRedirect";
 
 export default LoginRedirect;

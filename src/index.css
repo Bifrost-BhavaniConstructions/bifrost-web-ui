@@ -22,3 +22,70 @@ body{
     height: 100%;
     overflow: hidden;
 }
+
+/*FC*/
+
+.fc{
+    width: 100% !important;
+}
+
+.fc-view-harness{
+    width: 100% !important;
+}
+
+.fc-toolbar-chunk{
+    justify-content: center;
+    font-size: 16px !important;
+}
+.fc-toolbar-title{
+    justify-content: center;
+    font-size: 16px !important;
+}
+
+.fc-button-primary{
+    background-color: theme('colors.low-bg') !important;
+}
+
+.fc-theme-standard td{
+    border: 1px solid theme('colors.low-bg') !important;
+}
+.fc-theme-standard .fc-scrollgrid{
+    border: 1px solid theme('colors.low-bg') !important;
+}
+
+.fc-theme-standard td, .fc-theme-standard th{
+    border: 1px solid theme('colors.low-bg') !important;
+}
+
+.fc-icon-chevron-right{
+    font-size: 16px !important;
+}
+.fc-icon-chevron-left{
+    font-size: 16px !important;
+}
+
+.fc-today-button{
+    font-size: 12px !important;
+}
+
+.fc-next-button{
+    padding: 4px 10px !important;
+}
+.fc-prev-button{
+    padding: 4px 10px !important;
+}
+
+.fc .fc-toolbar{
+    justify-content: space-evenly !important;
+}
+.fc .fc-toolbar.fc-header-toolbar{
+    margin-bottom: 8px !important;
+}
+
+.fc-popover{
+    background-color: theme('colors.low-bg') !important;;
+}
+
+.fc-daygrid-day-number{
+    flex-grow: 1 !important;
+}

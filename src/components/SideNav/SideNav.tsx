@@ -58,6 +58,14 @@ const SideNav: React.FC<SideNavProps> = ({ clicked, setClicked, platform }) => {
       url: "/function-hall-management/",
     },
     {
+      label: "Function Halls",
+      url: "/function-hall-management/function-hall",
+    },
+    {
+      label: "Enquiry",
+      url: "/function-hall-management/queries",
+    },
+    {
       label: "Cash Accounts",
       url: "/function-hall-management/cash-account",
     },
@@ -88,7 +96,7 @@ const SideNav: React.FC<SideNavProps> = ({ clicked, setClicked, platform }) => {
     <div
       className={
         clicked
-          ? "absolute bg-main-bg right-0 top-0 overflow-x-hidden p-2 flex-col h-[100%] open-nav"
+          ? "absolute bg-main-bg right-0 top-0 overflow-x-hidden p-2 flex-col h-[100%] open-nav z-40"
           : "absolute bg-main-bg right-0 top-0 h-[100%] overflow-x-hidden hidden p-2 flex-col close-nav"
       }
     >

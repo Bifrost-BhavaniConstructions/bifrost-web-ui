@@ -2,16 +2,16 @@ import React from "react";
 import "./AddPeopleModal.css";
 import { Checkbox, CheckboxGroup, Stack } from "@chakra-ui/react";
 import ChakraModal from "../ChakraModal";
-import LabelledInput from "../LabelledFormInputs/LabelledInput";
-import { User } from "../../types/User";
-import { UserRoleEnum } from "../../enums/UserRoleEnum";
+import LabelledInput from "../../LabelledFormInputs/LabelledInput";
+import { User } from "../../../types/User";
+import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import {
   getPlatformEnumFromString,
   PlatformEnum,
-} from "../../enums/PlatformEnum";
-import httpClient from "../../config/AxiosInterceptors";
+} from "../../../enums/PlatformEnum";
+import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
-import { useStoreActions } from "../../store/hooks";
+import { useStoreActions } from "../../../store/hooks";
 
 interface AddPeopleModalProps {
   closeCallback: Function;

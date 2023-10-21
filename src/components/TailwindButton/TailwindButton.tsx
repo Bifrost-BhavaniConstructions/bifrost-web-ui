@@ -2,7 +2,7 @@ import React from "react";
 import "./TailwindButton.css";
 
 interface TailwindButtonProps {
-  text: string;
+  text: string | React.ReactNode;
   onClick: Function;
 }
 
@@ -22,7 +22,9 @@ const TailwindButton: React.FC<TailwindButtonProps> = ({ onClick, text }) => {
       onClick={() => {
         onClick();
       }}
-      className="flex px-[12px] py-[6px] rounded-[3px] text-[14px] font-airbnb font-normal bg-low-bg"
+      className={`flex px-[12px] ${
+        text instanceof String ? "py-[6px]" : "py-[12px]"
+      } rounded-[3px] text-[14px] font-airbnb font-normal bg-low-bg`}
     >
       {text}
     </div>

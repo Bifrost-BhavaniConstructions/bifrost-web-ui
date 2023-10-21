@@ -4,7 +4,7 @@ import TailwindButton from "../../../components/TailwindButton";
 import Avatar from "react-avatar";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
-import AddPeopleModal from "../../../components/AddPeopleModal";
+import AddPeopleModal from "../../../components/modals/AddPeopleModal";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
 import { User } from "../../../types/User";
 
@@ -16,9 +16,6 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
   // Objects
   const users = useStoreState((state) => state.peopleStore.users).filter(
     (user) => user.platforms.includes(platform),
-  );
-  const fetchUsers = useStoreActions(
-    (actions) => actions.peopleStore.fetchUsers,
   );
 
   // Variables
@@ -73,10 +70,6 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
   // Functions
 
   // Hook Functions
-  React.useEffect(() => {
-    fetchUsers();
-  }, []);
-
   return (
     <div className="h-[calc(100%-90px)] overflow-y-auto overflow-x-hidden">
       <div className="flex flex-col px-[24px] py-[16px]">

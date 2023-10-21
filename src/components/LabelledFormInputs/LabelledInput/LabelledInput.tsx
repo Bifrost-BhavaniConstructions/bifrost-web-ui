@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./LabelledInput.css";
 import {
   Input,
   InputGroup,
   InputLeftAddon,
   InputProps,
+  InputRightAddon,
 } from "@chakra-ui/react";
 
 interface LabelledInputProps {
@@ -13,6 +14,7 @@ interface LabelledInputProps {
   setValue: Function;
   inputProps?: InputProps;
   inputLeftAddon?: string;
+  inputRightAddon?: string;
 }
 
 const LabelledInput: React.FC<LabelledInputProps> = ({
@@ -21,6 +23,7 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
   name,
   inputProps,
   inputLeftAddon,
+  inputRightAddon,
 }) => {
   // Objects
 
@@ -38,12 +41,13 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
       <InputGroup>
         {inputLeftAddon && <InputLeftAddon children={inputLeftAddon} />}
         <Input
-          value={value}
+          value={inputProps?.type === "number" && value === 0 ? "" : value}
           onChange={(e) => setValue(e.target.value)}
           variant="filled"
-          placeholder={"Enter " + name}
+          placeholder={inputProps?.isDisabled ? "" : "Enter " + name}
           {...inputProps}
         />
+        {inputRightAddon && <InputRightAddon children={inputRightAddon} />}
       </InputGroup>
     </div>
   );

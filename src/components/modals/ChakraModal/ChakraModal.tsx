@@ -11,6 +11,7 @@ import {
   ModalCloseButton,
   Button,
   useDisclosure,
+  ModalProps,
 } from "@chakra-ui/react";
 
 interface ChakraModalProps {
@@ -18,8 +19,9 @@ interface ChakraModalProps {
   closeCallback: Function;
   children: React.ReactNode;
   title: string;
-  actionText: string;
+  actionText?: string;
   action: Function;
+  modalProps?: ModalProps;
 }
 
 const ChakraModal: React.FC<ChakraModalProps> = ({
@@ -29,6 +31,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
   title,
   action,
   actionText,
+  modalProps,
 }) => {
   // Objects
 
@@ -61,6 +64,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
         isOpen={isOpen}
         scrollBehavior={"inside"}
         onClose={closeModal}
+        {...modalProps}
       >
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) " />
         <ModalContent bg="brand.main-bg">
@@ -75,16 +79,18 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
             >
               Close
             </Button>
-            <Button
-              variant="solid"
-              bg="brand.low-bg"
-              className="font-normal text-[12px]"
-              onClick={() => {
-                action();
-              }}
-            >
-              {actionText}
-            </Button>
+            {actionText && (
+              <Button
+                variant="solid"
+                bg="brand.low-bg"
+                className="font-normal text-[12px]"
+                onClick={() => {
+                  action();
+                }}
+              >
+                {actionText}
+              </Button>
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

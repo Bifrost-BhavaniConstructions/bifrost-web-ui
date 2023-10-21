@@ -18,6 +18,12 @@ const FunctionHallManagement: React.FC<SiteManagementHomeProps> = () => {
   const { setUser, setDataFetched } = useStoreActions(
     (actions) => actions.userStore,
   );
+  const { fetchEnquiries, fetchFunctionHalls, fetchEnquiryTypes } =
+    useStoreActions((actions) => actions.functionHallStore);
+
+  const fetchUsers = useStoreActions(
+    (actions) => actions.peopleStore.fetchUsers,
+  );
   const navigate = useNavigate();
 
   // Functions
@@ -30,6 +36,10 @@ const FunctionHallManagement: React.FC<SiteManagementHomeProps> = () => {
         .then((user) => {
           setUser(user);
           setDataFetched(true);
+          fetchEnquiries();
+          fetchFunctionHalls();
+          fetchUsers();
+          fetchEnquiryTypes();
         })
         .catch(() => {});
     }

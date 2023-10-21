@@ -1,3 +1,3 @@
-import TailwindButton from './TailwindButton';
+import TailwindButton from "./TailwindButton";
 
 export default TailwindButton;
