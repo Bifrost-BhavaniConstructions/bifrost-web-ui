@@ -8,6 +8,7 @@ interface EstimateFieldProps {
   isRight: boolean;
   isFullWidth?: boolean;
   fontSize?: number;
+  subtitle?: string;
 }
 
 const EstimateField: React.FC<EstimateFieldProps> = ({
@@ -17,6 +18,7 @@ const EstimateField: React.FC<EstimateFieldProps> = ({
   isRight,
   isFullWidth,
   fontSize = 12,
+  subtitle,
 }) => {
   // Objects
 
@@ -32,11 +34,14 @@ const EstimateField: React.FC<EstimateFieldProps> = ({
     <div
       className={`flex flex-col mt-[4px] ${
         isFullWidth ? "w-full" : "w-[50%]"
-      } ${isRight && "items-end"}`}
+      } ${isRight && "text-right items-end"}`}
     >
       <div className={`font-light text-[${fontSize}px] opacity-70`}>
         {title}
       </div>
+      {subtitle && (
+        <div className={`font-light text-[10px] opacity-70`}>{subtitle}</div>
+      )}
       <div className={`font-semibold text-[${fontSize}px] opacity-70`}>
         ₹{tariff}
         {per && ` per ${per}`}

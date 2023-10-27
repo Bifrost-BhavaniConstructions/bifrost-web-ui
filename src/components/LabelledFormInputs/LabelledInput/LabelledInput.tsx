@@ -15,6 +15,7 @@ interface LabelledInputProps {
   inputProps?: InputProps;
   inputLeftAddon?: string;
   inputRightAddon?: string;
+  required?: boolean;
 }
 
 const LabelledInput: React.FC<LabelledInputProps> = ({
@@ -24,6 +25,7 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
   inputProps,
   inputLeftAddon,
   inputRightAddon,
+  required = false,
 }) => {
   // Objects
 
@@ -37,7 +39,12 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
 
   return (
     <div>
-      <div className="font-light text-[12px] opacity-70">{name}</div>
+      <div className="font-light text-[12px] opacity-70">
+        {name}
+        {required && (
+          <span className="text-red-500 ml-[3px] text-[14px]">*</span>
+        )}
+      </div>
       <InputGroup>
         {inputLeftAddon && <InputLeftAddon children={inputLeftAddon} />}
         <Input

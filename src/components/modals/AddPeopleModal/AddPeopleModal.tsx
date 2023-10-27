@@ -197,6 +197,9 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
       case UserRoleEnum.FH_SECURITY:
         platforms = [PlatformEnum.FUNCTION_HALL];
         break;
+      case UserRoleEnum.FH_VENDOR:
+        platforms = [PlatformEnum.FUNCTION_HALL];
+        break;
       default:
         platforms = [];
     }

@@ -46,6 +46,19 @@ const AddOrUpdateFunctionHallModal: React.FC<
     setFunctionHall({ ...functionHall, rooms: list });
   };
 
+  const validateFunctionHall: () => boolean = () => {
+    return (
+      functionHall.name !== "" &&
+      functionHall.address !== "" &&
+      functionHall.rooms.every((r) => r.name !== "") &&
+      functionHall.inventory.every(
+        (r) => r.name !== "" && r.charge > 0 && r.count > 0,
+      ) &&
+      functionHall.generators.every((r) => r.name !== "") &&
+      functionHall.powerMeters.every((r) => r.name !== "")
+    );
+  };
+
   // Hook Functions
   React.useEffect(() => {
     if (editFunctionHall) {
@@ -65,8 +78,10 @@ const AddOrUpdateFunctionHallModal: React.FC<
         cta(functionHall);
       }}
       actionText={"Submit"}
+      isButtonDisabled={!validateFunctionHall()}
     >
       <LabelledInput
+        required
         name={"name"}
         value={functionHall.name}
         setValue={(_val: string) => {
@@ -74,6 +89,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
         }}
       />
       <LabelledInput
+        required
         name={"address"}
         value={functionHall.address}
         setValue={(_val: string) => {
@@ -105,6 +121,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
               className="flex flex-col mt-[4px] pb-[10px] border-b-2"
             >
               <LabelledInput
+                required
                 name={"name"}
                 value={type.name}
                 setValue={(_val: string) =>
@@ -118,6 +135,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
               <div className="flex">
                 <div className="flex  px-[2px]">
                   <LabelledInput
+                    required
                     name={"count"}
                     value={type.count}
                     setValue={(_val: number) =>
@@ -133,6 +151,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
               </div>
               <div className="flex items-end justify-between px-[2px]">
                 <LabelledInput
+                  required
                   name={"damage charges"}
                   value={type.charge}
                   setValue={(_val: number) =>
@@ -183,6 +202,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
               className="flex flex-col mt-[4px] pb-[10px] border-b-2"
             >
               <LabelledInput
+                required
                 name={"name"}
                 value={powerMeter.name}
                 setValue={(_val: string) =>
@@ -228,6 +248,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
               className="flex flex-col mt-[4px] pb-[10px] border-b-2"
             >
               <LabelledInput
+                required
                 name={"name"}
                 value={generator.name}
                 setValue={(_val: string) =>
@@ -273,6 +294,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
               className="flex flex-col mt-[4px] pb-[10px] border-b-2"
             >
               <LabelledInput
+                required
                 name={"name"}
                 value={room.name}
                 setValue={(_val: string) =>

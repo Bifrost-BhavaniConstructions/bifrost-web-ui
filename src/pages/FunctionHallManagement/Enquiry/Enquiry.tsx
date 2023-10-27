@@ -64,8 +64,10 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                 )
               : true,
           )
-          .filter((enquiry) =>
-            selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking,
+          .filter(
+            (enquiry) =>
+              (selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking) &&
+              !enquiry.isCheckedOut,
           )
           .map((enquiry) => (
             <IndividualEnquiry key={enquiry._id} enquiry={enquiry} />

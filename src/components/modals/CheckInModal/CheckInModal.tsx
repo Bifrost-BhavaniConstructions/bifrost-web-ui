@@ -9,19 +9,29 @@ import TabSelect from "../../TabSelect";
 import { MultiSelect } from "chakra-multiselect";
 import FunctionHall from "../../../types/FunctionHall/FunctionHall";
 import { InventoryType } from "../../../types/FunctionHall/Inventory";
+import { GeneratorStatus } from "../../../types/FunctionHall/Generator";
+import TailwindButton from "../../TailwindButton";
+import moment from "moment/moment";
+import { DeleteIcon } from "@chakra-ui/icons";
+import Enquiry from "../../../types/FunctionHall/Enquiry";
+import { RoomStatus } from "../../../types/FunctionHall/Room";
+import ChakraSelect from "../../ChakraSelect";
+import { PowerMeterStatus } from "../../../types/FunctionHall/PowerMeter";
 
 interface AcceptBookingModalProps {
   open: boolean;
   closeCallback: Function;
-  enquiryId: string;
+  enquiry: Enquiry;
   functionHall: FunctionHall;
+  isUpdateStatus: boolean;
 }
 
 const CheckInModal: React.FC<AcceptBookingModalProps> = ({
   closeCallback,
   open,
-  enquiryId,
+  enquiry,
   functionHall,
+  isUpdateStatus,
 }) => {
   // Objects
 
@@ -32,33 +42,72 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
 
   // State Variables - Hooks
   const [tabIndex, setTabIndex] = React.useState(0);
-  const [rooms, setRooms] = React.useState<{ label: string; value: string }[]>(
-    [],
+  const [rooms, setRooms] = React.useState<RoomStatus[]>(
+    enquiry.statStatus &&
+      enquiry.statStatus.roomsAll &&
+      enquiry.statStatus.roomsAll.length > 0
+      ? enquiry.statStatus.roomsAll[enquiry.statStatus.roomsAll.length - 1]
+      : [],
   );
-  const [powerMeters, setPowerMeters] = React.useState(
-    functionHall.powerMeters.map((pM) => ({ name: pM.name, value: 0 })),
+  const [powerMeters, setPowerMeters] = React.useState<PowerMeterStatus[]>(
+    enquiry.statStatus &&
+      enquiry.statStatus.powerMetersAll &&
+      enquiry.statStatus.powerMetersAll.length > 0
+      ? enquiry.statStatus.powerMetersAll[
+          enquiry.statStatus.powerMetersAll.length - 1
+        ]
+      : functionHall.powerMeters.map((pM) => ({
+          name: pM.name,
+          reading: 0,
+          markedAt: new Date(),
+        })),
   );
-  const [securityGuards, setSecurityGuards] = React.useState(0);
+  const [securityGuards, setSecurityGuards] = React.useState(
+    enquiry.statStatus &&
+      enquiry.statStatus.securityGuards &&
+      enquiry.statStatus.securityGuards.length > 0
+      ? enquiry.statStatus.securityGuards[
+          enquiry.statStatus.securityGuards.length - 1
+        ]
+      : 0,
+  );
+  const [generators, setGenerators] = React.useState<GeneratorStatus[]>(
+    enquiry.statStatus &&
+      enquiry.statStatus.generatorsAll &&
+      enquiry.statStatus.generatorsAll.length > 0
+      ? enquiry.statStatus.generatorsAll
+      : functionHall.generators.map((generator) => ({
+          name: generator.name,
+          sessions: [],
+        })),
+  );
   const [newInventoryTypeList, setNewInventoryTypeList] = React.useState<
     InventoryType[]
-  >(functionHall.inventory);
+  >(
+    enquiry.statStatus &&
+      enquiry.statStatus.inventoryAll &&
+      enquiry.statStatus.inventoryAll.length > 0
+      ? enquiry.statStatus.inventoryAll[
+          enquiry.statStatus.inventoryAll.length - 1
+        ]
+      : functionHall.inventory,
+  );
   // Functions
   const checkIn = () => {
     const data = {
-      rooms: rooms.map((r) => ({
-        name: r.value,
-        assignedAt: new Date().toISOString(),
-      })),
+      rooms: rooms,
       powerMeters: powerMeters.map((p) => ({
         name: p.name,
-        reading: p.value,
+        reading: p.reading,
+        markedAt: p.markedAt,
       })),
       securityGuards: securityGuards,
       inventory: newInventoryTypeList,
+      generators: generators,
     };
     console.log(data);
     httpClient
-      .post(`/function-hall/enquiry/check-in/${enquiryId}`, data)
+      .post(`/function-hall/enquiry/update-status/${enquiry._id}`, data)
       .then(() => {
         fetchEnquiries();
         toast(`Checked In`, {
@@ -76,7 +125,7 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
         closeCallback();
       }}
       open={open}
-      title={"Check In"}
+      title={isUpdateStatus ? "Update Status" : "Check In"}
       action={() => {
         checkIn();
       }}
@@ -96,23 +145,63 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
           {
             text: "Inventory",
           },
+          {
+            text: "Generators",
+          },
         ]}
         tabIndex={tabIndex}
         setTabIndex={setTabIndex}
       />
       {tabIndex === 0 && (
         <div className="flex p-[8px] flex-col">
-          <div className="font-light text-[12px] opacity-70">Select Rooms</div>
-          <MultiSelect
-            value={rooms}
-            options={functionHall.rooms.map((r) => ({
-              label: r.name,
-              value: r.name,
-            }))}
-            onChange={(val: any) => {
-              setRooms(val);
-            }}
-          />
+          <div className="flex justify-between items-center font-light text-[12px] opacity-70">
+            <div>Rooms</div>
+            <TailwindButton
+              text={"Add Room +"}
+              onClick={() => {
+                setRooms([
+                  ...rooms,
+                  {
+                    name: "",
+                    assignedAt: new Date(),
+                  },
+                ]);
+              }}
+            />
+          </div>
+          {rooms.map((room, index) => {
+            return (
+              <div>
+                <ChakraSelect
+                  name={"Room"}
+                  value={room.name}
+                  values={functionHall.rooms.map((r) => ({
+                    name: r.name,
+                    value: r.name,
+                  }))}
+                  onValueChange={(value) => {
+                    setRooms(
+                      rooms.map((r, i) =>
+                        i === index ? { ...r, name: value } : r,
+                      ),
+                    );
+                  }}
+                />
+                <LabelledInput
+                  name={"Assigned Date"}
+                  value={moment(room.assignedAt).format("yyyy-MM-DDTHH:mm")}
+                  setValue={(_val: string) => {
+                    setRooms(
+                      rooms.map((r, i) =>
+                        i === index ? { ...r, assignedAt: new Date(_val) } : r,
+                      ),
+                    );
+                  }}
+                  inputProps={{ type: "datetime-local" }}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
       {tabIndex === 1 && (
@@ -122,11 +211,11 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
               <div key={pM.name} className="mt-[4px]">
                 <LabelledInput
                   name={pM.name + " Reading"}
-                  value={pM.value}
+                  value={pM.reading}
                   setValue={(_val: number) => {
                     setPowerMeters(
                       powerMeters.map((p, i) =>
-                        i === index ? { ...p, value: _val } : p,
+                        i === index ? { ...p, reading: _val } : p,
                       ),
                     );
                   }}
@@ -199,6 +288,131 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
                     inputProps={{ type: "number" }}
                   />
                 </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+      {tabIndex === 4 && (
+        <>
+          {generators.map((generator, generatorIndex) => {
+            return (
+              <div
+                key={generator.name}
+                className="flex flex-col mt-[4px] border-t-2"
+              >
+                <div className="flex text-[16px] justify-between items-center text-white mt-[10px] pt-[10px]">
+                  <h3>{generator.name}</h3>
+                  <TailwindButton
+                    text={"Add Session +"}
+                    onClick={() => {
+                      setGenerators(
+                        generators.map((g, i) =>
+                          i === generatorIndex
+                            ? {
+                                ...g,
+                                sessions: [...g.sessions, { from: new Date() }],
+                              }
+                            : g,
+                        ),
+                      );
+                    }}
+                  />
+                </div>
+                {generator.sessions.map((session, sessionIndex) => {
+                  return (
+                    <div className="flex w-full flex-col p-[8px]">
+                      <div className="flex justify-between">
+                        <div
+                          onClick={() => {
+                            setGenerators(
+                              generators.map((g, i) =>
+                                i === generatorIndex
+                                  ? {
+                                      ...g,
+                                      sessions: g.sessions.filter(
+                                        (s, j) => j !== sessionIndex,
+                                      ),
+                                    }
+                                  : g,
+                              ),
+                            );
+                          }}
+                          className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-low-bg"
+                        >
+                          <DeleteIcon width={"14px"} />
+                        </div>
+                        <h3>{"Session " + (sessionIndex + 1)}</h3>
+                      </div>
+                      <LabelledInput
+                        name="from"
+                        value={moment(session.from).format("yyyy-MM-DDTHH:mm")}
+                        setValue={(_val: string) => {
+                          setGenerators(
+                            generators.map((g, i) =>
+                              i === generatorIndex
+                                ? {
+                                    ...g,
+                                    sessions: g.sessions.map((s, j) =>
+                                      j === sessionIndex
+                                        ? { ...s, from: new Date(_val) }
+                                        : s,
+                                    ),
+                                  }
+                                : g,
+                            ),
+                          );
+                        }}
+                        inputProps={{ type: "datetime-local" }}
+                      />
+                      {!!session.to ? (
+                        <LabelledInput
+                          name="to"
+                          value={moment(session.to).format("yyyy-MM-DDTHH:mm")}
+                          setValue={(_val: string) => {
+                            setGenerators(
+                              generators.map((g, i) =>
+                                i === generatorIndex
+                                  ? {
+                                      ...g,
+                                      sessions: g.sessions.map((s, j) =>
+                                        j === sessionIndex
+                                          ? { ...s, to: new Date(_val) }
+                                          : s,
+                                      ),
+                                    }
+                                  : g,
+                              ),
+                            );
+                          }}
+                          inputProps={{ type: "datetime-local" }}
+                        />
+                      ) : (
+                        <div>
+                          <TailwindButton
+                            text={"Add To +"}
+                            onClick={() => {
+                              setGenerators(
+                                generators.map((g, i) =>
+                                  i === generatorIndex
+                                    ? {
+                                        ...g,
+                                        sessions: g.sessions.map((s, j) =>
+                                          j === sessionIndex
+                                            ? { ...s, to: new Date() }
+                                            : s,
+                                        ),
+                                      }
+                                    : g,
+                                ),
+                              );
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             );
           })}

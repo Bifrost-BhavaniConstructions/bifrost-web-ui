@@ -7,6 +7,7 @@ interface ChakraSelectProps {
   value: string;
   values: { name: string; value: string }[];
   onValueChange: (value: string) => void;
+  required?: boolean;
 }
 
 const ChakraSelect: React.FC<ChakraSelectProps> = ({
@@ -14,6 +15,7 @@ const ChakraSelect: React.FC<ChakraSelectProps> = ({
   value,
   values,
   onValueChange,
+  required = false,
 }) => {
   // Objects
 
@@ -27,7 +29,12 @@ const ChakraSelect: React.FC<ChakraSelectProps> = ({
 
   return (
     <div>
-      <div className="font-light text-[12px] opacity-70">{name}</div>
+      <div className="font-light text-[12px] opacity-70">
+        {name}
+        {required && (
+          <span className="text-red-500 ml-[3px] text-[14px]">*</span>
+        )}
+      </div>
       <InputGroup>
         <Select
           value={value}

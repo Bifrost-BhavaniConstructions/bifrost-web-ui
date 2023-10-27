@@ -22,6 +22,8 @@ interface ChakraModalProps {
   actionText?: string;
   action: Function;
   modalProps?: ModalProps;
+  minH?: number;
+  isButtonDisabled?: boolean;
 }
 
 const ChakraModal: React.FC<ChakraModalProps> = ({
@@ -32,6 +34,8 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
   action,
   actionText,
   modalProps,
+  minH = 400,
+  isButtonDisabled,
 }) => {
   // Objects
 
@@ -70,7 +74,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
         <ModalContent bg="brand.main-bg">
           <ModalHeader className="font-bold text-[16px]">{title}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody minH="400px">{children}</ModalBody>
+          <ModalBody minH={`${minH}px`}>{children}</ModalBody>
           <ModalFooter>
             <Button
               variant="ghost"
@@ -87,6 +91,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
                 onClick={() => {
                   action();
                 }}
+                isDisabled={isButtonDisabled}
               >
                 {actionText}
               </Button>

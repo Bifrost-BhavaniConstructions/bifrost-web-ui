@@ -36,6 +36,10 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
       role: UserRoleEnum.FH_SECURITY,
       name: "Security Guards",
     },
+    {
+      role: UserRoleEnum.FH_VENDOR,
+      name: "Vendors",
+    },
   ];
 
   const siteManagementUserRoleData = [

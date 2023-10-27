@@ -56,8 +56,10 @@ const AcceptBookingModal: React.FC<AcceptBookingModalProps> = ({
         updateBookingPayment();
       }}
       actionText={"Submit"}
+      isButtonDisabled={!(paymentAmount > 0)}
     >
       <LabelledInput
+        required
         name={"booking advance"}
         value={paymentAmount}
         setValue={(_val: number) => {

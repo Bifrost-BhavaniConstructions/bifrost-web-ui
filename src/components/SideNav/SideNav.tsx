@@ -67,7 +67,11 @@ const SideNav: React.FC<SideNavProps> = ({ clicked, setClicked, platform }) => {
     },
     {
       label: "Cash Accounts",
-      url: "/function-hall-management/cash-account",
+      url: "/function-hall-management/cash-accounts",
+    },
+    {
+      label: "All Transactions",
+      url: "/function-hall-management/all-transactions",
     },
     {
       label: "People",

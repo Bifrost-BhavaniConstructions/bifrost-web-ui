@@ -18,6 +18,8 @@ import AcceptPaymentModal from "../../../../components/modals/AcceptPaymentModal
 import { Inventory } from "../../../../types/FunctionHall/Inventory";
 import UpdateInventoryModal from "../../../../components/modals/UpdateInventoryModal";
 import CheckInModal from "../../../../components/modals/CheckInModal";
+import CheckOutModal from "../../../../components/modals/CheckOutModal";
+import FollowUpModal from "../../../../components/modals/FollowUpModal";
 
 interface IndividualEnquiryProps {
   enquiry: Enquiry;
@@ -30,9 +32,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
 
   // State Variables - Hooks
   const [editEnquiry, setEditEnquiry] = React.useState<Enquiry | undefined>();
-  const [updateInventory, setUpdateInventory] = React.useState<
-    Inventory[] | undefined
-  >();
+  const [updateStatus, setUpdateStatus] = React.useState<boolean>(false);
   const [estimates, setEstimates] = React.useState<Estimate[]>([]);
   const [enquiryClicked, setEnquiryClicked] = React.useState(false);
   const [bookingClicked, setBookingClicked] = React.useState(false);
@@ -40,6 +40,8 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
   const [acceptBooking, setAcceptBooking] = React.useState<boolean>(false);
   const [acceptPayment, setAcceptPayment] = React.useState<boolean>(false);
   const [checkIn, setCheckIn] = React.useState<boolean>(false);
+  const [checkOut, setCheckOut] = React.useState<boolean>(false);
+  const [followUp, setFollowUp] = React.useState<boolean>(false);
   // Functions
 
   // Hook Functions
@@ -87,7 +89,8 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
           <div className="flex justify-between flex-col items-end mx-[11px]">
             <div
               onClick={() => {
-                setUpdateInventory(enquiry.inventory);
+                setCheckIn(true);
+                setUpdateStatus(true);
               }}
               className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
             >
@@ -114,7 +117,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
           </div>
           <div
             onClick={() => {
-              window.open("tel:" + enquiry.primaryContactNumber, "_blank");
+              setFollowUp(true);
             }}
             className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
           >
@@ -138,14 +141,17 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
           open={estimates.length > 0}
           estimates={estimates}
         />
-        <UpdateInventoryModal
-          closeCallback={() => {
-            setUpdateInventory(undefined);
-          }}
-          open={updateInventory !== undefined}
-          inventoryList={updateInventory}
-          enquiryId={enquiry._id}
-        />
+        {followUp && (
+          <FollowUpModal
+            open={followUp}
+            closeCallback={() => {
+              setFollowUp(false);
+            }}
+            enquiryId={enquiry._id}
+            followups={enquiry.followUps}
+            contactNumber={enquiry.primaryContactNumber}
+          />
+        )}
       </div>
       {enquiryClicked && (
         <div className="flex flex-1 p-[8px] mt-[12px] bg-main-bg rounded-[6px] text-[14px] font-normal">
@@ -182,6 +188,16 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
           />
         </div>
       )}
+      <CheckInModal
+        closeCallback={() => {
+          setCheckIn(false);
+          setUpdateStatus(false);
+        }}
+        open={checkIn}
+        enquiry={enquiry}
+        functionHall={enquiry.functionHall}
+        isUpdateStatus={updateStatus}
+      />
       {bookingClicked && (
         <div className="flex flex-1 p-[8px] mt-[12px] bg-main-bg rounded-[6px] text-[14px] font-normal">
           <div
@@ -194,11 +210,11 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
           </div>
           <div
             onClick={() => {
-              setCheckIn(true);
+              enquiry.isCheckedIn ? setCheckOut(true) : setCheckIn(true);
             }}
             className="flex flex-1 justify-center items-center border-l-2"
           >
-            Check In
+            {enquiry.isCheckedIn ? "Check Out" : "Check In"}
           </div>
           <AcceptPaymentModal
             closeCallback={() => {
@@ -207,13 +223,12 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
             open={acceptPayment}
             enquiryId={enquiry._id}
           />
-          <CheckInModal
+          <CheckOutModal
             closeCallback={() => {
-              setCheckIn(false);
+              setCheckOut(false);
             }}
-            open={checkIn}
-            enquiryId={enquiry._id}
-            functionHall={enquiry.functionHall}
+            open={checkOut}
+            enquiry={enquiry}
           />
         </div>
       )}

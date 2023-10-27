@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./AddEnquiryModal.css";
-import { Stack } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import ChakraModal from "../ChakraModal";
 import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
@@ -34,6 +34,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
     enquiryType: "",
     estimates: [],
     fromDate: new Date(),
+    toDate: new Date(),
     functionHall: "",
     isBooking: false,
     name: "",
@@ -69,7 +70,6 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   // State Variables - Hooks
   const [enquiry, setEnquiry] = React.useState(emptyEnquiry);
   const [estimate, setEstimate] = React.useState(emptyEstimate);
-
   // Functions
   const createEnquiry = () => {
     console.log({ ...enquiry, estimates: [estimate] });
@@ -109,6 +109,32 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
       });
   };
 
+  const validateEnquiry: () => boolean = () => {
+    return (
+      enquiry.name !== "" &&
+      enquiry.functionHall !== "" &&
+      enquiry.fromDate !== undefined &&
+      enquiry.toDate !== undefined &&
+      enquiry.primaryReference !== "" &&
+      enquiry.enquiryType !== "" &&
+      enquiry.primaryContactName !== "" &&
+      enquiry.primaryContactNumber != 0
+    );
+  };
+
+  const validateEstimate: () => boolean = () => {
+    return (
+      estimate.generatorTariff > 0 &&
+      estimate.securityTariff > 0 &&
+      estimate.hallTariff > 0 &&
+      estimate.furnitureUtilityCharges > 0 &&
+      estimate.maintenanceCharges > 0 &&
+      estimate.additionalGuestRoomTariff > 0 &&
+      estimate.electricityTariff > 0 &&
+      estimate.applicableTaxes > 0
+    );
+  };
+
   // Hook Functions
   React.useEffect(() => {
     if (editEnquiry?._id) {
@@ -138,6 +164,13 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
           : createEnquiry();
       }}
       actionText={"Submit"}
+      isButtonDisabled={
+        !!editEnquiry
+          ? !validateEnquiry()
+          : !!addEstimate
+          ? !validateEstimate()
+          : !(validateEnquiry() && validateEstimate())
+      }
     >
       <Stack spacing={3}>
         {!addEstimate && (
@@ -146,6 +179,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               General Information
             </h3>
             <LabelledInput
+              required
               name="name"
               value={enquiry.name}
               setValue={(_val: string) => {
@@ -153,6 +187,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               }}
             />
             <ChakraSelect
+              required
               name="function hall"
               value={enquiry.functionHall}
               values={functionHalls.map((fH) => ({
@@ -164,6 +199,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               }}
             />
             <LabelledInput
+              required
               name="from"
               value={moment(enquiry.fromDate).format("yyyy-MM-DDTHH:mm")}
               setValue={(_val: string) => {
@@ -172,6 +208,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputProps={{ type: "datetime-local" }}
             />
             <LabelledInput
+              required
               name="to"
               value={moment(enquiry.toDate).format("yyyy-MM-DDTHH:mm")}
               setValue={(_val: string) => {
@@ -180,6 +217,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputProps={{ type: "datetime-local" }}
             />
             <ChakraSelect
+              required
               name="primary reference"
               value={enquiry.primaryReference}
               values={users
@@ -200,6 +238,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               }}
             />
             <ChakraSelect
+              required
               name="enquiry type"
               value={enquiry.enquiryType}
               values={enquiryTypes.map((fH) => ({
@@ -214,6 +253,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               Contact Information
             </h3>
             <LabelledInput
+              required
               name="primary contact name"
               value={enquiry.primaryContactName}
               setValue={(_val: string) => {
@@ -221,6 +261,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               }}
             />
             <LabelledInput
+              required
               name="primary contact number"
               value={enquiry.primaryContactNumber}
               setValue={(_val: number) => {
@@ -256,6 +297,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
             </h3>
             <LabelledInput
               name="hall tariff"
+              required
               value={estimate.hallTariff}
               setValue={(_val: number) => {
                 setEstimate({ ...estimate, hallTariff: _val });
@@ -264,6 +306,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputLeftAddon={"₹"}
             />
             <LabelledInput
+              required
               name="furniture utility charges"
               value={estimate.furnitureUtilityCharges}
               setValue={(_val: number) => {
@@ -273,6 +316,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputLeftAddon={"₹"}
             />
             <LabelledInput
+              required
               name="maintenance charges"
               value={estimate.maintenanceCharges}
               setValue={(_val: number) => {
@@ -282,6 +326,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputLeftAddon={"₹"}
             />
             <LabelledInput
+              required
               name="applicable taxes"
               value={estimate.applicableTaxes}
               setValue={(_val: number) => {
@@ -291,6 +336,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputLeftAddon={"₹"}
             />
             <LabelledInput
+              required
               name="additional guest room tariff"
               value={estimate.additionalGuestRoomTariff}
               setValue={(_val: number) => {
@@ -301,6 +347,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputRightAddon={"/room"}
             />
             <LabelledInput
+              required
               name="electricity tariff"
               value={estimate.electricityTariff}
               setValue={(_val: number) => {
@@ -311,6 +358,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputRightAddon={"/unit"}
             />
             <LabelledInput
+              required
               name="security tariff"
               value={estimate.securityTariff}
               setValue={(_val: number) => {
@@ -321,6 +369,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputRightAddon={"/guard"}
             />
             <LabelledInput
+              required
               name="generator tariff"
               value={estimate.generatorTariff}
               setValue={(_val: number) => {

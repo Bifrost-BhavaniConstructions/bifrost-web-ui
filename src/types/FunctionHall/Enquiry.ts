@@ -3,6 +3,8 @@ import EnquiryType from "./EnquiryType";
 import { Estimate } from "./Estimate";
 import { EnquiryPayment } from "./EnquiryPayment";
 import { Inventory } from "./Inventory";
+import { StatStatus } from "./StatStatus";
+import { FollowUp } from "./FollowUp";
 
 interface Enquiry {
   _id: string;
@@ -21,9 +23,13 @@ interface Enquiry {
   createdAt: string;
   updatedAt: string;
   isBooking: boolean;
+  isCheckedIn: boolean;
+  statStatus: StatStatus;
   bookingAmount: number;
   payments: EnquiryPayment[];
   inventory: Inventory[];
+  followUps: FollowUp[];
+  isCheckedOut: boolean;
 }
 export interface EnquiryCreateWrapper {
   _id?: string;
