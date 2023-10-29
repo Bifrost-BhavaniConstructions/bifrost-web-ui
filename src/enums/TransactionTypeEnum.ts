@@ -4,6 +4,7 @@ export enum TransactionTypeEnum {
   VENDOR_TRANSACTION = "VENDOR_TRANSACTION",
   MISCELLANEOUS_TRANSACTION = "MISCELLANEOUS_TRANSACTION",
   REFUND = "REFUND",
+  OT_PAY = "OT_PAY",
 }
 
 export const getTransactionTypeFromString = (

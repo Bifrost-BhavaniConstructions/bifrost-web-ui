@@ -24,6 +24,10 @@ const FunctionHallManagement: React.FC<SiteManagementHomeProps> = () => {
   const fetchUsers = useStoreActions(
     (actions) => actions.peopleStore.fetchUsers,
   );
+
+  const { fetchTransactionPurposes } = useStoreActions(
+    (actions) => actions.cashAccountStore,
+  );
   const navigate = useNavigate();
 
   // Functions
@@ -40,6 +44,7 @@ const FunctionHallManagement: React.FC<SiteManagementHomeProps> = () => {
           fetchFunctionHalls();
           fetchUsers();
           fetchEnquiryTypes();
+          fetchTransactionPurposes();
         })
         .catch(() => {});
     }

@@ -35,7 +35,6 @@ const FunctionHallDayViewModal: React.FC<AcceptBookingModalProps> = ({
     <ChakraModal
       closeCallback={() => {
         closeCallback();
-        console.log(functionHallId);
       }}
       open={open}
       title={

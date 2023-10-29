@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./IndividualCashAccount.css";
 import { CashAccount } from "../../../../types/CashAccount/CashAccount";
 import Radio from "../../../../components/Radio";
@@ -8,6 +8,8 @@ import { useStoreState } from "../../../../store/hooks";
 import IndividualTransaction from "../IndividualTransaction";
 import { PlatformEnum } from "../../../../enums/PlatformEnum";
 import { useNavigate } from "react-router-dom";
+import { Transaction } from "../../../../types/CashAccount/Transaction";
+import { TransactionWithFunctionHallName } from "../../AllTransactions/AllTransactions";
 
 interface IndividualCashAccountProps {
   cashAccount: CashAccount;
@@ -26,11 +28,36 @@ const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
   >();
   const [openGeneralTransactionPopup, setOpenGeneralTransactionPopup] =
     React.useState<boolean>(false);
+  const { functionHalls } = useStoreState((state) => state.functionHallStore);
+
   const { userTransactions } = useStoreState((state) => state.cashAccountStore);
   const navigate = useNavigate();
   // Functions
 
   // Hook Functions
+  const functionHallNameMap = useMemo(() => {
+    const nameMap: Record<string, string> = {};
+
+    functionHalls.forEach((functionHall) => {
+      nameMap[functionHall._id!] = functionHall.name;
+    });
+
+    return nameMap;
+  }, [functionHalls]);
+
+  // Now you can use this mapping to get the function hall name for each transaction
+  const transactionsWithFunctionHallNames = useMemo(() => {
+    return userTransactions.map((transaction: Transaction) => {
+      const functionHallName = transaction.functionHall
+        ? functionHallNameMap[transaction.functionHall]
+        : "";
+
+      return {
+        ...transaction,
+        functionHallName,
+      } as TransactionWithFunctionHallName;
+    });
+  }, [userTransactions, functionHallNameMap]);
 
   return (
     <div className="flex w-full h-full flex-col">
@@ -70,9 +97,11 @@ const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
         <h3 className="flex w-full p-[10px] font-semibold text-[14px]">
           Recent Transactions
         </h3>
-        {userTransactions.slice(0, 10).map((userTransaction) => (
-          <IndividualTransaction transaction={userTransaction} />
-        ))}
+        {transactionsWithFunctionHallNames
+          .slice(0, 10)
+          .map((userTransaction) => (
+            <IndividualTransaction transaction={userTransaction} />
+          ))}
         {userTransactions.length > 10 && (
           <h3
             onClick={() => {

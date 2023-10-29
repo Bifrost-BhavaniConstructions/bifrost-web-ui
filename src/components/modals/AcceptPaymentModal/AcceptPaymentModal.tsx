@@ -8,8 +8,15 @@ import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import ChakraSelect from "../../ChakraSelect";
 import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
-import { TransactionTypeEnum } from "../../../enums/TransactionTypeEnum";
+import {
+  getTransactionTypeFromString,
+  TransactionTypeEnum,
+} from "../../../enums/TransactionTypeEnum";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
+import {
+  getModeOfPaymentFromString,
+  ModeOfPaymentEnum,
+} from "../../../enums/ModeOfPaymentEnum";
 
 interface AcceptBookingModalProps {
   open: boolean;
@@ -33,6 +40,10 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
 
   // State Variables - Hooks
   const [paymentAmount, setPaymentAmount] = React.useState(0);
+  const [remark, setRemark] = React.useState("");
+  const [mode, setMode] = React.useState<ModeOfPaymentEnum>(
+    ModeOfPaymentEnum.CASH,
+  );
   const [from, setFrom] = React.useState("");
   const [type, setType] = React.useState("CASH_ACCOUNT");
   const { user } = useStoreState((state) => state.userStore);
@@ -48,6 +59,8 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
     httpClient
       .post(`/function-hall/enquiry/payment/${enquiryId}`, {
         paymentAmount,
+        remark,
+        modeOfPayment: mode,
         isCheckedOut: !!amount,
       })
       .then(() => {
@@ -107,6 +120,29 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
           setPaymentAmount(_val);
         }}
         inputProps={{ type: "number", isDisabled: !!amount }}
+      />
+      <ChakraSelect
+        name="transaction type"
+        value={mode}
+        values={[
+          ModeOfPaymentEnum.CASH,
+          ModeOfPaymentEnum.UPI,
+          ModeOfPaymentEnum.RTGS_NEFT,
+          ModeOfPaymentEnum.OTHERS,
+        ].map((fH) => ({
+          name: fH.split("_").join("/").toLowerCase(),
+          value: fH.toString(),
+        }))}
+        onValueChange={(value: string) => {
+          setMode(getModeOfPaymentFromString(value)!);
+        }}
+      />
+      <LabelledInput
+        name={"remark"}
+        value={remark}
+        setValue={(_val: string) => {
+          setRemark(_val);
+        }}
       />
       {!!amount && amount < 0 && (
         <RadioGroup

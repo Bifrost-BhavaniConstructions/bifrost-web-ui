@@ -23,7 +23,13 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
   const isDateInRange = (dateToCheck: Date, fromDate: Date, toDate: Date) => {
     // Check if the dateToCheck is equal to or greater than fromDate
     // and equal to or less than toDate
-    console.log("AAAA", dateToCheck, fromDate, toDate);
+    console.log(
+      "AAAA",
+      dateToCheck >= fromDate && dateToCheck <= toDate,
+      dateToCheck,
+      fromDate,
+      toDate,
+    );
     return dateToCheck >= fromDate && dateToCheck <= toDate;
   };
 
@@ -52,7 +58,10 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
           .filter((enquiry) =>
             date
               ? isDateInRange(
-                  date,
+                  moment(
+                    new Date(date).toLocaleDateString(),
+                    "MM/DD/YYYY",
+                  ).toDate(),
                   moment(
                     new Date(enquiry.fromDate).toLocaleDateString(),
                     "MM/DD/YYYY",
@@ -64,11 +73,15 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                 )
               : true,
           )
-          .filter(
-            (enquiry) =>
-              (selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking) &&
-              !enquiry.isCheckedOut,
+          .map((e) => {
+            console.log(!!date);
+            console.log(e);
+            return e;
+          })
+          .filter((enquiry) =>
+            selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking,
           )
+          .filter((enquiry) => (!!date ? true : !enquiry.isCheckedOut))
           .map((enquiry) => (
             <IndividualEnquiry key={enquiry._id} enquiry={enquiry} />
           ))}

@@ -13,7 +13,6 @@ import {
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import ChakraSelect from "../../ChakraSelect";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
-import transactionModal from "./index";
 
 interface TransactionModalProps {
   open: boolean;
@@ -35,6 +34,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
     remarks: "",
     to: "",
     platform: platform,
+    functionHall: "",
   };
 
   // Variables
@@ -44,6 +44,10 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   const { user } = useStoreState((state) => state.userStore);
   const { fetchCashAccount, fetchUserTransactions } = useStoreActions(
     (actions) => actions.cashAccountStore,
+  );
+  const { functionHalls } = useStoreState((state) => state.functionHallStore);
+  const { transactionPurposes } = useStoreState(
+    (state) => state.cashAccountStore,
   );
   const [transaction, setTransaction] =
     React.useState<TransactionCreateWrapper>(emptyTransaction);
@@ -187,6 +191,33 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               setTransaction({ ...transaction, remarks: _val });
             }}
           />
+          <ChakraSelect
+            required
+            name="function hall"
+            value={transaction.functionHall}
+            values={functionHalls.map((fH) => ({
+              name: fH.name,
+              value: fH._id!,
+            }))}
+            onValueChange={(value) => {
+              setTransaction({ ...transaction, functionHall: value });
+            }}
+          />
+          {transaction.transactionType ===
+            TransactionTypeEnum.MISCELLANEOUS_TRANSACTION && (
+            <ChakraSelect
+              required
+              name="transaction purpose"
+              value={transaction.transactionPurpose!}
+              values={transactionPurposes.map((fH) => ({
+                name: fH.name,
+                value: fH._id!,
+              }))}
+              onValueChange={(value) => {
+                setTransaction({ ...transaction, transactionPurpose: value });
+              }}
+            />
+          )}
         </>
       )}
     </ChakraModal>

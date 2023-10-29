@@ -10,9 +10,10 @@ import {
 } from "@heroicons/react/20/solid";
 import { PlatformEnum } from "../../../../enums/PlatformEnum";
 import ChakraModal from "../../../../components/modals/ChakraModal";
+import { TransactionWithFunctionHallName } from "../../AllTransactions/AllTransactions";
 
 interface IndividualTransactionProps {
-  transaction: Transaction;
+  transaction: TransactionWithFunctionHallName;
 }
 
 const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
@@ -39,9 +40,17 @@ const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
               {transaction.from ? transaction.from.user?.name : "N/A"}
             </div>
           </div>
-          <div className="flex flex-1 flex-col justify-center items-center text-accent">
-            <div className="font-medium text-[14px]">
+          <div className="flex flex-1 flex-col justify-center items-center ">
+            <div className="font-medium text-[14px] text-accent">
               ₹{transaction.amount ? transaction.amount : "0"}
+            </div>
+            <div className="font-medium text-[12px] opacity-50">
+              bal ₹
+              {transaction.from && transaction.from.user._id === user?._id
+                ? transaction.fromBalance
+                : transaction.to && transaction.to.user._id === user?._id
+                ? transaction.toBalance
+                : 0}
             </div>
           </div>
           <div className="flex flex-1 flex-col items-end">
@@ -83,6 +92,20 @@ const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
                   </TagLabel>
                 </Tag>
               </div>
+              <div className="flex mt-[4px]">
+                <Tag size={"sm"} variant="subtle" colorScheme="cyan">
+                  <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
+                  <TagLabel>{transaction.functionHallName}</TagLabel>
+                </Tag>
+              </div>
+              {transaction.transactionPurpose && (
+                <div className="flex mt-[4px]">
+                  <Tag size={"sm"} variant="subtle" colorScheme="cyan">
+                    <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
+                    <TagLabel>{transaction.transactionPurpose.name}</TagLabel>
+                  </Tag>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex text-[12px] font-light items-end">

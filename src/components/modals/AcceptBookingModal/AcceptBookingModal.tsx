@@ -5,6 +5,11 @@ import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
 import { useStoreActions } from "../../../store/hooks";
+import ChakraSelect from "../../ChakraSelect";
+import {
+  getModeOfPaymentFromString,
+  ModeOfPaymentEnum,
+} from "../../../enums/ModeOfPaymentEnum";
 
 interface AcceptBookingModalProps {
   open: boolean;
@@ -23,6 +28,8 @@ const AcceptBookingModal: React.FC<AcceptBookingModalProps> = ({
   const { fetchEnquiries } = useStoreActions(
     (actions) => actions.functionHallStore,
   );
+  const [remark, setRemark] = React.useState("");
+  const [mode, setMode] = React.useState<ModeOfPaymentEnum | undefined>();
 
   // State Variables - Hooks
   const [paymentAmount, setPaymentAmount] = React.useState(0);
@@ -32,6 +39,8 @@ const AcceptBookingModal: React.FC<AcceptBookingModalProps> = ({
     httpClient
       .post(`/function-hall/enquiry/booking/${enquiryId}`, {
         paymentAmount,
+        remark,
+        modeOfPayment: mode,
       })
       .then(() => {
         fetchEnquiries();
@@ -67,6 +76,31 @@ const AcceptBookingModal: React.FC<AcceptBookingModalProps> = ({
         }}
         inputProps={{ type: "number" }}
       />
+      <ChakraSelect
+        name="transaction type"
+        value={mode!}
+        values={[
+          ModeOfPaymentEnum.CASH,
+          ModeOfPaymentEnum.UPI,
+          ModeOfPaymentEnum.RTGS_NEFT,
+          ModeOfPaymentEnum.OTHERS,
+        ].map((fH) => ({
+          name: fH.split("_").join("/").toLowerCase(),
+          value: fH.toString(),
+        }))}
+        onValueChange={(value: string) => {
+          setMode(getModeOfPaymentFromString(value)!);
+        }}
+      />
+      {mode === ModeOfPaymentEnum.OTHERS && (
+        <LabelledInput
+          name={"remark"}
+          value={remark}
+          setValue={(_val: string) => {
+            setRemark(_val);
+          }}
+        />
+      )}
     </ChakraModal>
   );
 };
