@@ -29,16 +29,25 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
   ) => {
     // Check if the dateToCheck is equal to or greater than fromDate
     // and equal to or less than toDate
-    const from = moment(fromDate, "MM/DD/YYYY");
-    const to = moment(toDate, "MM/DD/YYYY");
-    const checkDate = moment(dateToCheck, "MM/DD/YYYY");
+    const from = new Date(fromDate);
+    const to = new Date(toDate);
+    const checkDate = new Date(dateToCheck);
 
-    // Use isSameOrAfter and isSameOrBefore to check if checkDate is within the range
-    if (checkDate.isSameOrAfter(from) && checkDate.isSameOrBefore(to)) {
-      console.log(`${checkDate.format("MM/DD/YYYY")} is within the range.`);
+    // Set the time portion to midnight (00:00:00) for all dates
+    from.setHours(0, 0, 0, 0);
+    to.setHours(0, 0, 0, 0);
+    checkDate.setHours(0, 0, 0, 0);
+
+    // Compare the dates
+    if (checkDate >= from && checkDate <= to) {
+      console.log(
+        `${checkDate.toLocaleDateString("en-US")} is within the range.`,
+      );
       return true;
     } else {
-      console.log(`${checkDate.format("MM/DD/YYYY")} is not within the range.`);
+      console.log(
+        `${checkDate.toLocaleDateString("en-US")} is not within the range.`,
+      );
       return false;
     }
   };
