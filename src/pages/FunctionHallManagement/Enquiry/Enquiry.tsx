@@ -98,7 +98,6 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                     new Date(date ? date : "").toLocaleDateString(),
                     "MM/DD/YYYY",
                   ).format("MM/DD/YYYY")}
-                  <br />
                   from
                   {moment(
                     new Date(e.fromDate).toLocaleDateString(),
@@ -106,30 +105,25 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                   )
                     .toDate()
                     .toISOString()}
-                  <br />
                   to
                   {moment(new Date(e.toDate).toLocaleDateString(), "MM/DD/YYYY")
                     .toDate()
                     .toISOString()}
-                  <br />
-                  {date
-                    ? isDateInRange(
-                        moment(
-                          new Date(date).toLocaleDateString(),
-                          "MM/DD/YYYY",
-                        ).format("MM/DD/YYYY"),
-                        moment(
-                          new Date(e.fromDate).toLocaleDateString(),
-                          "MM/DD/YYYY",
-                        ).toDate(),
-                        moment(
-                          new Date(e.toDate).toLocaleDateString(),
-                          "MM/DD/YYYY",
-                        ).toDate(),
-                      )
-                      ? "true"
-                      : "false"
-                    : "true"}
+                  true
+                  {isDateInRange(
+                    moment(
+                      new Date(date ? date : "").toLocaleDateString(),
+                      "MM/DD/YYYY",
+                    ).format("MM/DD/YYYY"),
+                    moment(
+                      new Date(e.fromDate).toLocaleDateString(),
+                      "MM/DD/YYYY",
+                    ).toDate(),
+                    moment(
+                      new Date(e.toDate).toLocaleDateString(),
+                      "MM/DD/YYYY",
+                    ).toDate(),
+                  )}
                 </>
               </div>
             );
