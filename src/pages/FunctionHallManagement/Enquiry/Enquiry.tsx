@@ -103,13 +103,14 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                   {moment(
                     new Date(e.fromDate).toLocaleDateString(),
                     "MM/DD/YYYY",
-                  ).toString()}
+                  )
+                    .toDate()
+                    .toISOString()}
                   <br />
                   to
-                  {moment(
-                    new Date(e.toDate).toLocaleDateString(),
-                    "MM/DD/YYYY",
-                  ).toString()}
+                  {moment(new Date(e.toDate).toLocaleDateString(), "MM/DD/YYYY")
+                    .toDate()
+                    .toISOString()}
                   <br />
                   {date
                     ? isDateInRange(
