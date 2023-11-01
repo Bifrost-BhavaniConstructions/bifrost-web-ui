@@ -58,7 +58,7 @@ const UpdateInventoryModal: React.FC<UpdateInventoryProps> = ({
 
   // Hook Functions
   React.useEffect(() => {
-    console.log(inventoryList);
+    //console.log(inventoryList);
     if (inventoryList && inventoryList.length > 0)
       setNewInventoryTypeList(
         inventoryList.sort((a, b) =>

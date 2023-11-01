@@ -4,6 +4,7 @@ import TabSelect from "../../../components/TabSelect";
 import { useStoreState } from "../../../store/hooks";
 import IndividualEnquiry from "./IndividualEnquiry";
 import moment from "moment/moment";
+import AddEnquiryModal from "../../../components/modals/AddEnquiryModal";
 
 interface QueriesProps {
   date?: Date;
@@ -16,28 +17,43 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
 
   // Variables
   const [selectedTab, setSelectedTab] = React.useState(0);
+  const [openEnquiry, setOpenEnquiry] = React.useState(false);
 
   // State Variables - Hooks
 
   // Functions
-  const isDateInRange = (dateToCheck: Date, fromDate: Date, toDate: Date) => {
+  const isDateInRange = (dateToCheck: string, fromDate: Date, toDate: Date) => {
     // Check if the dateToCheck is equal to or greater than fromDate
     // and equal to or less than toDate
-    console.log(
-      "AAAA",
-      dateToCheck >= fromDate && dateToCheck <= toDate,
-      dateToCheck,
-      fromDate,
-      toDate,
-    );
-    return dateToCheck >= fromDate && dateToCheck <= toDate;
+    const fromTimestamp = moment(fromDate.toISOString());
+    const toTimestamp = moment(toDate.toISOString());
+
+    // Create an array to store all dates in MM/DD/YYYY format
+    const allDates = [];
+
+    // Start from the "from" date and add each date to the array until we reach the "to" date
+    const currentDate = fromTimestamp.clone();
+    while (currentDate.isSameOrBefore(toTimestamp)) {
+      allDates.push(currentDate.format("MM/DD/YYYY"));
+      currentDate.add(1, "days");
+    }
+    return allDates.includes(dateToCheck);
   };
 
   // Hook Functions
-  console.log(date);
 
   return (
     <div className="flex flex-col h-[calc(100%-88px)]">
+      <div className="flex w-full p-[8px]">
+        <div
+          className="flex px-[20px] py-[12px] justify-center bg-low-bg rounded-[8px] w-full h-full"
+          onClick={() => {
+            setOpenEnquiry(true);
+          }}
+        >
+          Add Enquiry
+        </div>
+      </div>
       <TabSelect
         options={[
           {
@@ -61,7 +77,7 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                   moment(
                     new Date(date).toLocaleDateString(),
                     "MM/DD/YYYY",
-                  ).toDate(),
+                  ).format("MM/DD/YYYY"),
                   moment(
                     new Date(enquiry.fromDate).toLocaleDateString(),
                     "MM/DD/YYYY",
@@ -74,8 +90,6 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
               : true,
           )
           .map((e) => {
-            console.log(!!date);
-            console.log(e);
             return e;
           })
           .filter((enquiry) =>
@@ -86,6 +100,14 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
             <IndividualEnquiry key={enquiry._id} enquiry={enquiry} />
           ))}
       </div>
+      {openEnquiry && (
+        <AddEnquiryModal
+          closeCallback={() => {
+            setOpenEnquiry(false);
+          }}
+          open={openEnquiry}
+        />
+      )}
     </div>
   );
 };

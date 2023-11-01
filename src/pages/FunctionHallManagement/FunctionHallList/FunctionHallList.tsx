@@ -34,13 +34,13 @@ const FunctionHallList: React.FC<FunctionHallListProps> = () => {
   const addOrUpdateFunctionHall = (functionHall: FunctionHall) => {
     if (!functionHall._id) {
       addFunctionHall(functionHall).then((res) => {
-        console.log(res);
+        //console.log(res);
         fetchFunctionHalls();
         closeModal();
       });
     } else {
       updateFunctionHall(functionHall).then((res) => {
-        console.log(res);
+        //console.log(res);
         fetchFunctionHalls();
         closeModal();
       });

@@ -8,7 +8,7 @@ export const getAllUsers: () => Promise<User[]> = async () => {
     return response.data as User[];
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };

@@ -101,7 +101,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
       securityGuardSecondaryData,
       ...basicData
     } = user;
-    console.log(basicData);
+    ////console.log(basicData);
     let data: User;
     switch (roleToAdd) {
       case UserRoleEnum.SUPER_ADMIN:
@@ -142,7 +142,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
       securityGuardSecondaryData,
       ...basicData
     } = user;
-    console.log(basicData);
+    //console.log(basicData);
     let data: User;
     switch (roleToAdd) {
       case UserRoleEnum.SUPER_ADMIN:
@@ -208,7 +208,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
 
   React.useEffect(() => {
     if (isEdit && editUser) {
-      console.log(editUser);
+      //console.log(editUser);
       setUser(editUser!);
     }
   }, [isEdit]);

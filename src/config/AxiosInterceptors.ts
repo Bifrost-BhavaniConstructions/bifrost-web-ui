@@ -20,7 +20,7 @@ function createAxiosResponseInterceptor() {
     (response) => response,
     (error) => {
       // Reject promise if usual error
-      console.log(error);
+      //console.log(error);
       if (error.response.status !== 401) {
         return Promise.reject(error);
       }
@@ -53,7 +53,7 @@ function createAxiosResponseInterceptor() {
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("token");
           router.navigate("/login").then(() => {
-            console.log("redirected to Login");
+            //console.log("redirected to Login");
           });
           return Promise.reject(error2);
         })

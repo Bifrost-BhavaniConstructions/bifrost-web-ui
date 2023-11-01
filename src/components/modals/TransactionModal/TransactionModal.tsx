@@ -98,7 +98,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   }, [transaction.transactionType, user]);
 
   React.useEffect(() => {
-    console.log(transaction);
+    //console.log(transaction);
   }, [transaction]);
 
   return (

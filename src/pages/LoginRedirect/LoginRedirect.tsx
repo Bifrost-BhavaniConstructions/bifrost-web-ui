@@ -24,7 +24,7 @@ const LoginRedirect: React.FC<LoginRedirectProps> = () => {
   React.useEffect(() => {
     const token = searchParams.get("token");
     const localToken = localStorage.getItem("token");
-    console.log(token);
+    //console.log(token);
     if (token) {
       setToken(token);
       loginUsingToken(token)

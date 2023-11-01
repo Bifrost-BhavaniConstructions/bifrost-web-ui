@@ -8,7 +8,7 @@ export const getAllFunctionHalls: () => Promise<FunctionHall[]> = async () => {
     return response.data as FunctionHall[];
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
@@ -20,7 +20,7 @@ export const addFunctionHall: (
     return response.data as FunctionHall;
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
@@ -32,7 +32,7 @@ export const updateFunctionHall: (
     return response.data as FunctionHall;
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };

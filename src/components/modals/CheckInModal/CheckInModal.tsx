@@ -105,7 +105,7 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
       inventory: newInventoryTypeList,
       generators: generators,
     };
-    console.log(data);
+    //console.log(data);
     httpClient
       .post(`/function-hall/enquiry/update-status/${enquiry._id}`, data)
       .then(() => {

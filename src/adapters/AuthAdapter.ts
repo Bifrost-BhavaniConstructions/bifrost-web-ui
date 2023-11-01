@@ -13,7 +13,7 @@ export const loginUsingToken = async (token: string) => {
     return data.data;
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
@@ -23,7 +23,7 @@ export const checkPulse = async () => {
     await httpClient.get(`${API}/auth/pulse`);
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
@@ -33,7 +33,7 @@ export const loginUserWithToken: () => Promise<User> = async () => {
     return response.data as User;
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };

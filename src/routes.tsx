@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Navigate to="/site-management" />,
+    element: <Navigate to="/function-hall-management" />,
   },
   Routes,
   FunctionHallManagementRoutes,

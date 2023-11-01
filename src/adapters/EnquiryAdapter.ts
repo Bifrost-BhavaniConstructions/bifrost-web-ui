@@ -9,7 +9,7 @@ export const getAllEnquiries: () => Promise<Enquiry[]> = async () => {
     return response.data as Enquiry[];
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
@@ -21,7 +21,7 @@ export const getAllEnquiryTypes: () => Promise<EnquiryType[]> = async () => {
     return response.data as EnquiryType[];
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };

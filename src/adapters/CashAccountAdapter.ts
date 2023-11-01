@@ -13,7 +13,7 @@ export const fetchCashAccount: (
     return response.data as CashAccount;
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
@@ -28,7 +28,7 @@ export const fetchUserTransactions: (
     return response.data as Transaction[];
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
@@ -41,7 +41,7 @@ export const fetchTransactionPurposes: () => Promise<
     return response.data as TransactionPurpose[];
   } catch (e: any) {
     const axiosError = e as AxiosError;
-    console.log(axiosError);
+    //console.log(axiosError);
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };

@@ -39,8 +39,8 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = () => {
   useScrollSnap(
     containerRef,
     { snapDestinationX: "100%", snapStop: true },
-    (ref) => {
-      console.log(ref);
+    () => {
+      //console.log(ref);
     },
   );
 
@@ -186,14 +186,14 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = () => {
           functionHallId={selectedFunctionHall!}
         />
       )}
-      {
+      {openEnquiry && (
         <AddEnquiryModal
           closeCallback={() => {
             setOpenEnquiry(false);
           }}
           open={openEnquiry}
         />
-      }
+      )}
     </div>
   );
 };
