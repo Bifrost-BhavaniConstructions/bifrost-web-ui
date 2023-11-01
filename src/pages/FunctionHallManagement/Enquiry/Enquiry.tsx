@@ -22,23 +22,23 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
   // State Variables - Hooks
 
   // Functions
-  const isDateInRange = (dateToCheck: string, fromDate: Date, toDate: Date) => {
-    // Check if the dateToCheck is equal to or greater than fromDate
-    // and equal to or less than toDate
-    const fromTimestamp = moment(fromDate.toISOString());
-    const toTimestamp = moment(toDate.toISOString());
-
-    // Create an array to store all dates in MM/DD/YYYY format
-    const allDates = [];
-
-    // Start from the "from" date and add each date to the array until we reach the "to" date
-    const currentDate = fromTimestamp.clone();
-    while (currentDate.isSameOrBefore(toTimestamp)) {
-      allDates.push(currentDate.format("MM/DD/YYYY"));
-      currentDate.add(1, "days");
-    }
-    return allDates.includes(dateToCheck);
-  };
+  // const isDateInRange = (dateToCheck: string, fromDate: Date, toDate: Date) => {
+  //   // Check if the dateToCheck is equal to or greater than fromDate
+  //   // and equal to or less than toDate
+  //   const fromTimestamp = moment(fromDate.toISOString());
+  //   const toTimestamp = moment(toDate.toISOString());
+  //
+  //   // Create an array to store all dates in MM/DD/YYYY format
+  //   const allDates = [];
+  //
+  //   // Start from the "from" date and add each date to the array until we reach the "to" date
+  //   const currentDate = fromTimestamp.clone();
+  //   while (currentDate.isSameOrBefore(toTimestamp)) {
+  //     allDates.push(currentDate.format("MM/DD/YYYY"));
+  //     currentDate.add(1, "days");
+  //   }
+  //   return allDates.includes(dateToCheck);
+  // };
 
   // Hook Functions
 
@@ -102,24 +102,24 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                   to
                   {new Date(e.toDate).toLocaleDateString()}
                   <br />
-                  {date
-                    ? isDateInRange(
-                        moment(
-                          new Date(date).toLocaleDateString(),
-                          "MM/DD/YYYY",
-                        ).format("MM/DD/YYYY"),
-                        moment(
-                          new Date(e.fromDate).toLocaleDateString(),
-                          "MM/DD/YYYY",
-                        ).toDate(),
-                        moment(
-                          new Date(e.toDate).toLocaleDateString(),
-                          "MM/DD/YYYY",
-                        ).toDate(),
-                      )
-                      ? "true"
-                      : "false"
-                    : "true"}
+                  {/*{date*/}
+                  {/*  ? isDateInRange(*/}
+                  {/*      moment(*/}
+                  {/*        new Date(date).toLocaleDateString(),*/}
+                  {/*        "MM/DD/YYYY",*/}
+                  {/*      ).format("MM/DD/YYYY"),*/}
+                  {/*      moment(*/}
+                  {/*        new Date(e.fromDate).toLocaleDateString(),*/}
+                  {/*        "MM/DD/YYYY",*/}
+                  {/*      ).toDate(),*/}
+                  {/*      moment(*/}
+                  {/*        new Date(e.toDate).toLocaleDateString(),*/}
+                  {/*        "MM/DD/YYYY",*/}
+                  {/*      ).toDate(),*/}
+                  {/*    )*/}
+                  {/*    ? "true"*/}
+                  {/*    : "false"*/}
+                  {/*  : "true"}*/}
                 </>
               </div>
             );
