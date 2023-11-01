@@ -61,12 +61,12 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
           <div className="text-[12px] font-light">
             {`${new Date(enquiry.fromDate).toDateString()} [${new Date(
               enquiry.fromDate,
-            ).toLocaleTimeString()}]`}
+            ).toLocaleTimeString("en-US")}]`}
           </div>
           <div className="text-[12px] font-light">
             {`${new Date(enquiry.toDate).toDateString()} [${new Date(
               enquiry.toDate,
-            ).toLocaleTimeString()}]`}
+            ).toLocaleTimeString("en-US")}]`}
           </div>
           <div className="text-[14px] flex font-light mt-[4px]">
             <div className="flex flex-7 flex-col">

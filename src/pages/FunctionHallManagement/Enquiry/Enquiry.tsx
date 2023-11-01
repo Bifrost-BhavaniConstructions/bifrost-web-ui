@@ -38,6 +38,10 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
     to.setHours(0, 0, 0, 0);
     checkDate.setHours(0, 0, 0, 0);
 
+    console.log("from", from);
+    console.log("to", to);
+    console.log("check", checkDate);
+
     // Compare the dates
     if (checkDate >= from && checkDate <= to) {
       console.log(
@@ -83,22 +87,12 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
           .filter((enquiry) =>
             functionHall ? enquiry.functionHall._id === functionHall : true,
           )
-          .map((e, i) => {
-            if (i === 0) {
-              console.log(date);
-              console.log(new Date(date!).toLocaleDateString("en-US"));
-              console.log(
-                new Date(new Date(date!).toLocaleDateString("en-US")),
-              );
-            }
-            return e;
-          })
           .filter((enquiry) =>
             date
               ? isDateInRange(
                   new Date(date).toLocaleDateString("en-US"),
-                  new Date(enquiry.fromDate).toLocaleDateString(),
-                  new Date(enquiry.toDate).toLocaleDateString(),
+                  new Date(enquiry.fromDate).toLocaleDateString("en-US"),
+                  new Date(enquiry.toDate).toLocaleDateString("en-US"),
                 )
               : true,
           )

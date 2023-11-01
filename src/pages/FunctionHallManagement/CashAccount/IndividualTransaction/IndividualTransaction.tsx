@@ -67,7 +67,7 @@ const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
         <div className="flex w-full justify-between px-[12px] pb-[12px]">
           <div className="flex flex-col">
             <div className="text-[12px] font-light">
-              {new Date(transaction.createdAt).toLocaleString()}
+              {new Date(transaction.createdAt).toLocaleString("en-US")}
             </div>
             <div className="text-[12px] font-light">
               <div className="flex mt-[4px]">

@@ -80,8 +80,8 @@ const IndividualEstimate: React.FC<IndividualEstimateProps> = ({
           >
             <div>{`Estimate ${index + 1}`}</div>
             <div className="flex text-[12px] justify-center items-center">
-              {new Date(estimate.createdAt!)?.toLocaleDateString()}-
-              {new Date(estimate.createdAt!)?.toLocaleTimeString()}
+              {new Date(estimate.createdAt!)?.toLocaleDateString("en-US")}-
+              {new Date(estimate.createdAt!)?.toLocaleTimeString("en-US")}
             </div>
           </Box>
           <AccordionIcon />

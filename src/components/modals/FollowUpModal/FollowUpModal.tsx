@@ -110,7 +110,7 @@ const FollowUpModal: React.FC<AcceptBookingModalProps> = ({
               <div className="flex flex-grow flex-col">
                 <div className="font-light text-[12px] opacity-70">time</div>
                 <div className="flex font-semibold text-[14px]">
-                  {new Date(followup.datetime).toLocaleString()}
+                  {new Date(followup.datetime).toLocaleString("en-US")}
                 </div>
               </div>
               <div className="flex font-nomal text-[14px]">
