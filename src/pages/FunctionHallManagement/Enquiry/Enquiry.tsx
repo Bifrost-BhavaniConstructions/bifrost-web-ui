@@ -94,22 +94,13 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
               <div key={i} className="p-[20px]">
                 <>
                   date
-                  {moment(
-                    new Date(date ? date : "").toLocaleDateString(),
-                    "MM/DD/YYYY",
-                  ).format("MM/DD/YYYY")}
+                  {new Date(date ? date : "").toLocaleDateString()}
                   <br />
                   from
-                  {moment(
-                    new Date(e.fromDate).toLocaleDateString(),
-                    "MM/DD/YYYY",
-                  ).toString()}
+                  {new Date(e.fromDate).toLocaleDateString()}
                   <br />
                   to
-                  {moment(
-                    new Date(e.toDate).toLocaleDateString(),
-                    "MM/DD/YYYY",
-                  ).toString()}
+                  {new Date(e.toDate).toLocaleDateString()}
                   <br />
                   {date
                     ? isDateInRange(
