@@ -71,62 +71,34 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
           .filter((enquiry) =>
             functionHall ? enquiry.functionHall._id === functionHall : true,
           )
-          // .filter((enquiry) =>
-          //   date
-          //     ? isDateInRange(
-          //         moment(
-          //           new Date(date).toLocaleDateString(),
-          //           "MM/DD/YYYY",
-          //         ).format("MM/DD/YYYY"),
-          //         moment(
-          //           new Date(enquiry.fromDate).toLocaleDateString(),
-          //           "MM/DD/YYYY",
-          //         ).toDate(),
-          //         moment(
-          //           new Date(enquiry.toDate).toLocaleDateString(),
-          //           "MM/DD/YYYY",
-          //         ).toDate(),
-          //       )
-          //     : true,
-          // )
-          .map((e, i) => {
-            return (
-              <div key={i} className="p-[20px]">
-                <>
-                  date
-                  {moment(
-                    new Date(date ? date : "").toLocaleDateString(),
+          .filter((enquiry) =>
+            date
+              ? isDateInRange(
+                  moment(
+                    new Date(date).toLocaleDateString(),
                     "MM/DD/YYYY",
-                  ).format("MM/DD/YYYY")}
-                  from
-                  {moment(
-                    new Date(e.fromDate).toLocaleDateString(),
+                  ).format("MM/DD/YYYY"),
+                  moment(
+                    new Date(enquiry.fromDate).toLocaleDateString(),
                     "MM/DD/YYYY",
-                  ).toDate()}
-                  to
-                  {moment(
-                    new Date(e.toDate).toLocaleDateString(),
+                  ).toDate(),
+                  moment(
+                    new Date(enquiry.toDate).toLocaleDateString(),
                     "MM/DD/YYYY",
-                  ).toDate()}
-                  true
-                  {isDateInRange(
-                    moment(
-                      new Date(date ? date : "").toLocaleDateString(),
-                      "MM/DD/YYYY",
-                    ).format("MM/DD/YYYY"),
-                    moment(
-                      new Date(e.fromDate).toLocaleDateString(),
-                      "MM/DD/YYYY",
-                    ).toDate(),
-                    moment(
-                      new Date(e.toDate).toLocaleDateString(),
-                      "MM/DD/YYYY",
-                    ).toDate(),
-                  )}
-                </>
-              </div>
-            );
-          })}
+                  ).toDate(),
+                )
+              : true,
+          )
+          .map((e) => {
+            return e;
+          })
+          .filter((enquiry) =>
+            selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking,
+          )
+          .filter((enquiry) => (!!date ? true : !enquiry.isCheckedOut))
+          .map((enquiry) => (
+            <IndividualEnquiry key={enquiry._id} enquiry={enquiry} />
+          ))}
       </div>
       {openEnquiry && (
         <AddEnquiryModal
