@@ -83,6 +83,10 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
           .filter((enquiry) =>
             functionHall ? enquiry.functionHall._id === functionHall : true,
           )
+          .map((e) => {
+            console.log(date);
+            return e;
+          })
           .filter((enquiry) =>
             date
               ? isDateInRange(
@@ -92,10 +96,6 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
                 )
               : true,
           )
-          .map((e) => {
-            console.log(date);
-            return e;
-          })
           .filter((enquiry) =>
             selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking,
           )
