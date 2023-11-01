@@ -22,22 +22,25 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
   // State Variables - Hooks
 
   // Functions
-  const isDateInRange = (dateToCheck: string, fromDate: Date, toDate: Date) => {
+  const isDateInRange = (
+    dateToCheck: string,
+    fromDate: string,
+    toDate: string,
+  ) => {
     // Check if the dateToCheck is equal to or greater than fromDate
     // and equal to or less than toDate
-    const fromTimestamp = moment(fromDate.toISOString());
-    const toTimestamp = moment(toDate.toISOString());
+    const from = moment(fromDate, "MM/DD/YYYY");
+    const to = moment(toDate, "MM/DD/YYYY");
+    const checkDate = moment(dateToCheck, "MM/DD/YYYY");
 
-    // Create an array to store all dates in MM/DD/YYYY format
-    const allDates = [];
-
-    // Start from the "from" date and add each date to the array until we reach the "to" date
-    const currentDate = fromTimestamp.clone();
-    while (currentDate.isSameOrBefore(toTimestamp)) {
-      allDates.push(currentDate.format("MM/DD/YYYY"));
-      currentDate.add(1, "days");
+    // Use isSameOrAfter and isSameOrBefore to check if checkDate is within the range
+    if (checkDate.isSameOrAfter(from) && checkDate.isSameOrBefore(to)) {
+      console.log(`${checkDate.format("MM/DD/YYYY")} is within the range.`);
+      return true;
+    } else {
+      console.log(`${checkDate.format("MM/DD/YYYY")} is not within the range.`);
+      return false;
     }
-    return allDates.includes(dateToCheck);
   };
 
   // Hook Functions
@@ -74,18 +77,9 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
           .filter((enquiry) =>
             date
               ? isDateInRange(
-                  moment(
-                    new Date(date).toLocaleDateString(),
-                    "MM/DD/YYYY",
-                  ).format("MM/DD/YYYY"),
-                  moment(
-                    new Date(enquiry.fromDate).toLocaleDateString(),
-                    "MM/DD/YYYY",
-                  ).toDate(),
-                  moment(
-                    new Date(enquiry.toDate).toLocaleDateString(),
-                    "MM/DD/YYYY",
-                  ).toDate(),
+                  new Date(date).toLocaleDateString(),
+                  new Date(enquiry.fromDate).toLocaleDateString(),
+                  new Date(enquiry.toDate).toLocaleDateString(),
                 )
               : true,
           )
