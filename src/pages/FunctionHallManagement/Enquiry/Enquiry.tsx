@@ -93,6 +93,7 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
               : true,
           )
           .map((e) => {
+            console.log(date);
             return e;
           })
           .filter((enquiry) =>
