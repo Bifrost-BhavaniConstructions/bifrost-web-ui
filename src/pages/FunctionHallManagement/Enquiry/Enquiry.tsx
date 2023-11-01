@@ -83,8 +83,12 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
           .filter((enquiry) =>
             functionHall ? enquiry.functionHall._id === functionHall : true,
           )
-          .map((e) => {
-            console.log(date);
+          .map((e, i) => {
+            if (i === 0) {
+              console.log(date);
+              console.log(new Date(date!).toLocaleDateString());
+              console.log(new Date(new Date(date!).toLocaleDateString()));
+            }
             return e;
           })
           .filter((enquiry) =>
