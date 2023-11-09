@@ -38,22 +38,8 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
     to.setHours(0, 0, 0, 0);
     checkDate.setHours(0, 0, 0, 0);
 
-    console.log("from", from);
-    console.log("to", to);
-    console.log("check", checkDate);
-
     // Compare the dates
-    if (checkDate >= from && checkDate <= to) {
-      console.log(
-        `${checkDate.toLocaleDateString("en-US")} is within the range.`,
-      );
-      return true;
-    } else {
-      console.log(
-        `${checkDate.toLocaleDateString("en-US")} is not within the range.`,
-      );
-      return false;
-    }
+    return checkDate >= from && checkDate <= to;
   };
 
   // Hook Functions

@@ -36,14 +36,6 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = () => {
     string | undefined
   >();
 
-  useScrollSnap(
-    containerRef,
-    { snapDestinationX: "100%", snapStop: true },
-    () => {
-      //console.log(ref);
-    },
-  );
-
   // Functions
   const getEvents = (functionHall: FunctionHall) => {
     const eventCounts: EventCounts = {};
