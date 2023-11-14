@@ -3,11 +3,8 @@ import "./Enquiry.css";
 import TabSelect from "../../../components/TabSelect";
 import { useStoreState } from "../../../store/hooks";
 import IndividualEnquiry from "./IndividualEnquiry";
-import moment from "moment/moment";
 import AddEnquiryModal from "../../../components/modals/AddEnquiryModal";
-import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
-import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
-import FunctionHall from "../../../types/FunctionHall/FunctionHall";
+import { Tag, TagLabel } from "@chakra-ui/react";
 
 interface QueriesProps {
   date?: Date;
@@ -75,7 +72,7 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
         tabIndex={selectedTab}
         setTabIndex={setSelectedTab}
       />
-      <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] no-scrollbar">
+      <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] pb-[8px] no-scrollbar">
         {filteredFunctionHalls.length > 0 && (
           <Tag
             size={"md"}
