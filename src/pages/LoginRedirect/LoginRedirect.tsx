@@ -33,7 +33,7 @@ const LoginRedirect: React.FC<LoginRedirectProps> = () => {
           localStorage.setItem("token", token);
           localStorage.setItem("refreshToken", response.refreshToken);
           setUser(response);
-          navigate("/site-management");
+          navigate("/function-hall-management");
         })
         .catch(() => {
           // navigate('/login')
@@ -46,7 +46,7 @@ const LoginRedirect: React.FC<LoginRedirectProps> = () => {
           localStorage.setItem("token", localToken);
           localStorage.setItem("refreshToken", response.refreshToken);
           setUser(response);
-          navigate("/site-management");
+          navigate("/function-hall-management");
         })
         .catch(() => {
           // navigate('/login')
