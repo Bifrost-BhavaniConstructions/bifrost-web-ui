@@ -16,6 +16,16 @@ const LoginRedirect: React.FC<LoginRedirectProps> = () => {
     (actions) => actions.userStore,
   );
   const [searchParams] = useSearchParams();
+  const { fetchEnquiries, fetchFunctionHalls, fetchEnquiryTypes } =
+    useStoreActions((actions) => actions.functionHallStore);
+
+  const fetchUsers = useStoreActions(
+    (actions) => actions.peopleStore.fetchUsers,
+  );
+
+  const { fetchTransactionPurposes } = useStoreActions(
+    (actions) => actions.cashAccountStore,
+  );
   // State Variables - Hooks
 
   // Functions
@@ -33,6 +43,11 @@ const LoginRedirect: React.FC<LoginRedirectProps> = () => {
           localStorage.setItem("token", token);
           localStorage.setItem("refreshToken", response.refreshToken);
           setUser(response);
+          fetchEnquiries();
+          fetchFunctionHalls();
+          fetchUsers();
+          fetchEnquiryTypes();
+          fetchTransactionPurposes();
           navigate("/function-hall-management");
         })
         .catch(() => {
@@ -46,6 +61,11 @@ const LoginRedirect: React.FC<LoginRedirectProps> = () => {
           localStorage.setItem("token", localToken);
           localStorage.setItem("refreshToken", response.refreshToken);
           setUser(response);
+          fetchEnquiries();
+          fetchFunctionHalls();
+          fetchUsers();
+          fetchEnquiryTypes();
+          fetchTransactionPurposes();
           navigate("/function-hall-management");
         })
         .catch(() => {
