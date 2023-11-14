@@ -104,6 +104,7 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = () => {
   };
 
   // Hook Functions
+  useScrollSnap(containerRef, { snapDestinationX: "100%" }, () => {});
 
   return (
     <div

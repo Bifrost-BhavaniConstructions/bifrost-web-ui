@@ -19,6 +19,7 @@ interface AddEnquiryModalProps {
   editEnquiry?: EnquiryCreateWrapper;
   addEstimate?: boolean;
   enquiryId?: string;
+  latestEstimate?: Estimate;
 }
 
 const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
@@ -27,6 +28,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   editEnquiry,
   addEstimate,
   enquiryId,
+  latestEstimate,
 }) => {
   // Objects
   const emptyEnquiry: EnquiryCreateWrapper = {
@@ -40,6 +42,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
     name: "",
     primaryContactName: "",
     primaryContactNumber: 0,
+    pax: 0,
     primaryReference: "",
     secondaryContactName: "",
     secondaryReference: "",
@@ -72,7 +75,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   const [estimate, setEstimate] = React.useState(emptyEstimate);
   // Functions
   const createEnquiry = () => {
-    //console.log({ ...enquiry, estimates: [estimate] });
+    console.log({ ...enquiry, estimates: [estimate] });
     httpClient
       .post("/function-hall/enquiry/", { ...enquiry, estimates: [estimate] })
       .then(() => {
@@ -141,6 +144,11 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
       setEnquiry(editEnquiry);
     }
   }, [editEnquiry]);
+  React.useEffect(() => {
+    if (latestEstimate) {
+      setEstimate(latestEstimate);
+    }
+  }, [latestEstimate]);
 
   return (
     <ChakraModal
@@ -248,6 +256,15 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               onValueChange={(value) => {
                 setEnquiry({ ...enquiry, enquiryType: value });
               }}
+            />
+            <LabelledInput
+              required
+              name="pax"
+              value={enquiry.pax}
+              setValue={(_val: number) => {
+                setEnquiry({ ...enquiry, pax: _val });
+              }}
+              inputProps={{ type: "number" }}
             />
             <h3 className="flex text-[16px] justify-end text-white border-t-2 mt-[10px] pt-[10px]">
               Contact Information

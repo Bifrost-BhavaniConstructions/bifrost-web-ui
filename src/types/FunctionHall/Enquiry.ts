@@ -16,6 +16,7 @@ interface Enquiry {
   estimates: Estimate[];
   secondaryReference: string;
   primaryContactNumber: number;
+  pax: number;
   primaryContactName: string;
   secondaryContactNumber: number | null;
   secondaryContactName: string;
@@ -31,6 +32,9 @@ interface Enquiry {
   followUps: FollowUp[];
   isCheckedOut: boolean;
 }
+export interface EnquiryFilterWrapper {
+  enquiryType: string;
+}
 export interface EnquiryCreateWrapper {
   _id?: string;
   primaryReference: string;
@@ -41,6 +45,7 @@ export interface EnquiryCreateWrapper {
   estimates: Estimate[];
   secondaryReference?: string;
   primaryContactNumber: number;
+  pax: number;
   primaryContactName: string;
   secondaryContactNumber?: number | null;
   secondaryContactName?: string;

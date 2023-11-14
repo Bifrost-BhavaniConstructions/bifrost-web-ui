@@ -5,6 +5,9 @@ import { useStoreState } from "../../../store/hooks";
 import IndividualEnquiry from "./IndividualEnquiry";
 import moment from "moment/moment";
 import AddEnquiryModal from "../../../components/modals/AddEnquiryModal";
+import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
+import FunctionHall from "../../../types/FunctionHall/FunctionHall";
 
 interface QueriesProps {
   date?: Date;
@@ -13,12 +16,16 @@ interface QueriesProps {
 
 const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
   // Objects
-  const enquiries = useStoreState((state) => state.functionHallStore.enquiries);
+  const { enquiries, functionHalls } = useStoreState(
+    (state) => state.functionHallStore,
+  );
 
   // Variables
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [openEnquiry, setOpenEnquiry] = React.useState(false);
-
+  const [filteredFunctionHalls, setFilteredFunctionHalls] = React.useState<
+    string[]
+  >([]);
   // State Variables - Hooks
 
   // Functions
@@ -68,10 +75,54 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
         tabIndex={selectedTab}
         setTabIndex={setSelectedTab}
       />
+      <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] no-scrollbar">
+        {filteredFunctionHalls.length > 0 && (
+          <Tag
+            size={"md"}
+            variant={"subtle"}
+            className="flex shrink-0 mr-[4px]"
+            colorScheme="red"
+            onClick={() => {
+              setFilteredFunctionHalls([]);
+            }}
+          >
+            <TagLabel>clear</TagLabel>
+          </Tag>
+        )}
+        {functionHalls.map((fH) => {
+          return (
+            <Tag
+              key={fH._id}
+              size={"md"}
+              variant={
+                filteredFunctionHalls.includes(fH._id!) ? "subtle" : "outline"
+              }
+              className="flex shrink-0 mr-[4px]"
+              colorScheme="cyan"
+              onClick={() => {
+                if (filteredFunctionHalls.includes(fH._id!)) {
+                  setFilteredFunctionHalls(
+                    filteredFunctionHalls.filter((f) => f !== fH._id!),
+                  );
+                } else {
+                  setFilteredFunctionHalls([...filteredFunctionHalls, fH._id!]);
+                }
+              }}
+            >
+              <TagLabel>{fH.name}</TagLabel>
+            </Tag>
+          );
+        })}
+      </div>
       <div className="w-full h-[calc(100%-72px)] overflow-y-auto overflow-x-hidden p-[8px]">
         {enquiries
           .filter((enquiry) =>
             functionHall ? enquiry.functionHall._id === functionHall : true,
+          )
+          .filter((enquiry) =>
+            filteredFunctionHalls.length > 0
+              ? filteredFunctionHalls.includes(enquiry.functionHall._id!)
+              : true,
           )
           .filter((enquiry) =>
             date

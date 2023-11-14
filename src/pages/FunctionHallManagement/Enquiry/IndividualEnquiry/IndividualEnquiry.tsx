@@ -177,6 +177,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
             }}
             open={addEstimate}
             addEstimate={addEstimate}
+            latestEstimate={enquiry.estimates[0]}
             enquiryId={enquiry._id}
           />
           <AcceptBookingModal
