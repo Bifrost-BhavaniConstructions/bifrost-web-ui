@@ -5,6 +5,7 @@ import { EnquiryPayment } from "./EnquiryPayment";
 import { Inventory } from "./Inventory";
 import { StatStatus } from "./StatStatus";
 import { FollowUp } from "./FollowUp";
+import { PartOfDayEnum } from "../../enums/PartOfDayEnum";
 
 interface Enquiry {
   _id: string;
@@ -21,6 +22,7 @@ interface Enquiry {
   secondaryContactNumber: number | null;
   secondaryContactName: string;
   enquiryType: EnquiryType;
+  partOfDay: PartOfDayEnum;
   createdAt: string;
   updatedAt: string;
   isBooking: boolean;
@@ -44,6 +46,7 @@ export interface EnquiryCreateWrapper {
   toDate?: Date;
   estimates: Estimate[];
   secondaryReference?: string;
+  partOfDay: PartOfDayEnum;
   primaryContactNumber: number;
   pax: number;
   primaryContactName: string;

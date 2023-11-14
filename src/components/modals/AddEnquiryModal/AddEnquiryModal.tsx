@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React from "react";
 import "./AddEnquiryModal.css";
-import { Button, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import ChakraModal from "../ChakraModal";
 import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
@@ -11,6 +11,10 @@ import moment from "moment";
 import { Estimate } from "../../../types/FunctionHall/Estimate";
 import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
+import {
+  getPartOfDayEnumFromString,
+  PartOfDayEnum,
+} from "../../../enums/PartOfDayEnum";
 
 interface AddEnquiryModalProps {
   closeCallback: Function;
@@ -47,6 +51,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
     secondaryContactName: "",
     secondaryReference: "",
     updatedAt: "",
+    partOfDay: PartOfDayEnum.MORNING,
   };
 
   const emptyEstimate: Estimate = {
@@ -255,6 +260,24 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               }))}
               onValueChange={(value) => {
                 setEnquiry({ ...enquiry, enquiryType: value });
+              }}
+            />
+            <ChakraSelect
+              name="part of day"
+              value={enquiry.partOfDay}
+              values={[
+                PartOfDayEnum.MORNING,
+                PartOfDayEnum.AFTERNOON,
+                PartOfDayEnum.NIGHT,
+              ].map((fH) => ({
+                name: fH.split("_").join("/").toLowerCase(),
+                value: fH.toString(),
+              }))}
+              onValueChange={(value: string) => {
+                setEnquiry({
+                  ...enquiry,
+                  partOfDay: getPartOfDayEnumFromString(value)!,
+                });
               }}
             />
             <LabelledInput
