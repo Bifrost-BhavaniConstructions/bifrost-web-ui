@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { PlatformEnum } from "../../../../enums/PlatformEnum";
 import ChakraModal from "../../../../components/modals/ChakraModal";
-import { TransactionWithFunctionHallName } from "../../AllTransactions/AllTransactions";
+import { TransactionWithFunctionHallName } from "../AllTransactions/AllTransactions";
 
 interface IndividualTransactionProps {
   transaction: TransactionWithFunctionHallName;
@@ -95,7 +95,11 @@ const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
               <div className="flex mt-[4px]">
                 <Tag size={"sm"} variant="subtle" colorScheme="cyan">
                   <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
-                  <TagLabel>{transaction.functionHallName}</TagLabel>
+                  <TagLabel>
+                    {transaction.site
+                      ? transaction.site.name
+                      : transaction.functionHallName}
+                  </TagLabel>
                 </Tag>
               </div>
               {transaction.transactionPurpose && (

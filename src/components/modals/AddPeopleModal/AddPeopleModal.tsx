@@ -191,6 +191,9 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
       case UserRoleEnum.DRIVER:
         platforms = [PlatformEnum.SITE];
         break;
+      case UserRoleEnum.VENDOR:
+        platforms = [PlatformEnum.SITE];
+        break;
       case UserRoleEnum.FH_MANAGER:
         platforms = [PlatformEnum.FUNCTION_HALL];
         break;
@@ -230,6 +233,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
         {[
           UserRoleEnum.SUPER_ADMIN,
           UserRoleEnum.ADMIN,
+          UserRoleEnum.SUPERVISOR,
           UserRoleEnum.FH_MANAGER,
         ].includes(roleToAdd) && (
           <>
@@ -492,7 +496,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
               inputProps={{ type: "number" }}
             />
             <LabelledInput
-              name="salary"
+              name="OT pay"
               value={user.supervisorData?.payOT!}
               setValue={(_val: number) => {
                 setUser({

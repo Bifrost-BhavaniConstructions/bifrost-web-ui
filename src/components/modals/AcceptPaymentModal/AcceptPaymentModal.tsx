@@ -8,10 +8,7 @@ import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import ChakraSelect from "../../ChakraSelect";
 import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
-import {
-  getTransactionTypeFromString,
-  TransactionTypeEnum,
-} from "../../../enums/TransactionTypeEnum";
+import { TransactionTypeEnum } from "../../../enums/TransactionTypeEnum";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
 import {
   getModeOfPaymentFromString,
@@ -155,7 +152,7 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
         >
           <Stack spacing={4} direction="row">
             <Radio value="CASH_ACCOUNT">From Cash Account</Radio>
-            <Radio value="PR">PR</Radio>
+            <Radio value="Assets">Assets</Radio>
           </Stack>
         </RadioGroup>
       )}

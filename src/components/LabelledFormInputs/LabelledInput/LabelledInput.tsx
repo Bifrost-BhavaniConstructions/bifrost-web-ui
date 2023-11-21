@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import "./LabelledInput.css";
 import {
   Input,
@@ -39,7 +39,7 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
 
   return (
     <div>
-      <div className="font-light text-[12px] opacity-70">
+      <div className="font-light text-[12px] mt-[4px] opacity-70">
         {name}
         {required && (
           <span className="text-red-500 ml-[3px] text-[14px]">*</span>

@@ -5,8 +5,8 @@ import { PlatformEnum } from "../../../enums/PlatformEnum";
 import Home from "../Home";
 import Queries from "../Enquiry";
 import FunctionHallList from "../FunctionHallList";
-import CashAccount from "../CashAccount";
-import AllTransactions from "../AllTransactions";
+import CashAccount from "../../common/CashAccount";
+import AllTransactions from "../../common/CashAccount/AllTransactions";
 
 const FunctionHallManagementRoutes = {
   path: "/function-hall-management/",
@@ -30,7 +30,7 @@ const FunctionHallManagementRoutes = {
     },
     {
       path: "cash-accounts",
-      element: <CashAccount />,
+      element: <CashAccount platform={PlatformEnum.FUNCTION_HALL} />,
     },
     {
       path: "all-transactions",

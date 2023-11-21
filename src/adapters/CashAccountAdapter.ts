@@ -1,6 +1,5 @@
-import EnquiryType from "../types/FunctionHall/EnquiryType";
 import httpClient from "../config/AxiosInterceptors";
-import { AxiosError } from "axios/index";
+import { AxiosError } from "axios";
 import { CashAccount } from "../types/CashAccount/CashAccount";
 import { Transaction } from "../types/CashAccount/Transaction";
 import { TransactionPurpose } from "../types/CashAccount/TransactionPurpose";

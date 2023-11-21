@@ -18,6 +18,17 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
   const { setUser, setDataFetched } = useStoreActions(
     (actions) => actions.userStore,
   );
+  const fetchUsers = useStoreActions(
+    (actions) => actions.peopleStore.fetchUsers,
+  );
+  const { fetchTransactionPurposes } = useStoreActions(
+    (actions) => actions.cashAccountStore,
+  );
+  const { fetchFunctionHalls, fetchEnquiryTypes } = useStoreActions(
+    (actions) => actions.functionHallStore,
+  );
+  const { fetchSites, fetchVehicles, fetchPhones, fetchCards } =
+    useStoreActions((actions) => actions.siteManagementStore);
   const navigate = useNavigate();
 
   // Functions
@@ -30,6 +41,14 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
         .then((user) => {
           setUser(user);
           setDataFetched(true);
+          fetchUsers();
+          fetchFunctionHalls();
+          fetchEnquiryTypes();
+          fetchTransactionPurposes();
+          fetchSites();
+          fetchVehicles();
+          fetchPhones();
+          fetchCards();
         })
         .catch(() => {});
     }

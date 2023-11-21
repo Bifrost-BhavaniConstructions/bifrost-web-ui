@@ -16,6 +16,7 @@ export interface Transaction {
   createdAt: Date;
   platform: PlatformEnum;
   toMisc?: string;
-  functionHall: string;
+  functionHall?: string;
   transactionPurpose: TransactionPurpose;
+  site?: { name: string };
 }

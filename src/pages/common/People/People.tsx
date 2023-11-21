@@ -48,7 +48,7 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
       name: "Super Admins",
     },
     {
-      role: UserRoleEnum.SUPER_ADMIN,
+      role: UserRoleEnum.ADMIN,
       name: "Admins",
     },
     {
@@ -60,7 +60,7 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
       name: "Drivers",
     },
     {
-      role: UserRoleEnum.SUPER_ADMIN,
+      role: UserRoleEnum.VENDOR,
       name: "Vendors",
     },
   ];

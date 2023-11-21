@@ -6,14 +6,21 @@ interface RadioProps {
     text: string | ReactNode;
     onClick: Function;
   }[];
+  isWrapped?: boolean;
+  isHighlighted?: boolean;
 }
 
-const Radio: React.FC<RadioProps> = ({ options }) => {
+const Radio: React.FC<RadioProps> = ({
+  options,
+  isWrapped = true,
+  isHighlighted = false,
+}) => {
   // Objects
 
   // Variables
 
   // State Variables - Hooks
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   // Functions
 
@@ -21,12 +28,21 @@ const Radio: React.FC<RadioProps> = ({ options }) => {
 
   return (
     <div className="flex w-full p-[8px]">
-      <div className="flex flex-wrap justify-center items-center w-full p-[8px]">
+      <div
+        className={`flex justify-center items-center w-full p-[8px] ${
+          isWrapped && "flex-wrap"
+        }`}
+      >
         {options.map((option, index) => (
           <div
             key={index}
-            className={`flex justify-center p-[2px] w-[50%]`}
+            className={`flex justify-center p-[2px] ${
+              isWrapped ? "w-[50%]" : "flex-1"
+            } ${
+              !isHighlighted ? "" : index === selectedIndex ? "" : "opacity-50"
+            }`}
             onClick={() => {
+              setSelectedIndex(index);
               option.onClick();
             }}
           >

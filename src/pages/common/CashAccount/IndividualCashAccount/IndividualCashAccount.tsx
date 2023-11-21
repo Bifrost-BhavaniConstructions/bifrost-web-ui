@@ -9,14 +9,16 @@ import IndividualTransaction from "../IndividualTransaction";
 import { PlatformEnum } from "../../../../enums/PlatformEnum";
 import { useNavigate } from "react-router-dom";
 import { Transaction } from "../../../../types/CashAccount/Transaction";
-import { TransactionWithFunctionHallName } from "../../AllTransactions/AllTransactions";
+import { TransactionWithFunctionHallName } from "../AllTransactions/AllTransactions";
 
 interface IndividualCashAccountProps {
   cashAccount: CashAccount;
+  platform: PlatformEnum;
 }
 
 const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
   cashAccount,
+  platform,
 }) => {
   // Objects
 
@@ -121,7 +123,7 @@ const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
             setOpenGeneralTransactionPopup(false);
           }}
           transactionType={transactionPopup}
-          platform={PlatformEnum.FUNCTION_HALL}
+          platform={platform}
         />
       )}
     </div>

@@ -34,13 +34,16 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
     remarks: "",
     to: "",
     platform: platform,
-    functionHall: "",
   };
 
   // Variables
 
   // State Variables - Hooks
-  const { users } = useStoreState((state) => state.peopleStore);
+  const { functionHallUsers, siteUsers } = useStoreState(
+    (state) => state.peopleStore,
+  );
+  const { sites } = useStoreState((state) => state.siteManagementStore);
+
   const { user } = useStoreState((state) => state.userStore);
   const { fetchCashAccount, fetchUserTransactions } = useStoreActions(
     (actions) => actions.cashAccountStore,
@@ -54,6 +57,11 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
 
   // Functions
   const addTransaction = () => {
+    if (platform === PlatformEnum.SITE) {
+      delete transaction.functionHall;
+    } else {
+      delete transaction.site;
+    }
     httpClient.post(`/cash-account/transaction`, transaction).then(() => {
       fetchCashAccount(user?._id!);
       fetchUserTransactions(user?._id!);
@@ -150,7 +158,10 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             <ChakraSelect
               name="target account"
               value={transaction.to!}
-              values={users
+              values={(platform === PlatformEnum.FUNCTION_HALL
+                ? functionHallUsers
+                : siteUsers
+              )
                 .filter((user) =>
                   transaction.transactionType ===
                   TransactionTypeEnum.VENDOR_TRANSACTION
@@ -191,18 +202,34 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               setTransaction({ ...transaction, remarks: _val });
             }}
           />
-          <ChakraSelect
-            required
-            name="function hall"
-            value={transaction.functionHall}
-            values={functionHalls.map((fH) => ({
-              name: fH.name,
-              value: fH._id!,
-            }))}
-            onValueChange={(value) => {
-              setTransaction({ ...transaction, functionHall: value });
-            }}
-          />
+          {platform === PlatformEnum.FUNCTION_HALL && (
+            <ChakraSelect
+              required
+              name="function hall"
+              value={transaction.functionHall!}
+              values={functionHalls.map((fH) => ({
+                name: fH.name,
+                value: fH._id!,
+              }))}
+              onValueChange={(value) => {
+                setTransaction({ ...transaction, functionHall: value });
+              }}
+            />
+          )}
+          {platform === PlatformEnum.SITE && (
+            <ChakraSelect
+              required
+              name="site"
+              value={transaction.site!}
+              values={sites.map((site) => ({
+                name: site.name,
+                value: site._id!,
+              }))}
+              onValueChange={(value) => {
+                setTransaction({ ...transaction, site: value });
+              }}
+            />
+          )}
           {transaction.transactionType ===
             TransactionTypeEnum.MISCELLANEOUS_TRANSACTION && (
             <ChakraSelect

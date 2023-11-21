@@ -7,12 +7,15 @@ import FunctionHallStore from "./functionHallStore/functionHallStore";
 import { FunctionHallStoreModel } from "./functionHallStore/functionHallStoreModel";
 import { CashAccountStoreModel } from "./cashAccountStore/cashAccountStoreModel";
 import CashAccountStore from "./cashAccountStore/cashAccountStore";
+import { SiteManagementStoreModel } from "./siteManagementStore/siteManagementStoreModel";
+import siteManagementStore from "./siteManagementStore/siteManagementStore";
 
 export interface StoreModel {
   userStore: UserStoreModel;
   peopleStore: PeopleStoreModel;
   functionHallStore: FunctionHallStoreModel;
   cashAccountStore: CashAccountStoreModel;
+  siteManagementStore: SiteManagementStoreModel;
 }
 
 const store = createStore<StoreModel>({
@@ -20,6 +23,7 @@ const store = createStore<StoreModel>({
   peopleStore: PeopleStore,
   functionHallStore: FunctionHallStore,
   cashAccountStore: CashAccountStore,
+  siteManagementStore: siteManagementStore,
 });
 
 export default store;

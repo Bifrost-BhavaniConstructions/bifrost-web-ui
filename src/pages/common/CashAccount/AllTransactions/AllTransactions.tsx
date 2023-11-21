@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import "./AllTransactions.css";
-import IndividualTransaction from "../CashAccount/IndividualTransaction";
-import { useStoreActions, useStoreState } from "../../../store/hooks";
-import { Transaction } from "../../../types/CashAccount/Transaction";
+import IndividualTransaction from "../IndividualTransaction";
+import { useStoreActions, useStoreState } from "../../../../store/hooks";
+import { Transaction } from "../../../../types/CashAccount/Transaction";
 
 interface AllTransactionsProps {}
 

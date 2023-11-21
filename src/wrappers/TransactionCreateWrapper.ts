@@ -9,6 +9,7 @@ export interface TransactionCreateWrapper {
   transactionType: TransactionTypeEnum;
   platform: PlatformEnum;
   toMisc?: string;
-  functionHall: string;
+  functionHall?: string;
+  site?: string;
   transactionPurpose?: string;
 }

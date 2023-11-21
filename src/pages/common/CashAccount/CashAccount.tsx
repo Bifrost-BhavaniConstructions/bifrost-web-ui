@@ -2,11 +2,13 @@ import React from "react";
 import "./CashAccount.css";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import IndividualCashAccount from "./IndividualCashAccount";
-import cashAccountStore from "../../../store/cashAccountStore/cashAccountStore";
+import { PlatformEnum } from "../../../enums/PlatformEnum";
 
-interface CashAccountProps {}
+interface CashAccountProps {
+  platform: PlatformEnum;
+}
 
-const CashAccount: React.FC<CashAccountProps> = () => {
+const CashAccount: React.FC<CashAccountProps> = ({ platform }) => {
   // Objects
   const { user } = useStoreState((state) => state.userStore);
   const { cashAccount } = useStoreState((state) => state.cashAccountStore);
@@ -30,7 +32,9 @@ const CashAccount: React.FC<CashAccountProps> = () => {
 
   return (
     <div className="flex h-[calc(100%-88px)] w-[100%] flex-col p-[8px] overflow-y-auto">
-      {cashAccount && <IndividualCashAccount cashAccount={cashAccount} />}
+      {cashAccount && (
+        <IndividualCashAccount cashAccount={cashAccount} platform={platform} />
+      )}
     </div>
   );
 };
