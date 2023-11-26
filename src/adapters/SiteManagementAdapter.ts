@@ -4,6 +4,10 @@ import { Site } from "../types/SiteManagement/Site";
 import { Vehicle } from "../types/SiteManagement/Vehicle";
 import { Phone } from "../types/SiteManagement/Phone";
 import { Card } from "../types/SiteManagement/Card";
+import {
+  PurchaseRequest,
+  PurchaseRequestCreateWrapper,
+} from "../types/SiteManagement/PurchaseRequest";
 
 export const getAllSites: () => Promise<Site[]> = async () => {
   try {
@@ -162,6 +166,8 @@ export const assignCard: (
   }
 };
 
+//Cards
+
 export const getAllCards: () => Promise<Card[]> = async () => {
   try {
     const response = await httpClient.get(`/site-management/card`);
@@ -187,6 +193,105 @@ export const updateCard: (card: Card) => Promise<Phone> = async (card) => {
   try {
     const response = await httpClient.put(`/site-management/card`, card);
     return response.data as Card;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+//PurchaseRequests
+
+export const getAllMyPurchaseRequests: (
+  userId: string,
+) => Promise<PurchaseRequest[]> = async (userId) => {
+  try {
+    const response = await httpClient.get(
+      `/site-management/purchase-request/created-by/${userId}`,
+    );
+    return response.data as PurchaseRequest[];
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+export const getAllMyPendingPurchaseRequests: (
+  userId: string,
+) => Promise<PurchaseRequest[]> = async (userId) => {
+  try {
+    const response = await httpClient.get(
+      `/site-management/purchase-request/approver/${userId}`,
+    );
+    return response.data as PurchaseRequest[];
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+export const createPurchaseRequest: (
+  purchaseRequest: PurchaseRequestCreateWrapper,
+) => Promise<PurchaseRequest> = async (purchaseRequest) => {
+  try {
+    const response = await httpClient.post(
+      `/site-management/purchase-request/`,
+      purchaseRequest,
+    );
+    return response.data as PurchaseRequest;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+export const deletePurchaseRequest: (
+  prID: string,
+) => Promise<PurchaseRequest> = async (prID) => {
+  try {
+    const response = await httpClient.delete(
+      `/site-management/purchase-request/${prID}`,
+    );
+    return response.data as PurchaseRequest;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+export const approvePurchaseRequest: (
+  prID: string,
+  data: { approvalRemarks: string; approved: boolean },
+) => Promise<PurchaseRequest> = async (prID, data) => {
+  try {
+    const response = await httpClient.post(
+      `/site-management/purchase-request/approve/${prID}`,
+      data,
+    );
+    return response.data as PurchaseRequest;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+export const confirmPurchaseRequest: (
+  prID: string,
+  data: {
+    confirmationRemarks: string;
+    chequeNumber: string;
+    utrNumber: string;
+    confirmed: boolean;
+  },
+) => Promise<PurchaseRequest> = async (prID, data) => {
+  try {
+    const response = await httpClient.post(
+      `/site-management/purchase-request/confirm/${prID}`,
+      data,
+    );
+    return response.data as PurchaseRequest;
   } catch (e: any) {
     const axiosError = e as AxiosError;
     //console.log(axiosError);

@@ -6,11 +6,17 @@ import { PlatformEnum } from "../../../enums/PlatformEnum";
 import CashAccount from "../../common/CashAccount";
 import Sites from "../Sites";
 import Assets from "../Assets";
+import Home from "../Home";
+import AllTransactions from "../../common/CashAccount/AllTransactions";
 
 const SiteManagementRoutes = {
   path: "/site-management/",
   element: <SiteManagementHome />,
   children: [
+    {
+      path: "",
+      element: <Home />,
+    },
     {
       path: "pr",
       element: <PR />,
@@ -30,6 +36,10 @@ const SiteManagementRoutes = {
     {
       path: "assets",
       element: <Assets />,
+    },
+    {
+      path: "all-transactions",
+      element: <AllTransactions />,
     },
   ],
 };

@@ -83,7 +83,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
             >
               Close
             </Button>
-            {actionText && (
+            {actionText && actionText !== "" && (
               <Button
                 variant="solid"
                 bg="brand.low-bg"

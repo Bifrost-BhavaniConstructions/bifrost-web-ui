@@ -1,8 +1,10 @@
-import { action, thunk } from "easy-peasy";
+import { action, computed, thunk } from "easy-peasy";
 import { toast } from "react-toastify";
 import { SiteManagementStoreModel } from "./siteManagementStoreModel";
 import {
   getAllCards,
+  getAllMyPendingPurchaseRequests,
+  getAllMyPurchaseRequests,
   getAllPhones,
   getAllSites,
   getAllVehicles,
@@ -59,6 +61,32 @@ const SiteManagementStore: SiteManagementStoreModel = {
     getAllCards()
       .then((res) => {
         actions.setCards(res);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast("Error Fetching Cards", { type: "error" });
+      });
+  }),
+  myPurchaseRequests: [],
+  myPendingPurchaseRequests: [],
+  setMyPurchaseRequests: action((state, payload) => {
+    state.myPurchaseRequests = payload;
+  }),
+  setMyPendingPurchaseRequests: action((state, payload) => {
+    state.myPendingPurchaseRequests = payload;
+  }),
+  fetchPurchaseRequests: thunk((actions, payload) => {
+    getAllMyPurchaseRequests(payload)
+      .then((res) => {
+        actions.setMyPurchaseRequests(res);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast("Error Fetching Cards", { type: "error" });
+      });
+    getAllMyPendingPurchaseRequests(payload)
+      .then((res) => {
+        actions.setMyPendingPurchaseRequests(res);
       })
       .catch((err) => {
         console.error(err);

@@ -27,8 +27,13 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
   const { fetchFunctionHalls, fetchEnquiryTypes } = useStoreActions(
     (actions) => actions.functionHallStore,
   );
-  const { fetchSites, fetchVehicles, fetchPhones, fetchCards } =
-    useStoreActions((actions) => actions.siteManagementStore);
+  const {
+    fetchSites,
+    fetchVehicles,
+    fetchPhones,
+    fetchCards,
+    fetchPurchaseRequests,
+  } = useStoreActions((actions) => actions.siteManagementStore);
   const navigate = useNavigate();
 
   // Functions
@@ -49,6 +54,7 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
           fetchVehicles();
           fetchPhones();
           fetchCards();
+          fetchPurchaseRequests(user._id!);
         })
         .catch(() => {});
     }

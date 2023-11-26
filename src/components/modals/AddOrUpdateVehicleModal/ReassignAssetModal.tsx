@@ -12,7 +12,7 @@ import { useStoreState } from "../../../store/hooks";
 import { Button } from "@chakra-ui/react";
 import { VehicleAssignment } from "../../../types/SiteManagement/SubTypes/VehicleAssignment";
 
-interface ReassignVehicleModalProps {
+interface ReassignAssetModalProps {
   open: boolean;
   closeCallback: Function;
   cta: (asset: string) => void;
@@ -21,7 +21,7 @@ interface ReassignVehicleModalProps {
   assignmentHistory: VehicleAssignment[];
 }
 
-const ReassignVehicleModal: React.FC<ReassignVehicleModalProps> = ({
+const ReassignAssetModal: React.FC<ReassignAssetModalProps> = ({
   closeCallback,
   open,
   cta,
@@ -89,7 +89,7 @@ const ReassignVehicleModal: React.FC<ReassignVehicleModalProps> = ({
             <h2 className="flex text-[12px] justify-between text-white border-t-2 border-opacity-20 mt-[10px] pt-[10px]">
               <div className="flex">{aH.assignedTo.name}</div>
               <div className="flex">
-                {new Date(aH.createdAt).toLocaleDateString("en-US")}
+                {new Date(aH.createdAt).toLocaleDateString("en-GB")}
               </div>
             </h2>
           </div>
@@ -99,4 +99,4 @@ const ReassignVehicleModal: React.FC<ReassignVehicleModalProps> = ({
   );
 };
 
-export default ReassignVehicleModal;
+export default ReassignAssetModal;

@@ -14,10 +14,14 @@ import { TransactionWithFunctionHallName } from "../AllTransactions/AllTransacti
 
 interface IndividualTransactionProps {
   transaction: TransactionWithFunctionHallName;
+  light?: boolean;
+  minimal?: boolean;
 }
 
 const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
   transaction,
+  light = true,
+  minimal = false,
 }) => {
   // Objects
 
@@ -26,13 +30,21 @@ const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
   // State Variables - Hooks
   const { user } = useStoreState((state) => state.userStore);
   const [remark, setRemark] = React.useState<string | undefined>();
+  const [clicked, setClicked] = React.useState<boolean>();
   // Functions
 
   // Hook Functions
 
   return (
     <div className="flex p-[10px] flex-col">
-      <div className="flex w-full flex-col bg-low-bg rounded-[4px]">
+      <div
+        className={`flex w-full flex-col ${
+          light ? "bg-low-bg" : "bg-main-bg"
+        } rounded-[4px]`}
+        onClick={() => {
+          minimal && setClicked(!clicked);
+        }}
+      >
         <div className="flex p-[12px] pb-[4px]">
           <div className="flex flex-1 flex-col">
             <div className="font-light text-[12px] opacity-70">from</div>
@@ -64,53 +76,56 @@ const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
             </div>
           </div>
         </div>
+
         <div className="flex w-full justify-between px-[12px] pb-[12px]">
           <div className="flex flex-col">
             <div className="text-[12px] font-light">
               {new Date(transaction.createdAt).toLocaleString("en-US")}
             </div>
-            <div className="text-[12px] font-light">
-              <div className="flex mt-[4px]">
-                <Tag size={"sm"} variant="subtle" colorScheme="cyan">
-                  <TagLeftIcon boxSize="12px" as={InformationCircleIcon} />
-                  <TagLabel>
-                    {transaction.transactionType
-                      .toString()
-                      .split("_")
-                      .join(" ")
-                      .toLowerCase()}
-                  </TagLabel>
-                </Tag>
-              </div>
-              <div className="flex mt-[4px]">
-                <Tag size={"sm"} variant="subtle" colorScheme="cyan">
-                  <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
-                  <TagLabel>
-                    {transaction.platform === PlatformEnum.SITE
-                      ? "Site Management"
-                      : "Function Hall Management"}
-                  </TagLabel>
-                </Tag>
-              </div>
-              <div className="flex mt-[4px]">
-                <Tag size={"sm"} variant="subtle" colorScheme="cyan">
-                  <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
-                  <TagLabel>
-                    {transaction.site
-                      ? transaction.site.name
-                      : transaction.functionHallName}
-                  </TagLabel>
-                </Tag>
-              </div>
-              {transaction.transactionPurpose && (
+            {(!minimal || clicked) && (
+              <div className="text-[12px] font-light">
+                <div className="flex mt-[4px]">
+                  <Tag size={"sm"} variant="subtle" colorScheme="cyan">
+                    <TagLeftIcon boxSize="12px" as={InformationCircleIcon} />
+                    <TagLabel>
+                      {transaction.transactionType
+                        .toString()
+                        .split("_")
+                        .join(" ")
+                        .toLowerCase()}
+                    </TagLabel>
+                  </Tag>
+                </div>
                 <div className="flex mt-[4px]">
                   <Tag size={"sm"} variant="subtle" colorScheme="cyan">
                     <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
-                    <TagLabel>{transaction.transactionPurpose.name}</TagLabel>
+                    <TagLabel>
+                      {transaction.platform === PlatformEnum.SITE
+                        ? "Site Management"
+                        : "Function Hall Management"}
+                    </TagLabel>
                   </Tag>
                 </div>
-              )}
-            </div>
+                <div className="flex mt-[4px]">
+                  <Tag size={"sm"} variant="subtle" colorScheme="cyan">
+                    <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
+                    <TagLabel>
+                      {transaction.site
+                        ? transaction.site.name
+                        : transaction.functionHallName}
+                    </TagLabel>
+                  </Tag>
+                </div>
+                {transaction.transactionPurpose && (
+                  <div className="flex mt-[4px]">
+                    <Tag size={"sm"} variant="subtle" colorScheme="cyan">
+                      <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
+                      <TagLabel>{transaction.transactionPurpose.name}</TagLabel>
+                    </Tag>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <div className="flex text-[12px] font-light items-end">
             <InfoOutlineIcon

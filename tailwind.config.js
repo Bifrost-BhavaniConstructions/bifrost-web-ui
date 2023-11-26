@@ -8,6 +8,8 @@ module.exports = {
     extend: {
       colors: {
         'main-bg':'#303041',
+        'main-bg-success':'rgba(63,131,79,0.62)',
+        'main-bg-error':'rgba(131,63,63,0.62)',
         'low-bg':'#3D3A50',
         'accent':'#0EA2F6',
         'low-accent':'#F4FCFE',

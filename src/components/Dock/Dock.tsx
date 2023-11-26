@@ -30,6 +30,16 @@ const Dock: React.FC<SiteManagementNavBarProps> = ({ platform }) => {
   const fetchUsers = useStoreActions(
     (actions) => actions.peopleStore.fetchUsers,
   );
+  const { fetchTransactionPurposes } = useStoreActions(
+    (actions) => actions.cashAccountStore,
+  );
+  const {
+    fetchSites,
+    fetchVehicles,
+    fetchPhones,
+    fetchCards,
+    fetchPurchaseRequests,
+  } = useStoreActions((actions) => actions.siteManagementStore);
   // Functions
 
   // Hook Functions
@@ -70,11 +80,17 @@ const Dock: React.FC<SiteManagementNavBarProps> = ({ platform }) => {
           <div
             className="flex w-[40px] h-[40px] bg-main-bg justify-center items-center rounded-[8px]"
             onClick={() => {
+              fetchEnquiries();
+              fetchFunctionHalls();
+              fetchUsers();
+              fetchEnquiryTypes();
+              fetchTransactionPurposes();
+              fetchSites();
+              fetchVehicles();
+              fetchPhones();
+              fetchCards();
+              fetchPurchaseRequests(user!._id!);
               if (platform === PlatformEnum.SITE) {
-                fetchEnquiries();
-                fetchFunctionHalls();
-                fetchUsers();
-                fetchEnquiryTypes();
                 navigate("/function-hall-management");
               } else {
                 navigate("/site-management");

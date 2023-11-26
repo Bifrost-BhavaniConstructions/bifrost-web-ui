@@ -23,16 +23,11 @@ import AddOrUpdatePhoneModal from "../../../components/modals/AddOrUpdatePhoneMo
 import { Card } from "../../../types/SiteManagement/Card";
 import IndividualCard from "./IndividualCard";
 import AddOrUpdateCardModal from "../../../components/modals/AddOrUpdateCardModal";
-import ReassignVehicleModal from "../../../components/modals/AddOrUpdateVehicleModal/ReassignVehicleModal";
+import ReassignAssetModal from "../../../components/modals/AddOrUpdateVehicleModal/ReassignAssetModal";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
+import { AssetTypeEnum } from "../../../enums/AssetTypeEnum";
 
 interface AssetsProps {}
-
-enum AssetType {
-  VEHICLE,
-  PHONE,
-  CARD,
-}
 
 const Assets: React.FC<AssetsProps> = () => {
   // Objects
@@ -56,8 +51,8 @@ const Assets: React.FC<AssetsProps> = () => {
   const [reassignCard, setReassignCard] = React.useState<string | undefined>();
   const [editPhone, setEditPhone] = React.useState<Phone | undefined>();
   const [editCard, setEditCard] = React.useState<Card | undefined>();
-  const [currentAsset, setCurrentAsset] = React.useState<AssetType>(
-    AssetType.VEHICLE,
+  const [currentAsset, setCurrentAsset] = React.useState<AssetTypeEnum>(
+    AssetTypeEnum.VEHICLE,
   );
   // Functions
   const closeModal = () => {
@@ -118,24 +113,24 @@ const Assets: React.FC<AssetsProps> = () => {
           {
             text: <div className="flex">Vehicles</div>,
             onClick: () => {
-              setCurrentAsset(AssetType.VEHICLE);
+              setCurrentAsset(AssetTypeEnum.VEHICLE);
             },
           },
           {
             text: <div className="flex">Cards</div>,
             onClick: () => {
-              setCurrentAsset(AssetType.CARD);
+              setCurrentAsset(AssetTypeEnum.CARD);
             },
           },
           {
             text: <div className="flex">Phones</div>,
             onClick: () => {
-              setCurrentAsset(AssetType.PHONE);
+              setCurrentAsset(AssetTypeEnum.PHONE);
             },
           },
         ]}
       />
-      {currentAsset === AssetType.VEHICLE && (
+      {currentAsset === AssetTypeEnum.VEHICLE && (
         <>
           <div className="flex flex-row px-[24px] py-[16px] justify-between">
             <div className="flex font-airbnb font-black text-[24px]">
@@ -171,7 +166,7 @@ const Assets: React.FC<AssetsProps> = () => {
             editVehicle={editVehicle}
           />
           {!!reassignVehicle && (
-            <ReassignVehicleModal
+            <ReassignAssetModal
               open={!!reassignVehicle}
               closeCallback={() => {
                 closeModal();
@@ -190,7 +185,7 @@ const Assets: React.FC<AssetsProps> = () => {
           )}
         </>
       )}
-      {currentAsset === AssetType.PHONE && (
+      {currentAsset === AssetTypeEnum.PHONE && (
         <>
           <div className="flex flex-row px-[24px] py-[16px] justify-between">
             <div className="flex font-airbnb font-black text-[24px]">
@@ -226,7 +221,7 @@ const Assets: React.FC<AssetsProps> = () => {
             editPhone={editPhone}
           />
           {!!reassignPhone && (
-            <ReassignVehicleModal
+            <ReassignAssetModal
               open={!!reassignPhone}
               closeCallback={() => {
                 closeModal();
@@ -244,7 +239,7 @@ const Assets: React.FC<AssetsProps> = () => {
           )}
         </>
       )}
-      {currentAsset === AssetType.CARD && (
+      {currentAsset === AssetTypeEnum.CARD && (
         <>
           <div className="flex flex-row px-[24px] py-[16px] justify-between">
             <div className="flex font-airbnb font-black text-[24px]">Cards</div>
@@ -278,7 +273,7 @@ const Assets: React.FC<AssetsProps> = () => {
             editCard={editCard}
           />
           {!!reassignCard && (
-            <ReassignVehicleModal
+            <ReassignAssetModal
               open={!!reassignCard}
               closeCallback={() => {
                 closeModal();

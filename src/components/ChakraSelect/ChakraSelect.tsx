@@ -8,6 +8,7 @@ interface ChakraSelectProps {
   values: { name: string; value: string }[];
   onValueChange: (value: string) => void;
   required?: boolean;
+  isDisabled?: boolean;
 }
 
 const ChakraSelect: React.FC<ChakraSelectProps> = ({
@@ -16,6 +17,7 @@ const ChakraSelect: React.FC<ChakraSelectProps> = ({
   values,
   onValueChange,
   required = false,
+  isDisabled = false,
 }) => {
   // Objects
 
@@ -43,6 +45,7 @@ const ChakraSelect: React.FC<ChakraSelectProps> = ({
           onChange={(e) => {
             onValueChange(e.target.value);
           }}
+          isDisabled={isDisabled}
         >
           {values.map((value) => {
             return <option value={value.value}>{value.name}</option>;

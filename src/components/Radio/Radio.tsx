@@ -8,12 +8,14 @@ interface RadioProps {
   }[];
   isWrapped?: boolean;
   isHighlighted?: boolean;
+  noPadding?: boolean;
 }
 
 const Radio: React.FC<RadioProps> = ({
   options,
   isWrapped = true,
   isHighlighted = false,
+  noPadding = false,
 }) => {
   // Objects
 
@@ -27,11 +29,11 @@ const Radio: React.FC<RadioProps> = ({
   // Hook Functions
 
   return (
-    <div className="flex w-full p-[8px]">
+    <div className={`flex w-full ${!noPadding && "p-[8px]"}`}>
       <div
-        className={`flex justify-center items-center w-full p-[8px] ${
-          isWrapped && "flex-wrap"
-        }`}
+        className={`flex justify-center items-center w-full ${
+          !noPadding && "p-[8px]"
+        } ${isWrapped && "flex-wrap"}`}
       >
         {options.map((option, index) => (
           <div
