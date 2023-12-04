@@ -8,6 +8,7 @@ import {
   PurchaseRequest,
   PurchaseRequestCreateWrapper,
 } from "../types/SiteManagement/PurchaseRequest";
+import { Attendance } from "../types/SiteManagement/Attendance";
 
 export const getAllSites: () => Promise<Site[]> = async () => {
   try {
@@ -292,6 +293,24 @@ export const confirmPurchaseRequest: (
       data,
     );
     return response.data as PurchaseRequest;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+//Attendance
+
+export const createAttendance: (
+  attendance: Attendance,
+) => Promise<Attendance> = async (attendance) => {
+  try {
+    const response = await httpClient.post(
+      `/site-management/attendance/`,
+      attendance,
+    );
+    return response.data as Attendance;
   } catch (e: any) {
     const axiosError = e as AxiosError;
     //console.log(axiosError);

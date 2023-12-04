@@ -152,7 +152,7 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
         >
           <Stack spacing={4} direction="row">
             <Radio value="CASH_ACCOUNT">From Cash Account</Radio>
-            <Radio value="Assets">Assets</Radio>
+            <Radio value="OTHER">other</Radio>
           </Stack>
         </RadioGroup>
       )}

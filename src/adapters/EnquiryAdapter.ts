@@ -25,3 +25,32 @@ export const getAllEnquiryTypes: () => Promise<EnquiryType[]> = async () => {
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
+
+export const closeEnquiry: (enquiryId: string) => Promise<EnquiryType> = async (
+  enquiryId,
+) => {
+  try {
+    const response = await httpClient.post(
+      `/function-hall/enquiry/close-enquiry/${enquiryId}`,
+    );
+    return response.data as EnquiryType;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+export const restoreEnquiry: (
+  enquiryId: string,
+) => Promise<EnquiryType> = async (enquiryId) => {
+  try {
+    const response = await httpClient.post(
+      `/function-hall/enquiry/restore-enquiry/${enquiryId}`,
+    );
+    return response.data as EnquiryType;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};

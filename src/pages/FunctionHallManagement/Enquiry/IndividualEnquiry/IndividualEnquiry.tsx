@@ -2,9 +2,11 @@ import React from "react";
 import "./IndividualEnquiry.css";
 import Enquiry from "../../../../types/FunctionHall/Enquiry";
 import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
+  ArrowUturnUpIcon,
   BuildingLibraryIcon,
+  ClipboardDocumentListIcon,
   CurrencyRupeeIcon,
   InformationCircleIcon,
   PhoneIcon,
@@ -20,12 +22,21 @@ import UpdateInventoryModal from "../../../../components/modals/UpdateInventoryM
 import CheckInModal from "../../../../components/modals/CheckInModal";
 import CheckOutModal from "../../../../components/modals/CheckOutModal";
 import FollowUpModal from "../../../../components/modals/FollowUpModal";
+import {
+  closeEnquiry,
+  restoreEnquiry,
+} from "../../../../adapters/EnquiryAdapter";
+import { useStoreActions } from "../../../../store/hooks";
 
 interface IndividualEnquiryProps {
   enquiry: Enquiry;
+  closed: boolean;
 }
 
-const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
+const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
+  enquiry,
+  closed,
+}) => {
   // Objects
 
   // Variables
@@ -42,6 +53,9 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
   const [checkIn, setCheckIn] = React.useState<boolean>(false);
   const [checkOut, setCheckOut] = React.useState<boolean>(false);
   const [followUp, setFollowUp] = React.useState<boolean>(false);
+  const { fetchEnquiries } = useStoreActions(
+    (actions) => actions.functionHallStore,
+  );
   // Functions
 
   // Hook Functions
@@ -52,9 +66,15 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
         <div
           className="flex flex-col flex-grow"
           onClick={() => {
-            enquiry.isBooking
-              ? setBookingClicked(!bookingClicked)
-              : setEnquiryClicked(!enquiryClicked);
+            if (enquiry.isBooking) {
+              if (!enquiry.isCheckedOut) {
+                setBookingClicked(!bookingClicked);
+              }
+            } else {
+              if (!enquiry.isClosedEnquiry) {
+                setEnquiryClicked(!enquiryClicked);
+              }
+            }
           }}
         >
           <div className="text-[16px] font-bold">{enquiry.name}</div>
@@ -85,7 +105,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
             </div>
           </div>
         </div>
-        {enquiry.isBooking && (
+        {enquiry.isBooking && !enquiry.isCheckedOut && (
           <div className="flex justify-between flex-col items-end mx-[11px]">
             <div
               onClick={() => {
@@ -94,19 +114,40 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({ enquiry }) => {
               }}
               className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
             >
-              <EditIcon width={"14px"} />
+              <ClipboardDocumentListIcon width={"14px"} />
+            </div>
+          </div>
+        )}
+        {!enquiry.isBooking && (
+          <div className="flex justify-between flex-col items-end mx-[11px]">
+            <div
+              onClick={async () => {
+                !closed
+                  ? await closeEnquiry(enquiry._id)
+                  : await restoreEnquiry(enquiry._id);
+                fetchEnquiries();
+              }}
+              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
+            >
+              {!closed ? (
+                <DeleteIcon width={"14px"} />
+              ) : (
+                <ArrowUturnUpIcon width={"14px"} />
+              )}
             </div>
           </div>
         )}
         <div className="flex justify-between flex-col items-end">
-          <div
-            onClick={() => {
-              setEditEnquiry(enquiry);
-            }}
-            className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
-          >
-            <EditIcon width={"14px"} />
-          </div>
+          {!enquiry.isCheckedOut && (
+            <div
+              onClick={() => {
+                setEditEnquiry(enquiry);
+              }}
+              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
+            >
+              <EditIcon width={"14px"} />
+            </div>
+          )}
           <div
             onClick={() => {
               setEstimates(enquiry.estimates);

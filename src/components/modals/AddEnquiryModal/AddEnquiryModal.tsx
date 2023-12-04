@@ -282,6 +282,15 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
             />
             <LabelledInput
               required
+              name="muhurtam"
+              value={enquiry.muhurtam!}
+              setValue={(_val: string) => {
+                setEnquiry({ ...enquiry, muhurtam: _val });
+              }}
+              inputProps={{ type: "time" }}
+            />
+            <LabelledInput
+              required
               name="pax"
               value={enquiry.pax}
               setValue={(_val: number) => {

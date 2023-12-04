@@ -21,6 +21,7 @@ interface Enquiry {
   primaryContactName: string;
   secondaryContactNumber: number | null;
   secondaryContactName: string;
+  muhurtam?: string;
   enquiryType: EnquiryType;
   partOfDay: PartOfDayEnum;
   createdAt: string;
@@ -33,6 +34,7 @@ interface Enquiry {
   inventory: Inventory[];
   followUps: FollowUp[];
   isCheckedOut: boolean;
+  isClosedEnquiry: boolean;
 }
 export interface EnquiryFilterWrapper {
   enquiryType: string;
@@ -48,6 +50,7 @@ export interface EnquiryCreateWrapper {
   secondaryReference?: string;
   partOfDay: PartOfDayEnum;
   primaryContactNumber: number;
+  muhurtam?: string;
   pax: number;
   primaryContactName: string;
   secondaryContactNumber?: number | null;

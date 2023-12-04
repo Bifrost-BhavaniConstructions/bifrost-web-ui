@@ -7,6 +7,7 @@ import Queries from "../Enquiry";
 import FunctionHallList from "../FunctionHallList";
 import CashAccount from "../../common/CashAccount";
 import AllTransactions from "../../common/CashAccount/AllTransactions";
+import HomeFunctionHall from "../Home/HomeFunctionHall";
 
 const FunctionHallManagementRoutes = {
   path: "/function-hall-management/",
@@ -29,12 +30,20 @@ const FunctionHallManagementRoutes = {
       element: <Queries />,
     },
     {
+      path: "closed-queries",
+      element: <Queries closed />,
+    },
+    {
       path: "cash-accounts",
       element: <CashAccount platform={PlatformEnum.FUNCTION_HALL} />,
     },
     {
       path: "all-transactions",
       element: <AllTransactions />,
+    },
+    {
+      path: "function-hall/:fh_id", // New dynamic route with parameter
+      element: <HomeFunctionHall />, // Replace FunctionHallDetail with your desired component
     },
   ],
 };

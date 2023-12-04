@@ -5,6 +5,7 @@ import DriverData from "./UserSubTypes/DriverData";
 import { PlatformEnum } from "../enums/PlatformEnum";
 import ManagerData from "./UserSubTypes/ManagerData";
 import SecurityGuardSecondaryData from "./UserSubTypes/SecurityGuardSecondaryData";
+import VendorData from "./UserSubTypes/VendorData";
 
 export interface User {
   _id?: string;
@@ -23,4 +24,5 @@ export interface User {
   driverData?: DriverData;
   managerData?: ManagerData;
   securityGuardSecondaryData?: SecurityGuardSecondaryData;
+  vendorData?: VendorData;
 }

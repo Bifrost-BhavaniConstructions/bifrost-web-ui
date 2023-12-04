@@ -12,6 +12,8 @@ import {
 import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
 import { useStoreActions } from "../../../store/hooks";
+import TailwindButton from "../../TailwindButton";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 interface AddPeopleModalProps {
   closeCallback: Function;
@@ -42,6 +44,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
     dob: "",
     driverData: {
       salary: 0,
+      idlePay: 0,
       allowance: {
         dayShift: 0,
         nightShift: 0,
@@ -81,6 +84,9 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
       pan: "",
       personalMobileNumber: "",
     },
+    vendorData: {
+      items: [],
+    },
     username: "", // drivers - vendors - watchman -
   };
 
@@ -96,6 +102,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
   const createUser = () => {
     const {
       driverData,
+      vendorData,
       managerData,
       supervisorData,
       securityGuardSecondaryData,
@@ -122,6 +129,9 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
       case UserRoleEnum.FH_SECURITY:
         data = { ...basicData, securityGuardSecondaryData };
         break;
+      case UserRoleEnum.VENDOR:
+        data = { ...basicData, vendorData };
+        break;
       default:
         data = basicData;
     }
@@ -137,6 +147,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
   const updateUser = () => {
     const {
       driverData,
+      vendorData,
       managerData,
       supervisorData,
       securityGuardSecondaryData,
@@ -156,6 +167,9 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
         break;
       case UserRoleEnum.DRIVER:
         data = { ...basicData, driverData };
+        break;
+      case UserRoleEnum.VENDOR:
+        data = { ...basicData, vendorData };
         break;
       case UserRoleEnum.FH_MANAGER:
         data = { ...basicData, managerData };
@@ -414,6 +428,17 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
               inputProps={{ type: "number" }}
             />
             <LabelledInput
+              name="idle pay"
+              value={user.driverData?.idlePay!}
+              setValue={(_val: number) => {
+                setUser({
+                  ...user,
+                  driverData: { ...user.driverData!, idlePay: _val },
+                });
+              }}
+              inputProps={{ type: "number" }}
+            />
+            <LabelledInput
               name="allowance - day shift"
               value={user.driverData?.allowance.dayShift!}
               setValue={(_val: number) => {
@@ -465,6 +490,80 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
               inputProps={{ type: "number" }}
             />
           </>
+        )}
+        {roleToAdd === UserRoleEnum.VENDOR && (
+          <div className="flex flex-col border-t-4 mt-[10px] border-accent px-[10px]">
+            <div className="flex justify-between pt-[10px]">
+              <h3 className="flex text-[16px] justify-end items-center text-white">
+                Inventory
+              </h3>
+              <div>
+                <TailwindButton
+                  text={"Add Item +"}
+                  onClick={() => {
+                    setUser({
+                      ...user,
+                      vendorData: {
+                        ...(user.vendorData || {}), // Ensure vendorData exists
+                        items: [
+                          ...(user.vendorData?.items || []), // Ensure items array exists
+                          { name: "", charge: 0 }, // Adding a new object with name and charge properties
+                        ],
+                      },
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            {user.vendorData?.items.map((type, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col mt-[4px] pb-[10px] border-b-2"
+                >
+                  <LabelledInput
+                    required
+                    name={"name"}
+                    value={type.name}
+                    setValue={(_val: string) =>
+                      setUser({
+                        ...user,
+                        vendorData: {
+                          items: user.vendorData
+                            ? user.vendorData.items.map((iT, i) =>
+                                i === index ? { ...iT, name: _val } : iT,
+                              )
+                            : [],
+                        },
+                      })
+                    }
+                  />
+                  <div className="flex">
+                    <div className="flex  px-[2px]">
+                      <LabelledInput
+                        required
+                        name={"charge"}
+                        value={type.charge}
+                        setValue={(_val: number) =>
+                          setUser({
+                            ...user,
+                            vendorData: {
+                              items: user.vendorData
+                                ? user.vendorData.items.map((iT, i) =>
+                                    i === index ? { ...iT, charge: _val } : iT,
+                                  )
+                                : [],
+                            },
+                          })
+                        }
+                        inputProps={{ type: "number" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
         {roleToAdd === UserRoleEnum.SUPERVISOR && (
           <>

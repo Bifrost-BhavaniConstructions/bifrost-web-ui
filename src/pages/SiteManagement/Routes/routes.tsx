@@ -8,6 +8,7 @@ import Sites from "../Sites";
 import Assets from "../Assets";
 import Home from "../Home";
 import AllTransactions from "../../common/CashAccount/AllTransactions";
+import Attendance from "../Attendance";
 
 const SiteManagementRoutes = {
   path: "/site-management/",
@@ -40,6 +41,10 @@ const SiteManagementRoutes = {
     {
       path: "all-transactions",
       element: <AllTransactions />,
+    },
+    {
+      path: "attendance",
+      element: <Attendance />,
     },
   ],
 };

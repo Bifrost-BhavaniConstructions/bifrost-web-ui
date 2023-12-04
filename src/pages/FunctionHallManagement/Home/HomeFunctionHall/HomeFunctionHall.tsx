@@ -9,7 +9,7 @@ import moment from "moment";
 import FunctionHallDayViewModal from "../../../../components/modals/FunctionHallDayViewModal";
 import FunctionHall from "../../../../types/FunctionHall/FunctionHall";
 import AddEnquiryModal from "../../../../components/modals/AddEnquiryModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
 import { EyeIcon } from "@heroicons/react/20/solid";
 
@@ -19,16 +19,21 @@ interface EventCounts {
   [date: string]: { bookingCount: number; nonBookingCount: number };
 }
 
-const HomeFunctionHall: React.FC<HomeFunctionHallProps> = () => {
+const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
   // Objects
-  const { functionHalls, enquiries } = useStoreState(
+
+  const { enquiries, functionHalls } = useStoreState(
     (state) => state.functionHallStore,
   );
 
   // Variables
+  const { fh_id } = useParams();
 
   // State Variables - Hooks
   const navigate = useNavigate();
+  const [functionHall, setFunctionHall] = React.useState<
+    FunctionHall | undefined
+  >();
   const [openEnquiry, setOpenEnquiry] = React.useState(false);
   const containerRef = React.createRef<HTMLDivElement>();
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>();
@@ -106,69 +111,73 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = () => {
   // Hook Functions
   useScrollSnap(containerRef, { snapDestinationX: "100%" }, () => {});
 
+  React.useEffect(() => {
+    if (fh_id) {
+      setFunctionHall(functionHalls.filter((f) => f._id === fh_id)[0]);
+    }
+  }, [fh_id]);
+
   return (
     <div
       ref={containerRef}
       className="flex h-[90%] flex-grow overflow-x-auto overflow-y-hidden"
     >
-      {functionHalls.map((functionHall) => {
-        return (
-          <>
-            <div
-              key={functionHall._id}
-              className="flex flex-col min-w-[100vw] h-[100%] p-[10px] pt-0"
-            >
-              <div className="flex justify-center items-center">
-                <div className="flex flex-grow text-[24px] font-bold p-[12px]">
-                  {functionHall.name}
-                </div>
-                <div className="flex flex-col">
-                  <div className="flex ">
-                    <div className="flex flex-grow rounded-[4px] flex-col">
-                      <div className="flex flex-1 flex-grow p-[4px] rounded-[4px]">
-                        <div
-                          onClick={() => {
-                            setOpenEnquiry(true);
-                          }}
-                          className="flex flex-grow p-[12px] bg-low-bg rounded-[4px] justify-center items-center"
-                        >
-                          <AddIcon fontSize={12} />
-                        </div>
+      {functionHall && (
+        <>
+          <div
+            key={functionHall._id}
+            className="flex flex-col min-w-[100vw] h-[100%] p-[10px] pt-0"
+          >
+            <div className="flex justify-center items-center">
+              <div className="flex flex-grow text-[24px] font-bold p-[12px]">
+                {functionHall.name}
+              </div>
+              <div className="flex flex-col">
+                <div className="flex ">
+                  <div className="flex flex-grow rounded-[4px] flex-col">
+                    <div className="flex flex-1 flex-grow p-[4px] rounded-[4px]">
+                      <div
+                        onClick={() => {
+                          setOpenEnquiry(true);
+                        }}
+                        className="flex flex-grow p-[12px] bg-low-bg rounded-[4px] justify-center items-center"
+                      >
+                        <AddIcon fontSize={12} />
                       </div>
-                      <div className="flex flex-1 flex-grow p-[4px] rounded-[4px]">
-                        <div
-                          onClick={() => {
-                            navigate("/function-hall-management/queries");
-                          }}
-                          className="flex flex-grow p-[12px] bg-low-bg rounded-[4px] justify-center items-center"
-                        >
-                          <EyeIcon width={16} />
-                        </div>
+                    </div>
+                    <div className="flex flex-1 flex-grow p-[4px] rounded-[4px]">
+                      <div
+                        onClick={() => {
+                          navigate("/function-hall-management/queries");
+                        }}
+                        className="flex flex-grow p-[12px] bg-low-bg rounded-[4px] justify-center items-center"
+                      >
+                        <EyeIcon width={16} />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-grow w-full">
-                <div className="flex flex-grow ">
-                  <FullCalendar
-                    key={functionHall._id}
-                    plugins={[dayGridPlugin, interactionPlugin]}
-                    initialView="dayGridMonth"
-                    dayMaxEventRows={3}
-                    fixedWeekCount={false}
-                    events={getEvents(functionHall)}
-                    dateClick={(info) => {
-                      setSelectedDate(new Date(info.dateStr));
-                      setSelectedFunctionHall(functionHall._id);
-                    }}
-                  />
-                </div>
+            </div>
+            <div className="flex flex-grow w-full">
+              <div className="flex flex-grow ">
+                <FullCalendar
+                  key={functionHall._id}
+                  plugins={[dayGridPlugin, interactionPlugin]}
+                  initialView="dayGridMonth"
+                  dayMaxEventRows={3}
+                  fixedWeekCount={false}
+                  events={getEvents(functionHall)}
+                  dateClick={(info) => {
+                    setSelectedDate(new Date(info.dateStr));
+                    setSelectedFunctionHall(functionHall._id);
+                  }}
+                />
               </div>
             </div>
-          </>
-        );
-      })}
+          </div>
+        </>
+      )}
       {!!selectedDate && !!selectedFunctionHall && (
         <FunctionHallDayViewModal
           open={!!selectedDate && !!selectedFunctionHall}

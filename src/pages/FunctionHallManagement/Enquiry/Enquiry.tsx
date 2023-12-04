@@ -9,9 +9,10 @@ import { Tag, TagLabel } from "@chakra-ui/react";
 interface QueriesProps {
   date?: Date;
   functionHall?: string;
+  closed?: boolean;
 }
 
-const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
+const Enquiry: React.FC<QueriesProps> = ({ date, functionHall, closed }) => {
   // Objects
   const { enquiries, functionHalls } = useStoreState(
     (state) => state.functionHallStore,
@@ -50,23 +51,25 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
 
   return (
     <div className="flex flex-col h-[calc(100%-88px)]">
-      <div className="flex w-full p-[8px]">
-        <div
-          className="flex px-[20px] py-[12px] justify-center bg-low-bg rounded-[8px] w-full h-full"
-          onClick={() => {
-            setOpenEnquiry(true);
-          }}
-        >
-          Add Enquiry
+      {!closed && (
+        <div className="flex w-full p-[8px]">
+          <div
+            className="flex px-[20px] py-[12px] justify-center bg-low-bg rounded-[8px] w-full h-full"
+            onClick={() => {
+              setOpenEnquiry(true);
+            }}
+          >
+            Add Enquiry
+          </div>
         </div>
-      </div>
+      )}
       <TabSelect
         options={[
           {
-            text: "Enquiry",
+            text: !closed ? "Enquiry" : "Closed Enquiries",
           },
           {
-            text: "Bookings",
+            text: !closed ? "Bookings" : "Completed Bookings",
           },
         ]}
         tabIndex={selectedTab}
@@ -133,9 +136,19 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall }) => {
           .filter((enquiry) =>
             selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking,
           )
-          .filter((enquiry) => (!!date ? true : !enquiry.isCheckedOut))
+          .filter((enquiry) =>
+            !!date
+              ? true
+              : !closed
+              ? !enquiry.isCheckedOut && !enquiry.isClosedEnquiry
+              : enquiry.isCheckedOut || enquiry.isClosedEnquiry,
+          )
           .map((enquiry) => (
-            <IndividualEnquiry key={enquiry._id} enquiry={enquiry} />
+            <IndividualEnquiry
+              key={enquiry._id}
+              enquiry={enquiry}
+              closed={closed!}
+            />
           ))}
       </div>
       {openEnquiry && (
