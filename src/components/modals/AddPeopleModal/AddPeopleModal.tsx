@@ -255,7 +255,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
               name="username"
               value={user.username}
               setValue={(_val: string) => {
-                setUser({ ...user, username: _val });
+                setUser({ ...user, username: _val.toLowerCase() });
               }}
             />
             <LabelledInput
