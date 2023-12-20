@@ -6,7 +6,6 @@ import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
 import { useStoreActions } from "../../../store/hooks";
 import TabSelect from "../../TabSelect";
-import { MultiSelect } from "chakra-multiselect";
 import FunctionHall from "../../../types/FunctionHall/FunctionHall";
 import { InventoryType } from "../../../types/FunctionHall/Inventory";
 import { GeneratorStatus } from "../../../types/FunctionHall/Generator";

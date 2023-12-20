@@ -1,5 +1,3 @@
-import { PlatformEnum } from "./PlatformEnum";
-
 export enum SiteDutyTypeEnum {
   DUTY = "DUTY",
   IDLE = "IDLE",

@@ -1,10 +1,5 @@
 import { action, thunk } from "easy-peasy";
 import { CashAccountStoreModel } from "./cashAccountStoreModel";
-import { getAllFunctionHalls } from "../../adapters/FunctionHallAdapter";
-import {
-  getAllEnquiries,
-  getAllEnquiryTypes,
-} from "../../adapters/EnquiryAdapter";
 import {
   fetchCashAccount,
   fetchTransactionPurposes,

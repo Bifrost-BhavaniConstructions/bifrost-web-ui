@@ -1,10 +1,6 @@
 import React from "react";
 import "./UpdateInventoryModal.css";
 import ChakraModal from "../ChakraModal";
-import { Estimate } from "../../../types/FunctionHall/Estimate";
-import IndividualEstimate from "../../../pages/FunctionHallManagement/Enquiry/IndividualEstimate";
-import { Accordion } from "@chakra-ui/react";
-import EstimateField from "../../../pages/FunctionHallManagement/Enquiry/IndividualEstimate/EstimateField";
 import {
   Inventory,
   InventoryType,

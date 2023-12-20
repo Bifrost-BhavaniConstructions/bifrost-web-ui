@@ -17,8 +17,6 @@ import EstimatesModal from "../../../../components/modals/EstimatesModal";
 import { Estimate } from "../../../../types/FunctionHall/Estimate";
 import AcceptBookingModal from "../../../../components/modals/AcceptBookingModal";
 import AcceptPaymentModal from "../../../../components/modals/AcceptPaymentModal";
-import { Inventory } from "../../../../types/FunctionHall/Inventory";
-import UpdateInventoryModal from "../../../../components/modals/UpdateInventoryModal";
 import CheckInModal from "../../../../components/modals/CheckInModal";
 import CheckOutModal from "../../../../components/modals/CheckOutModal";
 import FollowUpModal from "../../../../components/modals/FollowUpModal";

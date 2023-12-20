@@ -4,7 +4,9 @@ import { SiteDutyTypeEnum } from "../../enums/SiteDutyTypeEnum";
 
 export interface VendorTypeData {
   name: string;
-  charge: number;
+  cost: number;
+  charge?: number;
+  amount?: number;
 }
 export interface Attendance {
   _id?: string;

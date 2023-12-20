@@ -9,6 +9,7 @@ interface ChakraSelectProps {
   onValueChange: (value: string) => void;
   required?: boolean;
   isDisabled?: boolean;
+  placeholder?: string;
 }
 
 const ChakraSelect: React.FC<ChakraSelectProps> = ({
@@ -18,6 +19,7 @@ const ChakraSelect: React.FC<ChakraSelectProps> = ({
   onValueChange,
   required = false,
   isDisabled = false,
+  placeholder = "Select option",
 }) => {
   // Objects
 
@@ -31,17 +33,19 @@ const ChakraSelect: React.FC<ChakraSelectProps> = ({
 
   return (
     <div>
-      <div className="font-light text-[12px] opacity-70">
-        {name}
-        {required && (
-          <span className="text-red-500 ml-[3px] text-[14px]">*</span>
-        )}
-      </div>
+      {name !== "" && (
+        <div className="font-light text-[12px] opacity-70">
+          {name}
+          {required && (
+            <span className="text-red-500 ml-[3px] text-[14px]">*</span>
+          )}
+        </div>
+      )}
       <InputGroup>
         <Select
           value={value}
           variant="filled"
-          placeholder="Select option"
+          placeholder={placeholder}
           onChange={(e) => {
             onValueChange(e.target.value);
           }}

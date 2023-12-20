@@ -3,8 +3,8 @@ import "./IndividualVehicle.css";
 import { Vehicle } from "../../../../types/SiteManagement/Vehicle";
 import { EditIcon } from "@chakra-ui/icons";
 import {
-  UserIcon,
   ArrowPathRoundedSquareIcon,
+  UserIcon,
 } from "@heroicons/react/20/solid";
 import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 

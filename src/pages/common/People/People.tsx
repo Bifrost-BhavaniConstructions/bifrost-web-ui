@@ -2,7 +2,7 @@ import React from "react";
 import "./People.css";
 import TailwindButton from "../../../components/TailwindButton";
 import Avatar from "react-avatar";
-import { useStoreActions, useStoreState } from "../../../store/hooks";
+import { useStoreState } from "../../../store/hooks";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import AddPeopleModal from "../../../components/modals/AddPeopleModal";
 import { PlatformEnum } from "../../../enums/PlatformEnum";

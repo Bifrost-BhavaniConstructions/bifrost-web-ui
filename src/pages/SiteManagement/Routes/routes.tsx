@@ -9,6 +9,7 @@ import Assets from "../Assets";
 import Home from "../Home";
 import AllTransactions from "../../common/CashAccount/AllTransactions";
 import Attendance from "../Attendance";
+import SalariesAllowances from "../SalariesAllowances";
 
 const SiteManagementRoutes = {
   path: "/site-management/",
@@ -45,6 +46,10 @@ const SiteManagementRoutes = {
     {
       path: "attendance",
       element: <Attendance />,
+    },
+    {
+      path: "salaries-allowances",
+      element: <SalariesAllowances />,
     },
   ],
 };

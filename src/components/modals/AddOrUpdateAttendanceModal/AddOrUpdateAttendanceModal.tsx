@@ -1,7 +1,6 @@
 import React from "react";
 import "./AddOrUpdateAttendanceModal.css";
 import ChakraModal from "../ChakraModal";
-import { Site } from "../../../types/SiteManagement/Site";
 import { Attendance } from "../../../types/SiteManagement/Attendance";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import { User } from "../../../types/User";
@@ -21,14 +20,14 @@ interface AddOrUpdateAttendanceModalProps {
   open: boolean;
   closeCallback: Function;
   cta: (attendance: Attendance) => void;
-  editAttendance?: Site;
+  selectedUserParent?: User;
 }
 
 const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
   closeCallback,
   open,
   cta,
-  editAttendance,
+  selectedUserParent,
 }) => {
   // Objects
   const emptyAttendance: Attendance = {
@@ -39,6 +38,7 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
     shift: SiteShiftEnum.DAY,
     dutyType: SiteDutyTypeEnum.DUTY,
     shiftPay: 0,
+    vendorItems: [],
   };
 
   // Variables
@@ -79,8 +79,31 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
           shiftPay: selectedUser.driverData?.idlePay,
         });
       }
+    } else if (selectedUser && selectedUser.role === UserRoleEnum.VENDOR) {
+      setAttendance({
+        ...attendance,
+        vendorItems: selectedUser.vendorData?.items.map((i) => {
+          return {
+            name: i.name,
+            cost: 0,
+            charge: i.charge,
+            amount: 0,
+          };
+        }),
+      });
     }
   }, [selectedUser, attendance.shift, attendance.dutyType]);
+
+  React.useEffect(() => {
+    if (selectedUserParent) {
+      setSelectedUser(selectedUserParent);
+      setAttendance({
+        ...attendance,
+        of: selectedUserParent._id!,
+        role: selectedUserParent.role,
+      });
+    }
+  }, [selectedUserParent]);
 
   return (
     <ChakraModal
@@ -88,7 +111,7 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
         closeCallback();
       }}
       open={open}
-      title={"Add Site"}
+      title={"Mark Attendance"}
       action={async () => {
         await cta(attendance);
         setAttendance(emptyAttendance);
@@ -99,20 +122,6 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
       isButtonDisabled={!validateAttendance()}
     >
       <ChakraSelect
-        name="target account"
-        value={attendance.of}
-        values={siteUsers
-          .filter((fH) => fH.role !== UserRoleEnum.SUPER_ADMIN)
-          .map((fH) => ({
-            name: fH.name,
-            value: fH._id!,
-          }))}
-        onValueChange={(value) => {
-          setAttendance({ ...attendance, of: value });
-          setSelectedUser(siteUsers.filter((f) => f._id === value)[0]);
-        }}
-      />
-      <ChakraSelect
         name="site"
         value={attendance.site}
         values={sites.map((fH) => ({
@@ -122,6 +131,14 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
         onValueChange={(value) => {
           setAttendance({ ...attendance, site: value });
         }}
+      />
+      <LabelledInput
+        name="date"
+        value={moment(attendance.on).format("yyyy-MM-DD")}
+        setValue={(_val: string) => {
+          setAttendance({ ...attendance, on: new Date(_val) });
+        }}
+        inputProps={{ type: "date" }}
       />
       {selectedUser && selectedUser.role === UserRoleEnum.DRIVER && (
         <>
@@ -188,14 +205,36 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
             inputProps={{ type: "number" }}
             inputLeftAddon={"₹"}
           />
-          <LabelledInput
-            name="date"
-            value={moment(attendance.on).format("yyyy-MM-DD")}
-            setValue={(_val: string) => {
-              setAttendance({ ...attendance, on: new Date(_val) });
-            }}
-            inputProps={{ type: "date" }}
-          />
+        </>
+      )}
+      {selectedUser && selectedUser.role === UserRoleEnum.VENDOR && (
+        <>
+          <div className="font-light text-[12px] opacity-70">vendor items</div>
+          {attendance.vendorItems &&
+            attendance.vendorItems.map((item, index) => {
+              return (
+                <LabelledInput
+                  key={item.name}
+                  name={item.name}
+                  value={item.cost / item.charge!}
+                  setValue={(_val: number) => {
+                    setAttendance({
+                      ...attendance,
+                      vendorItems: attendance.vendorItems?.map((vI, i) =>
+                        i === index
+                          ? {
+                              ...vI,
+                              cost: vI.charge! * _val,
+                              amount: Number(_val),
+                            }
+                          : vI,
+                      ),
+                    });
+                  }}
+                  inputProps={{ type: "number" }}
+                />
+              );
+            })}
         </>
       )}
     </ChakraModal>

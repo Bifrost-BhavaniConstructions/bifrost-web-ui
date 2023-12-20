@@ -13,7 +13,6 @@ import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
 import { useStoreActions } from "../../../store/hooks";
 import TailwindButton from "../../TailwindButton";
-import { DeleteIcon } from "@chakra-ui/icons";
 
 interface AddPeopleModalProps {
   closeCallback: Function;

@@ -1,7 +1,5 @@
 import React from "react";
 import "./Home.css";
-import HomeFunctionHall from "./HomeFunctionHall";
-import AddEnquiryModal from "../../../components/modals/AddEnquiryModal";
 import { useNavigate } from "react-router-dom";
 import { useStoreState } from "../../../store/hooks";
 import IndividualFunctionHall from "../FunctionHallList/IndividualFunctionHall";

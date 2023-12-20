@@ -1,6 +1,5 @@
 import React from "react";
 import "./IndividualTransaction.css";
-import { Transaction } from "../../../../types/CashAccount/Transaction";
 import { useStoreState } from "../../../../store/hooks";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";

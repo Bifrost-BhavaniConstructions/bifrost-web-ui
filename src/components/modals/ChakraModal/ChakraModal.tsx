@@ -2,16 +2,16 @@ import React from "react";
 import "./ChakraModal.css";
 
 import {
+  Button,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
-  useDisclosure,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   ModalProps,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 interface ChakraModalProps {

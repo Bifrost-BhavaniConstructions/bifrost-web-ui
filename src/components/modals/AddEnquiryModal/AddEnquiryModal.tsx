@@ -80,7 +80,6 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   const [estimate, setEstimate] = React.useState(emptyEstimate);
   // Functions
   const createEnquiry = () => {
-    console.log({ ...enquiry, estimates: [estimate] });
     httpClient
       .post("/function-hall/enquiry/", { ...enquiry, estimates: [estimate] })
       .then(() => {

@@ -1,11 +1,6 @@
 import React from "react";
 import "./AddOrUpdateVehicleModal.css";
 import ChakraModal from "../ChakraModal";
-import LabelledInput from "../../LabelledFormInputs/LabelledInput";
-import { Vehicle } from "../../../types/SiteManagement/Vehicle";
-import moment from "moment/moment";
-import { Card } from "../../../types/SiteManagement/Card";
-import { Phone } from "../../../types/SiteManagement/Phone";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import ChakraSelect from "../../ChakraSelect";
 import { useStoreState } from "../../../store/hooks";

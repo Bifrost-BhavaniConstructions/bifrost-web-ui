@@ -2,7 +2,6 @@ import React from "react";
 import "./IndividualEstimate.css";
 import { Estimate } from "../../../../types/FunctionHall/Estimate";
 import {
-  Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,

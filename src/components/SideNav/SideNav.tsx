@@ -44,8 +44,8 @@ const SideNav: React.FC<SideNavProps> = ({ clicked, setClicked, platform }) => {
       url: "/site-management/pr",
     },
     {
-      label: "Pending Actions",
-      url: "/site-management/pending-actions",
+      label: "Salaries/Allowances",
+      url: "/site-management/salaries-allowances",
     },
     {
       label: "Manage System",

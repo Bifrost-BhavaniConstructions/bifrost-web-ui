@@ -4,7 +4,6 @@ import { useStoreActions, useStoreState } from "../../../../store/hooks";
 import { PlatformEnum } from "../../../../enums/PlatformEnum";
 import { TransactionTypeEnum } from "../../../../enums/TransactionTypeEnum";
 import { useNavigate } from "react-router-dom";
-import Radio from "../../../../components/Radio";
 import IndividualTransaction from "../../../common/CashAccount/IndividualTransaction";
 import TransactionModal from "../../../../components/modals/TransactionModal";
 import { Transaction } from "../../../../types/CashAccount/Transaction";

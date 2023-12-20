@@ -1,6 +1,5 @@
 import React from "react";
 import "./HomeFunctionHall.css";
-import useScrollSnap from "../../../../hooks/useScrollSnap";
 import { useStoreState } from "../../../../store/hooks";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -35,7 +34,6 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
     FunctionHall | undefined
   >();
   const [openEnquiry, setOpenEnquiry] = React.useState(false);
-  const containerRef = React.createRef<HTMLDivElement>();
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>();
   const [selectedFunctionHall, setSelectedFunctionHall] = React.useState<
     string | undefined
@@ -109,7 +107,6 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
   };
 
   // Hook Functions
-  useScrollSnap(containerRef, { snapDestinationX: "100%" }, () => {});
 
   React.useEffect(() => {
     if (fh_id) {
@@ -118,10 +115,7 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
   }, [fh_id]);
 
   return (
-    <div
-      ref={containerRef}
-      className="flex h-[90%] flex-grow overflow-x-auto overflow-y-hidden"
-    >
+    <div className="flex h-[90%] flex-grow overflow-x-auto overflow-y-hidden">
       {functionHall && (
         <>
           <div

@@ -9,6 +9,7 @@ import {
   PurchaseRequestCreateWrapper,
 } from "../types/SiteManagement/PurchaseRequest";
 import { Attendance } from "../types/SiteManagement/Attendance";
+import { AttendanceTransaction } from "../types/SiteManagement/AttendanceTransaction";
 
 export const getAllSites: () => Promise<Site[]> = async () => {
   try {
@@ -311,6 +312,157 @@ export const createAttendance: (
       attendance,
     );
     return response.data as Attendance;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+export const getAttendance: (
+  userId: string,
+) => Promise<{ date: string; title: string }[]> = async (userId) => {
+  try {
+    const response = await httpClient.get(
+      `/site-management/attendance/six-month/${userId}`,
+    );
+    return response.data as { date: string; title: string }[];
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+export const addAllowanceDeduction: (
+  userId: string,
+  amount: number,
+  isSalary: boolean,
+) => Promise<void> = async (userId, amount, isSalary) => {
+  try {
+    await httpClient.post(`/site-management/attendance/transaction/${userId}`, {
+      amount,
+      isSalary,
+    });
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+export const getPayoutLastMonth: (userId: string) => Promise<number> = async (
+  userId,
+) => {
+  try {
+    const response = await httpClient.get(
+      `/site-management/attendance/payout/month/${userId}`,
+    );
+    return response.data as number;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+export const getAttendanceTransactions: (
+  userId: string,
+) => Promise<AttendanceTransaction[]> = async (userId) => {
+  try {
+    const response = await httpClient.get(
+      `/site-management/attendance/transactions/${userId}`,
+    );
+    return response.data as AttendanceTransaction[];
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+export const getAllowanceDataByMonth: (
+  userId: string,
+  monthYear: string,
+) => Promise<number> = async (userId, monthYear) => {
+  try {
+    const response = await httpClient.post(
+      `/site-management/attendance/salary/advance`,
+      {
+        userId,
+        monthYear,
+      },
+    );
+    return response.data as number;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.status));
+  }
+};
+export const getVariableForSelectedPeriod: (
+  userId: string,
+  from: string,
+  to: string,
+) => Promise<number> = async (userId, from, to) => {
+  try {
+    const response = await httpClient.get(
+      `/site-management/attendance/variable?userId=${userId}&fromDate=${from}&toDate=${to}`,
+    );
+    return response.data as number;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.status));
+  }
+};
+
+export const getVariableAdvanceForSelectedPeriod: (
+  userId: string,
+  from: string,
+  to: string,
+) => Promise<number> = async (userId, from, to) => {
+  try {
+    const response = await httpClient.get(
+      `/site-management/attendance/variable/advance?userId=${userId}&fromDate=${from}&toDate=${to}`,
+    );
+    return response.data as number;
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.status));
+  }
+};
+
+export const paySalaryForMonth: (
+  userId: string,
+  monthYear: string,
+  amount: number,
+) => Promise<void> = async (userId, monthYear, amount) => {
+  try {
+    await httpClient.post(`/site-management/attendance/salary`, {
+      userId,
+      monthYear,
+      amount,
+    });
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
+
+export const payVariableForPeriod: (
+  userId: string,
+  fromDate: string,
+  toDate: string,
+  amount: number,
+) => Promise<void> = async (userId, fromDate, toDate, amount) => {
+  try {
+    await httpClient.post(`/site-management/attendance/variable`, {
+      userId,
+      fromDate,
+      toDate,
+      amount,
+    });
   } catch (e: any) {
     const axiosError = e as AxiosError;
     //console.log(axiosError);
