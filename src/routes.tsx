@@ -7,6 +7,7 @@ import LoginRedirect from "./pages/LoginRedirect";
 import React from "react";
 import Routes from "./pages/SiteManagement/Routes/routes";
 import FunctionHallManagementRoutes from "./pages/FunctionHallManagement/Routes/routes";
+import Login from "./pages/Login";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Navigate to="/function-hall-management" />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   Routes,
   FunctionHallManagementRoutes,
