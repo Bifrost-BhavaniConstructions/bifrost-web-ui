@@ -1,6 +1,6 @@
 import React from "react";
 import "./AddEnquiryModal.css";
-import { Stack } from "@chakra-ui/react";
+import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
 import ChakraModal from "../ChakraModal";
 import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
@@ -35,12 +35,13 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   latestEstimate,
 }) => {
   // Objects
+  const latestDate = new Date();
   const emptyEnquiry: EnquiryCreateWrapper = {
     createdAt: "",
     enquiryType: "",
     estimates: [],
-    fromDate: new Date(),
-    toDate: new Date(),
+    fromDate: latestDate,
+    toDate: latestDate,
     functionHall: "",
     isBooking: false,
     name: "",
@@ -78,6 +79,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   // State Variables - Hooks
   const [enquiry, setEnquiry] = React.useState(emptyEnquiry);
   const [estimate, setEstimate] = React.useState(emptyEstimate);
+  const [type, setType] = React.useState("SINGLE");
   // Functions
   const createEnquiry = () => {
     httpClient
@@ -153,6 +155,27 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
       setEstimate(latestEstimate);
     }
   }, [latestEstimate]);
+  React.useEffect(() => {
+    if (
+      enquiry.fromDate &&
+      enquiry.toDate &&
+      new Date(enquiry.fromDate).toDateString() ===
+        new Date(enquiry.toDate).toDateString()
+    ) {
+      setType("SINGLE");
+    } else {
+      setType("MULTI");
+    }
+  }, [enquiry]);
+  React.useEffect(() => {
+    if (type === "SINGLE") {
+      setEnquiry({
+        ...enquiry,
+        fromDate: enquiry.fromDate,
+        toDate: enquiry.fromDate,
+      });
+    }
+  }, [type]);
 
   return (
     <ChakraModal
@@ -210,24 +233,56 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
                 setEnquiry({ ...enquiry, functionHall: value });
               }}
             />
-            <LabelledInput
-              required
-              name="from"
-              value={moment(enquiry.fromDate).format("yyyy-MM-DDTHH:mm")}
-              setValue={(_val: string) => {
-                setEnquiry({ ...enquiry, fromDate: new Date(_val) });
+            <RadioGroup
+              value={type}
+              onChange={(e) => {
+                setType(e);
               }}
-              inputProps={{ type: "datetime-local" }}
-            />
-            <LabelledInput
-              required
-              name="to"
-              value={moment(enquiry.toDate).format("yyyy-MM-DDTHH:mm")}
-              setValue={(_val: string) => {
-                setEnquiry({ ...enquiry, toDate: new Date(_val) });
-              }}
-              inputProps={{ type: "datetime-local" }}
-            />
+              className="p-[8px] my-[4px]"
+            >
+              <Stack spacing={4} direction="row">
+                <Radio value="SINGLE">Single Day</Radio>
+                <Radio value="MULTI">Multi Day</Radio>
+              </Stack>
+            </RadioGroup>
+            {type === "MULTI" && (
+              <>
+                <LabelledInput
+                  required
+                  name="from"
+                  value={moment(enquiry.fromDate).format("yyyy-MM-DDTHH:mm")}
+                  setValue={(_val: string) => {
+                    setEnquiry({ ...enquiry, fromDate: new Date(_val) });
+                  }}
+                  inputProps={{ type: "datetime-local" }}
+                />
+                <LabelledInput
+                  required
+                  name="to"
+                  value={moment(enquiry.toDate).format("yyyy-MM-DDTHH:mm")}
+                  setValue={(_val: string) => {
+                    setEnquiry({ ...enquiry, toDate: new Date(_val) });
+                  }}
+                  inputProps={{ type: "datetime-local" }}
+                />
+              </>
+            )}
+            {type === "SINGLE" && (
+              <LabelledInput
+                required
+                name="event date"
+                value={moment(enquiry.fromDate).format("yyyy-MM-DDTHH:mm")}
+                setValue={(_val: string) => {
+                  const x = new Date(_val);
+                  setEnquiry({
+                    ...enquiry,
+                    fromDate: x,
+                    toDate: x,
+                  });
+                }}
+                inputProps={{ type: "datetime-local" }}
+              />
+            )}
             <ChakraSelect
               name="primary reference"
               value={enquiry.primaryReference}
