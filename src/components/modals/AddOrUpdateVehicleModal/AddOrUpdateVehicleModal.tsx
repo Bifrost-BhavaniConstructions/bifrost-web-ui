@@ -151,7 +151,7 @@ const AddOrUpdateVehicleModal: React.FC<AddOrUpdateVehicleModalProps> = ({
       </h3>
       <LabelledInput
         required
-        name="from"
+        name="fitness"
         value={moment(vehicle.fitness).format("yyyy-MM-DD")}
         setValue={(_val: string) => {
           setVehicle({ ...vehicle, fitness: new Date(_val) });
@@ -159,7 +159,6 @@ const AddOrUpdateVehicleModal: React.FC<AddOrUpdateVehicleModalProps> = ({
         inputProps={{ type: "date" }}
       />
       <LabelledInput
-        required
         name="permit"
         value={moment(vehicle.permit).format("yyyy-MM-DD")}
         setValue={(_val: string) => {

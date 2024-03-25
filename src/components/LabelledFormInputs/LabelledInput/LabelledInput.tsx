@@ -50,6 +50,7 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
         <Input
           value={inputProps?.type === "number" && value === 0 ? "" : value}
           onChange={(e) => setValue(e.target.value)}
+          onWheel={(e) => (e.target as HTMLElement).blur()}
           variant="filled"
           placeholder={inputProps?.isDisabled ? "" : "Enter " + name}
           {...inputProps}

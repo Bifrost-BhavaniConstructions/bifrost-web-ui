@@ -266,20 +266,6 @@ const AddOrUpdatePurchaseRequestModal: React.FC<
             inputProps={{ isDisabled: viewOnly }}
           />
           <LabelledInput
-            name="account holder"
-            value={purchaseRequest.destinationBankAccount.accountHolder}
-            setValue={(_val: string) => {
-              setPurchaseRequest({
-                ...purchaseRequest,
-                destinationBankAccount: {
-                  ...purchaseRequest.destinationBankAccount,
-                  accountHolder: _val,
-                },
-              });
-            }}
-            inputProps={{ isDisabled: viewOnly }}
-          />
-          <LabelledInput
             name="branch"
             value={purchaseRequest.destinationBankAccount.branch}
             setValue={(_val: string) => {

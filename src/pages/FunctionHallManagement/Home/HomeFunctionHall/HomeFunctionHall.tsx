@@ -120,9 +120,9 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
         <>
           <div
             key={functionHall._id}
-            className="flex flex-col min-w-[100vw] h-[100%] p-[10px] pt-0"
+            className="flex flex-col md:flex-row min-w-[100vw] h-[100%] p-[10px] pt-0 md:justify-between md:items-start"
           >
-            <div className="flex justify-center items-center">
+            <div className="flex md:flex-col justify-center items-center md:items-start">
               <div className="flex flex-grow text-[24px] font-bold p-[12px]">
                 {functionHall.name}
               </div>
@@ -153,7 +153,7 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-grow w-full">
+            <div className="flex flex-grow w-full md:w-[50%] md:flex-grow-0 md:h-[100%]">
               <div className="flex flex-grow ">
                 <FullCalendar
                   key={functionHall._id}

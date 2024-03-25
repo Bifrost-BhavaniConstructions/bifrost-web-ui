@@ -229,7 +229,6 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputProps={{ type: "datetime-local" }}
             />
             <ChakraSelect
-              required
               name="primary reference"
               value={enquiry.primaryReference}
               values={users

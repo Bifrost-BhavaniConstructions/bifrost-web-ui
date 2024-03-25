@@ -70,6 +70,10 @@ const SideNav: React.FC<SideNavProps> = ({ clicked, setClicked, platform }) => {
       url: "/function-hall-management/closed-queries",
     },
     {
+      label: "Completed Bookings",
+      url: "/function-hall-management/completed-bookings",
+    },
+    {
       label: "Cash Accounts",
       url: "/function-hall-management/cash-accounts",
     },

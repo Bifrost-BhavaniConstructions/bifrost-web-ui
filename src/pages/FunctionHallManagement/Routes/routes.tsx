@@ -34,6 +34,10 @@ const FunctionHallManagementRoutes = {
       element: <Queries closed />,
     },
     {
+      path: "completed-bookings",
+      element: <Queries completed />,
+    },
+    {
       path: "cash-accounts",
       element: <CashAccount platform={PlatformEnum.FUNCTION_HALL} />,
     },

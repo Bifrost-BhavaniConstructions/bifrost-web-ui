@@ -116,7 +116,8 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
             </div>
           </div>
         )}
-        {!enquiry.isBooking && (
+        {((enquiry.isBooking && !enquiry.isCheckedIn) ||
+          !enquiry.isBooking) && (
           <div className="flex justify-between flex-col items-end mx-[11px]">
             <div
               onClick={async () => {

@@ -10,9 +10,15 @@ interface QueriesProps {
   date?: Date;
   functionHall?: string;
   closed?: boolean;
+  completed?: boolean;
 }
 
-const Enquiry: React.FC<QueriesProps> = ({ date, functionHall, closed }) => {
+const Enquiry: React.FC<QueriesProps> = ({
+  date,
+  functionHall,
+  closed,
+  completed,
+}) => {
   // Objects
   const { enquiries, functionHalls } = useStoreState(
     (state) => state.functionHallStore,
@@ -48,10 +54,32 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall, closed }) => {
   };
 
   // Hook Functions
+  React.useEffect(() => {
+    console.log(
+      enquiries
+        .filter((enquiry) =>
+          completed
+            ? enquiry.isBooking
+            : selectedTab === 0
+            ? !enquiry.isBooking
+            : enquiry.isBooking,
+        )
+        .filter((enquiry) =>
+          !!date
+            ? true
+            : !closed
+            ? !enquiry.isCheckedOut && !enquiry.isClosedEnquiry
+            : !completed
+            ? enquiry.isClosedEnquiry
+            : enquiry.isCheckedOut,
+        ),
+    );
+    console.log(completed);
+  }, [completed]);
 
   return (
     <div className="flex flex-col h-[calc(100%-88px)]">
-      {!closed && (
+      {!(closed || completed) && (
         <div className="flex w-full p-[8px]">
           <div
             className="flex px-[20px] py-[12px] justify-center bg-low-bg rounded-[8px] w-full h-full"
@@ -63,18 +91,27 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall, closed }) => {
           </div>
         </div>
       )}
-      <TabSelect
-        options={[
-          {
-            text: !closed ? "Enquiry" : "Closed Enquiries",
-          },
-          {
-            text: !closed ? "Bookings" : "Completed Bookings",
-          },
-        ]}
-        tabIndex={selectedTab}
-        setTabIndex={setSelectedTab}
-      />
+      {!completed && (
+        <TabSelect
+          options={[
+            {
+              text: !closed ? "Enquiry" : "Closed Enquiries",
+            },
+            {
+              text: !closed ? "Bookings" : "Closed Bookings",
+            },
+          ]}
+          tabIndex={selectedTab}
+          setTabIndex={setSelectedTab}
+        />
+      )}
+      {completed && (
+        <div className="flex flex-row px-[24px] py-[16px] justify-between">
+          <div className="flex font-airbnb font-black text-[24px]">
+            Completed Bookings
+          </div>
+        </div>
+      )}
       <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] pb-[8px] no-scrollbar">
         {filteredFunctionHalls.length > 0 && (
           <Tag
@@ -134,14 +171,20 @@ const Enquiry: React.FC<QueriesProps> = ({ date, functionHall, closed }) => {
               : true,
           )
           .filter((enquiry) =>
-            selectedTab === 0 ? !enquiry.isBooking : enquiry.isBooking,
+            completed
+              ? enquiry.isBooking
+              : selectedTab === 0
+              ? !enquiry.isBooking
+              : enquiry.isBooking,
           )
           .filter((enquiry) =>
             !!date
               ? true
-              : !closed
-              ? !enquiry.isCheckedOut && !enquiry.isClosedEnquiry
-              : enquiry.isCheckedOut || enquiry.isClosedEnquiry,
+              : closed
+              ? enquiry.isClosedEnquiry
+              : completed
+              ? enquiry.isCheckedOut && !enquiry.isClosedEnquiry
+              : !enquiry.isCheckedOut && !enquiry.isClosedEnquiry,
           )
           .map((enquiry) => (
             <IndividualEnquiry

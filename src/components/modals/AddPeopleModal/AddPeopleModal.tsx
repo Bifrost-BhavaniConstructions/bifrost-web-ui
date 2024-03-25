@@ -375,19 +375,6 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
           }}
         />
         <LabelledInput
-          name="account holder"
-          value={user.bankAccountPersonal.accountHolder}
-          setValue={(_val: string) => {
-            setUser({
-              ...user,
-              bankAccountPersonal: {
-                ...user.bankAccountPersonal,
-                accountHolder: _val,
-              },
-            });
-          }}
-        />
-        <LabelledInput
           name="branch"
           value={user.bankAccountPersonal.branch}
           setValue={(_val: string) => {
@@ -651,7 +638,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
         {roleToAdd === UserRoleEnum.FH_SECURITY && (
           <>
             <h3 className="flex text-[16px] justify-center text-white border-t-2 mt-[10px] pt-[10px]">
-              Additional Data for Couple
+              Additional Data for Spouse
             </h3>
             <LabelledInput
               name="name"
@@ -788,25 +775,6 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
                     bankAccountPersonal: {
                       ...user.securityGuardSecondaryData?.bankAccountPersonal!,
                       bankName: _val,
-                    },
-                  },
-                });
-              }}
-            />
-            <LabelledInput
-              name="account holder"
-              value={
-                user.securityGuardSecondaryData?.bankAccountPersonal!
-                  .accountHolder!
-              }
-              setValue={(_val: string) => {
-                setUser({
-                  ...user,
-                  securityGuardSecondaryData: {
-                    ...user.securityGuardSecondaryData,
-                    bankAccountPersonal: {
-                      ...user.securityGuardSecondaryData?.bankAccountPersonal!,
-                      accountHolder: _val,
                     },
                   },
                 });
