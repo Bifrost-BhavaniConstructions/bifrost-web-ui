@@ -8,7 +8,14 @@ import Enquiry from "../../../types/FunctionHall/Enquiry";
 import { PowerMeterStatus } from "../../../types/FunctionHall/PowerMeter";
 import { GeneratorStatus } from "../../../types/FunctionHall/Generator";
 import AcceptPaymentModal from "../AcceptPaymentModal";
+import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 
+interface InventoryItem {
+  [key: string]: any; // Index signature for string keys
+  name: string;
+  count: number;
+  charge: number;
+}
 interface EstimatesProps {
   closeCallback: Function;
   open: boolean;
@@ -24,6 +31,37 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
   const estimatesSorted = enquiry.estimates.sort((a, b) =>
     new Date(a.createdAt!) > new Date(b.createdAt!) ? -1 : 1,
   );
+
+  const [discount, setDiscount] = React.useState(0);
+  const inventoryCharges = [];
+  const inventoryItems: { [key: string]: InventoryItem } = {};
+  for (const inventory of enquiry.statStatus.inventoryAll[0]) {
+    inventoryItems[inventory.name] = inventory;
+  }
+
+  // Step 2: Process each unique inventory item
+  for (const inventoryName in inventoryItems) {
+    const inventoryItem = inventoryItems[inventoryName];
+    const firstCount = inventoryItem.count;
+    const charge = inventoryItem.charge;
+
+    const lastInventory =
+      enquiry.statStatus.inventoryAll[
+        enquiry.statStatus.inventoryAll.length - 1
+      ];
+    const lastCount =
+      lastInventory.find((item) => item.name === inventoryName)?.count ?? 0;
+
+    const countDifference = firstCount - lastCount;
+    const result = countDifference * charge;
+
+    inventoryCharges.push({
+      name: inventoryName,
+      countDifference,
+      charge,
+      result,
+    });
+  }
 
   // Variables
   const rooms =
@@ -68,6 +106,8 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
       name: initialMeter.name,
       reading: finalMeter.reading - initialMeter.reading,
       markedAt: finalMeter.markedAt, // You can use the finalMeter's timestamp
+      initialReading: initialMeter.reading,
+      finalReading: finalMeter.reading,
     };
 
     meterDifferences.push(difference);
@@ -78,21 +118,17 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
   // Functions
   const getTotalGeneratorHours = (generatorStatuses: GeneratorStatus[]) => {
     let totalHours = 0;
-
     for (const status of generatorStatuses) {
       for (const session of status.sessions) {
         if (session.from && session.to) {
           const fromTime = new Date(session.from).getTime();
           const toTime = new Date(session.to).getTime();
-          const sessionHours = Math.ceil(
-            (toTime - fromTime) / (1000 * 60 * 60),
-          ); // Convert milliseconds to hours
+          const sessionHours = (toTime - fromTime) / (1000 * 60 * 60); // Convert milliseconds to hours directly
           totalHours += sessionHours;
         }
       }
     }
-
-    return totalHours;
+    return parseFloat(totalHours.toFixed(2));
   };
   const generatorHours = getTotalGeneratorHours(
     enquiry.statStatus ? enquiry.statStatus.generatorsAll : [],
@@ -126,7 +162,8 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
         : 0,
     ) +
     Number(securityGuards * estimatesSorted[0].securityTariff) +
-    Number(generatorHours * estimatesSorted[0].generatorTariff);
+    Number(generatorHours * estimatesSorted[0].generatorTariff) -
+    Number(discount);
 
   // Hook Functions
 
@@ -200,8 +237,21 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
               <EstimateField
                 key={"electricity consumed - " + meter.name}
                 title={"electricity consumed - " + meter.name}
-                subtitle={`${meter.reading} units`}
+                subtitle={`${meter.reading} units (${meter.finalReading} - ${meter.initialReading})`}
                 tariff={meter.reading * estimatesSorted[0].electricityTariff}
+                isRight
+                isFullWidth
+                fontSize={18}
+              />
+            );
+          })}
+          {inventoryCharges.map((inventoryCharge) => {
+            return (
+              <EstimateField
+                key={"inventory damaged - " + inventoryCharge.name}
+                title={"inventory damaged - " + inventoryCharge.name}
+                subtitle={`${inventoryCharge.countDifference} items * ${inventoryCharge.charge}`}
+                tariff={inventoryCharge.result}
                 isRight
                 isFullWidth
                 fontSize={18}
@@ -223,6 +273,14 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
             isRight
             isFullWidth
             fontSize={18}
+          />
+          <LabelledInput
+            name={"discount"}
+            value={discount}
+            inputProps={{ type: "number" }}
+            setValue={(_val: number) => {
+              setDiscount(_val);
+            }}
           />
           <EstimateField
             key={"total"}

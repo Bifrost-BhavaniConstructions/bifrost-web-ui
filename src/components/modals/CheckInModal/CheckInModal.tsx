@@ -41,6 +41,7 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
 
   // State Variables - Hooks
   const [tabIndex, setTabIndex] = React.useState(0);
+  const [inventorySearch, setInventorySearch] = React.useState<string>("");
   const [rooms, setRooms] = React.useState<RoomStatus[]>(
     enquiry.statStatus &&
       enquiry.statStatus.roomsAll &&
@@ -239,33 +240,61 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
       )}
       {tabIndex === 3 && (
         <>
-          {newInventoryTypeList.map((type, index) => {
-            return (
-              <div
-                key={type.name}
-                className="flex flex-col mt-[4px] border-t-2"
-              >
-                <LabelledInput
-                  name={"name"}
-                  value={type.name}
-                  inputProps={{ isDisabled: true }}
-                  setValue={(_val: string) =>
-                    setNewInventoryTypeList(
-                      newInventoryTypeList.map((iT, i) =>
-                        i === index ? { ...iT, name: _val } : iT,
-                      ),
-                    )
-                  }
-                />
-                <div className="flex">
+          <LabelledInput
+            name={"search inventory"}
+            value={inventorySearch}
+            setValue={(_val: string) => {
+              setInventorySearch(_val);
+            }}
+          />
+          {newInventoryTypeList
+            .filter(
+              (it) =>
+                inventorySearch === "" ||
+                it.name.toLowerCase().includes(inventorySearch.toLowerCase()),
+            )
+            .map((type, index) => {
+              return (
+                <div
+                  key={type.name}
+                  className="flex flex-col mt-[4px] border-t-2"
+                >
+                  <LabelledInput
+                    name={"name"}
+                    value={type.name}
+                    inputProps={{ isDisabled: true }}
+                    setValue={(_val: string) =>
+                      setNewInventoryTypeList(
+                        newInventoryTypeList.map((iT, i) =>
+                          i === index ? { ...iT, name: _val } : iT,
+                        ),
+                      )
+                    }
+                  />
+                  <div className="flex">
+                    <div className="flex  px-[2px]">
+                      <LabelledInput
+                        name={"count"}
+                        value={type.count}
+                        setValue={(_val: number) =>
+                          setNewInventoryTypeList(
+                            newInventoryTypeList.map((iT, i) =>
+                              i === index ? { ...iT, count: _val } : iT,
+                            ),
+                          )
+                        }
+                        inputProps={{ type: "number" }}
+                      />
+                    </div>
+                  </div>
                   <div className="flex  px-[2px]">
                     <LabelledInput
-                      name={"count"}
-                      value={type.count}
+                      name={"damage charges"}
+                      value={type.charge}
                       setValue={(_val: number) =>
                         setNewInventoryTypeList(
                           newInventoryTypeList.map((iT, i) =>
-                            i === index ? { ...iT, count: _val } : iT,
+                            i === index ? { ...iT, charge: _val } : iT,
                           ),
                         )
                       }
@@ -273,23 +302,8 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
                     />
                   </div>
                 </div>
-                <div className="flex  px-[2px]">
-                  <LabelledInput
-                    name={"damage charges"}
-                    value={type.charge}
-                    setValue={(_val: number) =>
-                      setNewInventoryTypeList(
-                        newInventoryTypeList.map((iT, i) =>
-                          i === index ? { ...iT, charge: _val } : iT,
-                        ),
-                      )
-                    }
-                    inputProps={{ type: "number" }}
-                  />
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </>
       )}
       {tabIndex === 4 && (
