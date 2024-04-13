@@ -58,6 +58,7 @@ const Enquiry: React.FC<QueriesProps> = ({
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [openEnquiry, setOpenEnquiry] = React.useState(false);
   const [sortBy, setSortBy] = React.useState("DB");
+  const [direction, setDirection] = React.useState("DSC");
   const [search, setSearch] = React.useState("");
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [filteredFunctionHalls, setFilteredFunctionHalls] = React.useState<
@@ -208,12 +209,15 @@ const Enquiry: React.FC<QueriesProps> = ({
           .sort((a, b) => {
             if (sortBy === "DB") {
               return (
-                new Date(b.fromDate).getTime() - new Date(a.fromDate).getTime()
+                (new Date(b.fromDate).getTime() -
+                  new Date(a.fromDate).getTime()) *
+                (direction === "ASC" ? -1 : 1)
               );
             } else {
               return (
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
+                (new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()) *
+                (direction === "ASC" ? -1 : 1)
               );
             }
           })
@@ -271,7 +275,7 @@ const Enquiry: React.FC<QueriesProps> = ({
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col w-full z-[200]">
-              <div className="flex flex-col justify-start items-start flex-grow w-full">
+              <div className="flex flex-row justify-start items-start flex-grow w-full gap-[4px]">
                 <ChakraSelect
                   fullWidth
                   name="sort by"
@@ -282,6 +286,18 @@ const Enquiry: React.FC<QueriesProps> = ({
                   ]}
                   onValueChange={(value) => {
                     setSortBy(value);
+                  }}
+                />
+                <ChakraSelect
+                  fullWidth
+                  name="direction"
+                  value={direction}
+                  values={[
+                    { name: "Ascending", value: "ASC" },
+                    { name: "Descending", value: "DSC" },
+                  ]}
+                  onValueChange={(value) => {
+                    setDirection(value);
                   }}
                 />
               </div>
@@ -398,14 +414,131 @@ const Enquiry: React.FC<QueriesProps> = ({
             <DrawerHeader>
               <DrawerTitle>Sort / Filter</DrawerTitle>
             </DrawerHeader>
+            <div className="flex flex-col w-full z-[200]">
+              <div className="flex flex-row justify-start items-start flex-grow w-full gap-[4px]">
+                <ChakraSelect
+                  fullWidth
+                  name="sort by"
+                  value={sortBy}
+                  values={[
+                    { name: "Date Of Booking", value: "DB" },
+                    { name: "Date Of Enquiry", value: "DE" },
+                  ]}
+                  onValueChange={(value) => {
+                    setSortBy(value);
+                  }}
+                />
+                <ChakraSelect
+                  fullWidth
+                  name="direction"
+                  value={direction}
+                  values={[
+                    { name: "Ascending", value: "ASC" },
+                    { name: "Descending", value: "DSC" },
+                  ]}
+                  onValueChange={(value) => {
+                    setDirection(value);
+                  }}
+                />
+              </div>
+              <div className="flex flex-col justify-start items-start flex-grow w-full">
+                <div className="font-light text-[12px] opacity-70 mt-[4px] w-full">
+                  function halls
+                </div>
+                <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] pb-[8px] no-scrollbar">
+                  {filteredFunctionHalls.length > 0 && (
+                    <Tag
+                      size={"md"}
+                      variant={"subtle"}
+                      className="flex shrink-0 mr-[4px]"
+                      colorScheme="red"
+                      onClick={() => {
+                        setFilteredFunctionHalls([]);
+                      }}
+                    >
+                      <TagLabel>clear</TagLabel>
+                    </Tag>
+                  )}
+                  {functionHalls.map((fH) => {
+                    return (
+                      <Tag
+                        key={fH._id}
+                        size={"md"}
+                        variant={
+                          filteredFunctionHalls.includes(fH._id!)
+                            ? "subtle"
+                            : "outline"
+                        }
+                        className="flex shrink-0 mr-[4px]"
+                        colorScheme="cyan"
+                        onClick={() => {
+                          if (filteredFunctionHalls.includes(fH._id!)) {
+                            setFilteredFunctionHalls(
+                              filteredFunctionHalls.filter(
+                                (f) => f !== fH._id!,
+                              ),
+                            );
+                          } else {
+                            setFilteredFunctionHalls([
+                              ...filteredFunctionHalls,
+                              fH._id!,
+                            ]);
+                          }
+                        }}
+                      >
+                        <TagLabel>{fH.name}</TagLabel>
+                      </Tag>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex flex-col justify-start items-start flex-grow w-full z-[200]">
+                <LabelledInput
+                  name={"month"}
+                  value={filter.month!}
+                  setValue={(_val: string) => {
+                    setFilter({ ...filter, month: _val });
+                  }}
+                  inputProps={{ type: "month" }}
+                />
+                <ChakraSelect
+                  name="primary reference"
+                  value={filter.primaryReference!}
+                  values={users
+                    .filter((user) => user.role === UserRoleEnum.SUPER_ADMIN)
+                    .map((fH) => ({
+                      name: fH.name,
+                      value: fH._id!,
+                    }))}
+                  onValueChange={(value) => {
+                    setFilter({ ...filter, primaryReference: value });
+                  }}
+                />
+                <ChakraSelect
+                  name="enquiry type"
+                  value={filter.enquiryType!}
+                  values={enquiryTypes.map((fH) => ({
+                    name: fH.name,
+                    value: fH._id!,
+                  }))}
+                  onValueChange={(value) => {
+                    setFilter({ ...filter, enquiryType: value });
+                  }}
+                />
+              </div>
+            </div>
             <DrawerFooter>
               <DrawerClose className="w-full">
                 <Button
-                  className="w-full"
                   onClick={() => {
                     setSortBy("DB");
                     setFilteredFunctionHalls([]);
                     setOpenDrawer(false);
+                    setFilter({
+                      primaryReference: null,
+                      enquiryType: null,
+                      month: null,
+                    });
                   }}
                 >
                   Clear All
