@@ -26,12 +26,18 @@ export const getAllEnquiryTypes: () => Promise<EnquiryType[]> = async () => {
   }
 };
 
-export const closeEnquiry: (enquiryId: string) => Promise<EnquiryType> = async (
-  enquiryId,
-) => {
+export const closeEnquiry: (
+  enquiryId: string,
+  remark: string,
+  refundAmount: number,
+) => Promise<EnquiryType> = async (enquiryId, remark, refundAmount) => {
   try {
     const response = await httpClient.post(
       `/function-hall/enquiry/close-enquiry/${enquiryId}`,
+      {
+        reason: remark,
+        refundAmount: refundAmount,
+      },
     );
     return response.data as EnquiryType;
   } catch (e: any) {

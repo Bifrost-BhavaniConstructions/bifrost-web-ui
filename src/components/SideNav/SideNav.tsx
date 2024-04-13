@@ -62,7 +62,7 @@ const SideNav: React.FC<SideNavProps> = ({ clicked, setClicked, platform }) => {
       url: "/function-hall-management/function-hall",
     },
     {
-      label: "Enquiry",
+      label: "Enquiries/Bookings",
       url: "/function-hall-management/queries",
     },
     {

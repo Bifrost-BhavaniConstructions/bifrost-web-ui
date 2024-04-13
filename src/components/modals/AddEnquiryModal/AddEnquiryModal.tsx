@@ -45,6 +45,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
     functionHall: "",
     isBooking: false,
     name: "",
+    isFloating: false,
     primaryContactName: "",
     primaryContactNumber: 0,
     pax: 0,
@@ -83,7 +84,11 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   // Functions
   const createEnquiry = () => {
     httpClient
-      .post("/function-hall/enquiry/", { ...enquiry, estimates: [estimate] })
+      .post("/function-hall/enquiry/", {
+        ...enquiry,
+        estimates: [estimate],
+        isFloating: type === "FLOATING",
+      })
       .then(() => {
         fetchEnquiries();
         toast(`Enquiry created`, {
@@ -96,7 +101,12 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   const updateEnquiry = () => {
     //console.log({ ...enquiry, estimates: [] });
     httpClient
-      .put("/function-hall/enquiry/", { ...enquiry, estimates: [] })
+      .put("/function-hall/enquiry/", {
+        ...enquiry,
+        primaryContactNumber: parseInt(enquiry.primaryContactNumber.toString()),
+        isFloating: type === "FLOATING",
+        estimates: [],
+      })
       .then(() => {
         fetchEnquiries();
         toast(`Enquiry updated`, {
@@ -124,7 +134,6 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
       enquiry.functionHall !== "" &&
       enquiry.fromDate !== undefined &&
       enquiry.toDate !== undefined &&
-      enquiry.primaryReference !== "" &&
       enquiry.enquiryType !== "" &&
       enquiry.primaryContactName !== "" &&
       enquiry.primaryContactNumber != 0
@@ -162,13 +171,14 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
       new Date(enquiry.fromDate).toDateString() ===
         new Date(enquiry.toDate).toDateString()
     ) {
-      setType("SINGLE");
+      if (type === "FLOATING") setType("FLOATING");
+      else setType("SINGLE");
     } else {
       setType("MULTI");
     }
   }, [enquiry]);
   React.useEffect(() => {
-    if (type === "SINGLE") {
+    if (type === "SINGLE" || type === "FLOATING") {
       setEnquiry({
         ...enquiry,
         fromDate: enquiry.fromDate,
@@ -243,6 +253,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               <Stack spacing={4} direction="row">
                 <Radio value="SINGLE">Single Day</Radio>
                 <Radio value="MULTI">Multi Day</Radio>
+                <Radio value="FLOATING">Floating</Radio>
               </Stack>
             </RadioGroup>
             {type === "MULTI" && (
@@ -250,28 +261,28 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
                 <LabelledInput
                   required
                   name="from"
-                  value={moment(enquiry.fromDate).format("yyyy-MM-DDTHH:mm")}
+                  value={moment(enquiry.fromDate).format("yyyy-MM-DD")}
                   setValue={(_val: string) => {
                     setEnquiry({ ...enquiry, fromDate: new Date(_val) });
                   }}
-                  inputProps={{ type: "datetime-local" }}
+                  inputProps={{ type: "date" }}
                 />
                 <LabelledInput
                   required
                   name="to"
-                  value={moment(enquiry.toDate).format("yyyy-MM-DDTHH:mm")}
+                  value={moment(enquiry.toDate).format("yyyy-MM-DD")}
                   setValue={(_val: string) => {
                     setEnquiry({ ...enquiry, toDate: new Date(_val) });
                   }}
-                  inputProps={{ type: "datetime-local" }}
+                  inputProps={{ type: "date" }}
                 />
               </>
             )}
-            {type === "SINGLE" && (
+            {(type === "SINGLE" || type === "FLOATING") && (
               <LabelledInput
                 required
                 name="event date"
-                value={moment(enquiry.fromDate).format("yyyy-MM-DDTHH:mm")}
+                value={moment(enquiry.fromDate).format("yyyy-MM-DD")}
                 setValue={(_val: string) => {
                   const x = new Date(_val);
                   setEnquiry({
@@ -280,7 +291,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
                     toDate: x,
                   });
                 }}
-                inputProps={{ type: "datetime-local" }}
+                inputProps={{ type: "date" }}
               />
             )}
             <ChakraSelect
@@ -482,7 +493,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               inputRightAddon={"/generator"}
             />
             <LabelledInput
-              name="total estimate"
+              name="total estimate (excl. additional charges)"
               value={
                 Number(estimate.hallTariff) +
                 Number(estimate.furnitureUtilityCharges) +
@@ -492,7 +503,6 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               setValue={() => {}}
               inputProps={{ type: "number", isDisabled: true }}
               inputLeftAddon={"₹"}
-              inputRightAddon={"excl. additional charges"}
             />
           </>
         )}

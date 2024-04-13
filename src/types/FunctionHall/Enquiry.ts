@@ -35,6 +35,7 @@ interface Enquiry {
   followUps: FollowUp[];
   isCheckedOut: boolean;
   isClosedEnquiry: boolean;
+  isFloating?: boolean;
 }
 export interface EnquiryFilterWrapper {
   enquiryType: string;
@@ -59,6 +60,7 @@ export interface EnquiryCreateWrapper {
   createdAt?: string;
   updatedAt?: string;
   isBooking: boolean;
+  isFloating?: boolean;
 }
 
 export default Enquiry;

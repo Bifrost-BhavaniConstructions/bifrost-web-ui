@@ -35,8 +35,14 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
   const [discount, setDiscount] = React.useState(0);
   const inventoryCharges = [];
   const inventoryItems: { [key: string]: InventoryItem } = {};
-  for (const inventory of enquiry.statStatus.inventoryAll[0]) {
-    inventoryItems[inventory.name] = inventory;
+  if (
+    enquiry.statStatus &&
+    enquiry.statStatus.inventoryAll &&
+    enquiry.statStatus.inventoryAll.length > 0
+  ) {
+    for (const inventory of enquiry.statStatus.inventoryAll[0]) {
+      inventoryItems[inventory.name] = inventory;
+    }
   }
 
   // Step 2: Process each unique inventory item
@@ -51,14 +57,16 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
       ];
     const lastCount =
       lastInventory.find((item) => item.name === inventoryName)?.count ?? 0;
+    const lastCharge =
+      lastInventory.find((item) => item.name === inventoryName)?.charge ?? 0;
 
     const countDifference = firstCount - lastCount;
-    const result = countDifference * charge;
+    const result = countDifference * lastCharge;
 
     inventoryCharges.push({
       name: inventoryName,
       countDifference,
-      charge,
+      lastCharge,
       result,
     });
   }
@@ -245,19 +253,21 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
               />
             );
           })}
-          {inventoryCharges.map((inventoryCharge) => {
-            return (
-              <EstimateField
-                key={"inventory damaged - " + inventoryCharge.name}
-                title={"inventory damaged - " + inventoryCharge.name}
-                subtitle={`${inventoryCharge.countDifference} items * ${inventoryCharge.charge}`}
-                tariff={inventoryCharge.result}
-                isRight
-                isFullWidth
-                fontSize={18}
-              />
-            );
-          })}
+          {inventoryCharges
+            .filter((i) => i.countDifference !== 0)
+            .map((inventoryCharge) => {
+              return (
+                <EstimateField
+                  key={"inventory damaged - " + inventoryCharge.name}
+                  title={"inventory damaged - " + inventoryCharge.name}
+                  subtitle={`${inventoryCharge.countDifference} items * ${inventoryCharge.lastCharge}`}
+                  tariff={inventoryCharge.result}
+                  isRight
+                  isFullWidth
+                  fontSize={18}
+                />
+              );
+            })}
           <EstimateField
             key={"security cost "}
             title={"security guards - " + securityGuards}

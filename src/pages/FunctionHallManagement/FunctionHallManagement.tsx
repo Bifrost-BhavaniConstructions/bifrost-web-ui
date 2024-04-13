@@ -46,7 +46,9 @@ const FunctionHallManagement: React.FC<SiteManagementHomeProps> = () => {
           fetchEnquiryTypes();
           fetchTransactionPurposes();
         })
-        .catch(() => {});
+        .catch(() => {
+          navigate("/login");
+        });
     }
     if (dataFetched && !user) {
       navigate("/login");

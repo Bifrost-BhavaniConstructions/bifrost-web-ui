@@ -16,6 +16,7 @@ interface LabelledInputProps {
   inputLeftAddon?: string;
   inputRightAddon?: string;
   required?: boolean;
+  fullWidth?: boolean;
 }
 
 const LabelledInput: React.FC<LabelledInputProps> = ({
@@ -26,6 +27,7 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
   inputLeftAddon,
   inputRightAddon,
   required = false,
+  fullWidth = false,
 }) => {
   // Objects
 
@@ -38,7 +40,7 @@ const LabelledInput: React.FC<LabelledInputProps> = ({
   // Hook Functions
 
   return (
-    <div>
+    <div className={`flex flex-col ${fullWidth ? "flex-grow" : "flex-grow-0"}`}>
       <div className="font-light text-[12px] mt-[4px] opacity-70">
         {name}
         {required && (

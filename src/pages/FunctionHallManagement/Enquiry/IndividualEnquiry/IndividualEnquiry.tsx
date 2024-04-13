@@ -25,6 +25,7 @@ import {
   restoreEnquiry,
 } from "../../../../adapters/EnquiryAdapter";
 import { useStoreActions } from "../../../../store/hooks";
+import CloseEnquiryModal from "../../../../components/modals/CloseEnquiryModal";
 
 interface IndividualEnquiryProps {
   enquiry: Enquiry;
@@ -51,6 +52,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
   const [checkIn, setCheckIn] = React.useState<boolean>(false);
   const [checkOut, setCheckOut] = React.useState<boolean>(false);
   const [followUp, setFollowUp] = React.useState<boolean>(false);
+  const [closeEnquiry, setCloseEnquiry] = React.useState<boolean>(false);
   const { fetchEnquiries } = useStoreActions(
     (actions) => actions.functionHallStore,
   );
@@ -59,7 +61,11 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
   // Hook Functions
 
   return (
-    <div className="flex flex-col p-[8px] rounded-[8px] bg-low-bg mb-[8px]">
+    <div
+      className={`flex flex-col p-[8px] rounded-[8px] ${
+        enquiry.isFloating ? "bg-low-bg-floating" : "bg-low-bg"
+      } mb-[8px]`}
+    >
       <div className="flex">
         <div
           className="flex flex-col flex-grow"
@@ -122,7 +128,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
             <div
               onClick={async () => {
                 !closed
-                  ? await closeEnquiry(enquiry._id)
+                  ? setCloseEnquiry(true)
                   : await restoreEnquiry(enquiry._id);
                 fetchEnquiries();
               }}
@@ -238,6 +244,14 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
         enquiry={enquiry}
         functionHall={enquiry.functionHall}
         isUpdateStatus={updateStatus}
+      />
+      <CloseEnquiryModal
+        open={closeEnquiry}
+        closeCallback={() => {
+          setCloseEnquiry(false);
+          fetchEnquiries();
+        }}
+        enquiryId={enquiry._id}
       />
       {bookingClicked && (
         <div className="flex flex-1 p-[8px] mt-[12px] bg-main-bg rounded-[6px] text-[14px] font-normal">

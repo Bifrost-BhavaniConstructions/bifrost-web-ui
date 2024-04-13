@@ -34,7 +34,7 @@ const ChakraSelect: React.FC<ChakraSelectProps> = ({
   return (
     <div>
       {name !== "" && (
-        <div className="font-light text-[12px] opacity-70">
+        <div className="font-light text-[12px] opacity-70 mt-[4px]">
           {name}
           {required && (
             <span className="text-red-500 ml-[3px] text-[14px]">*</span>

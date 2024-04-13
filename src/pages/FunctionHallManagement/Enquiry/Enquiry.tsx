@@ -5,6 +5,10 @@ import { useStoreState } from "../../../store/hooks";
 import IndividualEnquiry from "./IndividualEnquiry";
 import AddEnquiryModal from "../../../components/modals/AddEnquiryModal";
 import { Tag, TagLabel } from "@chakra-ui/react";
+import ChakraSelect from "../../../components/ChakraSelect";
+import LabelledInput from "../../../components/LabelledFormInputs/LabelledInput";
+import { en } from "@fullcalendar/core/internal-common";
+import moment from "moment";
 
 interface QueriesProps {
   date?: Date;
@@ -27,6 +31,8 @@ const Enquiry: React.FC<QueriesProps> = ({
   // Variables
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [openEnquiry, setOpenEnquiry] = React.useState(false);
+  const [sortBy, setSortBy] = React.useState("DB");
+  const [search, setSearch] = React.useState("");
   const [filteredFunctionHalls, setFilteredFunctionHalls] = React.useState<
     string[]
   >([]);
@@ -151,6 +157,29 @@ const Enquiry: React.FC<QueriesProps> = ({
           );
         })}
       </div>
+      <div className="w-full flex flex-row px-[16px] pb-[8px]">
+        <div className="flex flex-grow">
+          <LabelledInput
+            name={"search"}
+            value={search}
+            setValue={setSearch}
+            fullWidth
+          />
+        </div>
+        <div className="flex">
+          <ChakraSelect
+            name="sort by"
+            value={sortBy}
+            values={[
+              { name: "Date Of Booking", value: "DB" },
+              { name: "Date Of Enquiry", value: "DE" },
+            ]}
+            onValueChange={(value) => {
+              setSortBy(value);
+            }}
+          />
+        </div>
+      </div>
       <div className="w-full h-[calc(100%-72px)] overflow-y-auto overflow-x-hidden p-[8px]">
         {enquiries
           .filter((enquiry) =>
@@ -185,6 +214,29 @@ const Enquiry: React.FC<QueriesProps> = ({
               : completed
               ? enquiry.isCheckedOut && !enquiry.isClosedEnquiry
               : !enquiry.isCheckedOut && !enquiry.isClosedEnquiry,
+          )
+          .sort((a, b) => {
+            if (sortBy === "DB") {
+              return (
+                new Date(b.fromDate).getTime() - new Date(a.fromDate).getTime()
+              );
+            } else {
+              return (
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+              );
+            }
+          })
+          .filter((enquiry) =>
+            search.trim() !== ""
+              ? (
+                  enquiry.primaryContactNumber.toString() +
+                  " " +
+                  enquiry.name +
+                  " " +
+                  moment(enquiry.fromDate).format("DD/MM/YYYY")
+                ).includes(search)
+              : true,
           )
           .map((enquiry) => (
             <IndividualEnquiry

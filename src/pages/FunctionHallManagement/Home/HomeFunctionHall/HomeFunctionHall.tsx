@@ -15,7 +15,11 @@ import { EyeIcon } from "@heroicons/react/20/solid";
 interface HomeFunctionHallProps {}
 
 interface EventCounts {
-  [date: string]: { bookingCount: number; nonBookingCount: number };
+  [date: string]: {
+    bookingCount: number;
+    nonBookingCount: number;
+    floatingCount: number;
+  };
 }
 
 const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
@@ -58,6 +62,7 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
               eventCounts[formattedDate] = {
                 bookingCount: 0,
                 nonBookingCount: 0,
+                floatingCount: 0,
               };
             }
 
@@ -71,9 +76,12 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
             eventCounts[formattedDate] = {
               bookingCount: 0,
               nonBookingCount: 0,
+              floatingCount: 0,
             };
           }
-          eventCounts[formattedDate].nonBookingCount++;
+          if (enquiry.isFloating) {
+            eventCounts[formattedDate].floatingCount++;
+          } else eventCounts[formattedDate].nonBookingCount++;
         }
       });
 
@@ -83,25 +91,41 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
         date,
         bookingCount: counts.bookingCount,
         nonBookingCount: counts.nonBookingCount,
+        floatingCount: counts.floatingCount,
       };
     });
     return events
       .map((item) => {
         const bookingTitle = `${item.bookingCount} Bookings`;
-        const enquiriesTitle = `${item.nonBookingCount} Enquiries`;
+        const floatingTitle = `${item.floatingCount} Floating`;
+        const enquiriesTitle = `${
+          item.nonBookingCount + item.bookingCount
+        } Enquiries`;
 
-        return [
+        const events = [
           {
             title: bookingTitle,
             date: moment(item.date).format("YYYY-MM-DD"),
             end: moment(item.date).format("YYYY-MM-DD"),
+            backgroundColor: "#3688D8",
           },
           {
             title: enquiriesTitle,
             date: moment(item.date).format("YYYY-MM-DD"),
             end: moment(item.date).format("YYYY-MM-DD"),
+            backgroundColor: "#3688D8",
           },
         ];
+
+        if (item.floatingCount > 0) {
+          events.push({
+            title: floatingTitle,
+            date: moment(item.date).format("YYYY-MM-DD"),
+            end: moment(item.date).format("YYYY-MM-DD"),
+            backgroundColor: "#9d904a",
+          });
+        }
+        return events;
       })
       .reduce((acc, val) => acc.concat(val), []);
   };
