@@ -1,14 +1,39 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./Enquiry.css";
 import TabSelect from "../../../components/TabSelect";
 import { useStoreState } from "../../../store/hooks";
 import IndividualEnquiry from "./IndividualEnquiry";
 import AddEnquiryModal from "../../../components/modals/AddEnquiryModal";
-import { Tag, TagLabel } from "@chakra-ui/react";
+import { Button, Portal, Tag, TagLabel } from "@chakra-ui/react";
 import ChakraSelect from "../../../components/ChakraSelect";
 import LabelledInput from "../../../components/LabelledFormInputs/LabelledInput";
 import { en } from "@fullcalendar/core/internal-common";
 import moment from "moment";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { restoreEnquiry } from "@/adapters/EnquiryAdapter";
+import { DeleteIcon, SettingsIcon } from "@chakra-ui/icons";
+import { ArrowUturnUpIcon } from "@heroicons/react/20/solid";
+import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { UserRoleEnum } from "@/enums/UserRoleEnum";
 
 interface QueriesProps {
   date?: Date;
@@ -29,13 +54,27 @@ const Enquiry: React.FC<QueriesProps> = ({
   );
 
   // Variables
+  const { users } = useStoreState((state) => state.peopleStore);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [openEnquiry, setOpenEnquiry] = React.useState(false);
   const [sortBy, setSortBy] = React.useState("DB");
   const [search, setSearch] = React.useState("");
+  const [openDrawer, setOpenDrawer] = React.useState(false);
   const [filteredFunctionHalls, setFilteredFunctionHalls] = React.useState<
     string[]
   >([]);
+  const [filterApplied, setFilterApplied] = React.useState(false);
+  const { enquiryTypes } = useStoreState((state) => state.functionHallStore);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [filter, setFilter] = React.useState<{
+    month: string | null;
+    enquiryType: string | null;
+    primaryReference: string | null;
+  }>({
+    month: null,
+    enquiryType: null,
+    primaryReference: null,
+  });
   // State Variables - Hooks
 
   // Functions
@@ -61,27 +100,17 @@ const Enquiry: React.FC<QueriesProps> = ({
 
   // Hook Functions
   React.useEffect(() => {
-    console.log(
-      enquiries
-        .filter((enquiry) =>
-          completed
-            ? enquiry.isBooking
-            : selectedTab === 0
-            ? !enquiry.isBooking
-            : enquiry.isBooking,
-        )
-        .filter((enquiry) =>
-          !!date
-            ? true
-            : !closed
-            ? !enquiry.isCheckedOut && !enquiry.isClosedEnquiry
-            : !completed
-            ? enquiry.isClosedEnquiry
-            : enquiry.isCheckedOut,
-        ),
-    );
-    console.log(completed);
-  }, [completed]);
+    if (
+      filter.month ||
+      filter.enquiryType ||
+      filter.primaryReference ||
+      filteredFunctionHalls.length > 0
+    ) {
+      setFilterApplied(true);
+    } else {
+      setFilterApplied(false);
+    }
+  }, [filter, filteredFunctionHalls]);
 
   return (
     <div className="flex flex-col h-[calc(100%-88px)]">
@@ -118,66 +147,27 @@ const Enquiry: React.FC<QueriesProps> = ({
           </div>
         </div>
       )}
-      <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] pb-[8px] no-scrollbar">
-        {filteredFunctionHalls.length > 0 && (
-          <Tag
-            size={"md"}
-            variant={"subtle"}
-            className="flex shrink-0 mr-[4px]"
-            colorScheme="red"
-            onClick={() => {
-              setFilteredFunctionHalls([]);
-            }}
-          >
-            <TagLabel>clear</TagLabel>
-          </Tag>
-        )}
-        {functionHalls.map((fH) => {
-          return (
-            <Tag
-              key={fH._id}
-              size={"md"}
-              variant={
-                filteredFunctionHalls.includes(fH._id!) ? "subtle" : "outline"
-              }
-              className="flex shrink-0 mr-[4px]"
-              colorScheme="cyan"
-              onClick={() => {
-                if (filteredFunctionHalls.includes(fH._id!)) {
-                  setFilteredFunctionHalls(
-                    filteredFunctionHalls.filter((f) => f !== fH._id!),
-                  );
-                } else {
-                  setFilteredFunctionHalls([...filteredFunctionHalls, fH._id!]);
-                }
-              }}
-            >
-              <TagLabel>{fH.name}</TagLabel>
-            </Tag>
-          );
-        })}
-      </div>
       <div className="w-full flex flex-row px-[16px] pb-[8px]">
-        <div className="flex flex-grow">
+        <div className="flex flex-grow px-[8px]">
           <LabelledInput
-            name={"search"}
+            name={""}
             value={search}
             setValue={setSearch}
             fullWidth
+            inputProps={{ placeholder: "search" }}
           />
         </div>
-        <div className="flex">
-          <ChakraSelect
-            name="sort by"
-            value={sortBy}
-            values={[
-              { name: "Date Of Booking", value: "DB" },
-              { name: "Date Of Enquiry", value: "DE" },
-            ]}
-            onValueChange={(value) => {
-              setSortBy(value);
+        <div className="flex flex-col justify-center items-center">
+          <div
+            onClick={() => {
+              setOpenDrawer(true);
             }}
-          />
+            className={`flex p-[8px] w-[40px] h-[40px] text-accent mt-[4px] justify-center items-center rounded-[4px] bg-low-bg ${
+              filterApplied ? "bg-accent-color" : "bg-low-bg"
+            }`}
+          >
+            <AdjustmentsVerticalIcon color="white" width={"14px"} />
+          </div>
         </div>
       </div>
       <div className="w-full h-[calc(100%-72px)] overflow-y-auto overflow-x-hidden p-[8px]">
@@ -227,6 +217,23 @@ const Enquiry: React.FC<QueriesProps> = ({
               );
             }
           })
+          .filter((enquiry) => {
+            let month = true;
+            let enquiryType = true;
+            let primaryReference = true;
+            if (filter.month) {
+              month =
+                moment(enquiry.fromDate).format("YYYY-MM") === filter.month;
+            }
+            if (filter.enquiryType) {
+              enquiryType = enquiry.enquiryType._id === filter.enquiryType;
+            }
+            if (filter.primaryReference) {
+              primaryReference =
+                enquiry.primaryReference === filter.primaryReference;
+            }
+            return month && enquiryType && primaryReference;
+          })
           .filter((enquiry) =>
             search.trim() !== ""
               ? (
@@ -253,6 +260,163 @@ const Enquiry: React.FC<QueriesProps> = ({
           }}
           open={openEnquiry}
         />
+      )}
+      {isDesktop ? (
+        <Dialog open={openDrawer} onOpenChange={setOpenDrawer}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Sort / Filter</DialogTitle>
+              <DialogDescription>
+                filters are automatically applied
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col w-full z-[200]">
+              <div className="flex flex-col justify-start items-start flex-grow w-full">
+                <ChakraSelect
+                  fullWidth
+                  name="sort by"
+                  value={sortBy}
+                  values={[
+                    { name: "Date Of Booking", value: "DB" },
+                    { name: "Date Of Enquiry", value: "DE" },
+                  ]}
+                  onValueChange={(value) => {
+                    setSortBy(value);
+                  }}
+                />
+              </div>
+              <div className="flex flex-col justify-start items-start flex-grow w-full">
+                <div className="font-light text-[12px] opacity-70 mt-[4px] w-full">
+                  function halls
+                </div>
+                <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] pb-[8px] no-scrollbar">
+                  {filteredFunctionHalls.length > 0 && (
+                    <Tag
+                      size={"md"}
+                      variant={"subtle"}
+                      className="flex shrink-0 mr-[4px]"
+                      colorScheme="red"
+                      onClick={() => {
+                        setFilteredFunctionHalls([]);
+                      }}
+                    >
+                      <TagLabel>clear</TagLabel>
+                    </Tag>
+                  )}
+                  {functionHalls.map((fH) => {
+                    return (
+                      <Tag
+                        key={fH._id}
+                        size={"md"}
+                        variant={
+                          filteredFunctionHalls.includes(fH._id!)
+                            ? "subtle"
+                            : "outline"
+                        }
+                        className="flex shrink-0 mr-[4px]"
+                        colorScheme="cyan"
+                        onClick={() => {
+                          if (filteredFunctionHalls.includes(fH._id!)) {
+                            setFilteredFunctionHalls(
+                              filteredFunctionHalls.filter(
+                                (f) => f !== fH._id!,
+                              ),
+                            );
+                          } else {
+                            setFilteredFunctionHalls([
+                              ...filteredFunctionHalls,
+                              fH._id!,
+                            ]);
+                          }
+                        }}
+                      >
+                        <TagLabel>{fH.name}</TagLabel>
+                      </Tag>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex flex-col justify-start items-start flex-grow w-full z-[200]">
+                <LabelledInput
+                  name={"month"}
+                  value={filter.month!}
+                  setValue={(_val: string) => {
+                    setFilter({ ...filter, month: _val });
+                  }}
+                  inputProps={{ type: "month" }}
+                />
+                <ChakraSelect
+                  name="primary reference"
+                  value={filter.primaryReference!}
+                  values={users
+                    .filter((user) => user.role === UserRoleEnum.SUPER_ADMIN)
+                    .map((fH) => ({
+                      name: fH.name,
+                      value: fH._id!,
+                    }))}
+                  onValueChange={(value) => {
+                    setFilter({ ...filter, primaryReference: value });
+                  }}
+                />
+                <ChakraSelect
+                  name="enquiry type"
+                  value={filter.enquiryType!}
+                  values={enquiryTypes.map((fH) => ({
+                    name: fH.name,
+                    value: fH._id!,
+                  }))}
+                  onValueChange={(value) => {
+                    setFilter({ ...filter, enquiryType: value });
+                  }}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                onClick={() => {
+                  setSortBy("DB");
+                  setFilteredFunctionHalls([]);
+                  setOpenDrawer(false);
+                  setFilter({
+                    primaryReference: null,
+                    enquiryType: null,
+                    month: null,
+                  });
+                }}
+              >
+                Clear All
+              </Button>
+              <Button variant="outline" onClick={() => setOpenDrawer(false)}>
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Drawer open={openDrawer} dismissible onOpenChange={setOpenDrawer}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Sort / Filter</DrawerTitle>
+            </DrawerHeader>
+            <DrawerFooter>
+              <DrawerClose className="w-full">
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    setSortBy("DB");
+                    setFilteredFunctionHalls([]);
+                    setOpenDrawer(false);
+                  }}
+                >
+                  Clear All
+                </Button>
+              </DrawerClose>
+              <DrawerClose>
+                <Button variant="outline">Close</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       )}
     </div>
   );

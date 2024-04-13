@@ -21,7 +21,11 @@
     "jsx": "react-jsx",
     "typeRoots": [
       "./@types"
-    ]
+    ],
+    "rootDir": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "src"
