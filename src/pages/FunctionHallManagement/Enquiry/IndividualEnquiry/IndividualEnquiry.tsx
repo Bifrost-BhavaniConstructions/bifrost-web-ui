@@ -2,7 +2,6 @@ import React from "react";
 import "./IndividualEnquiry.css";
 import Enquiry from "../../../../types/FunctionHall/Enquiry";
 import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   ArrowUturnUpIcon,
   BuildingLibraryIcon,
@@ -10,6 +9,7 @@ import {
   CurrencyRupeeIcon,
   InformationCircleIcon,
   PhoneIcon,
+  TrashIcon,
 } from "@heroicons/react/20/solid";
 import AddEnquiryModal from "../../../../components/modals/AddEnquiryModal";
 import { EnquiryToEnquiryCreateWrapper } from "../../../../helper/Helper";
@@ -26,6 +26,7 @@ import {
 } from "../../../../adapters/EnquiryAdapter";
 import { useStoreActions } from "../../../../store/hooks";
 import CloseEnquiryModal from "../../../../components/modals/CloseEnquiryModal";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
 interface IndividualEnquiryProps {
   enquiry: Enquiry;
@@ -118,7 +119,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
               }}
               className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
             >
-              <ClipboardDocumentListIcon width={"14px"} />
+              <ClipboardDocumentListIcon color={"white"} width={"14px"} />
             </div>
           </div>
         )}
@@ -135,9 +136,9 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
               className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
             >
               {!closed ? (
-                <DeleteIcon width={"14px"} />
+                <TrashIcon color={"white"} width={"14px"} />
               ) : (
-                <ArrowUturnUpIcon width={"14px"} />
+                <ArrowUturnUpIcon color={"white"} width={"14px"} />
               )}
             </div>
           </div>
@@ -150,7 +151,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
               }}
               className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
             >
-              <EditIcon width={"14px"} />
+              <PencilSquareIcon color={"white"} width={"14px"} />
             </div>
           )}
           <div
@@ -159,7 +160,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
             }}
             className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
           >
-            <CurrencyRupeeIcon width={"14px"} />
+            <CurrencyRupeeIcon color={"white"} width={"14px"} />
           </div>
           <div
             onClick={() => {
@@ -167,7 +168,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
             }}
             className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
           >
-            <PhoneIcon width={14} />
+            <PhoneIcon color={"white"} width={14} />
           </div>
         </div>
         <AddEnquiryModal
