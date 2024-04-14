@@ -49,7 +49,11 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
     enquiries
       .filter((enquiry) => functionHall._id === enquiry.functionHall._id)
       .forEach((enquiry) => {
-        if (enquiry.isBooking) {
+        if (
+          !enquiry.isCheckedOut &&
+          !enquiry.isClosedEnquiry &&
+          enquiry.isBooking
+        ) {
           // If it's a booking, iterate through each day in the date range
           const fromDate = moment(enquiry.fromDate);
           const toDate = moment(enquiry.toDate);
@@ -69,7 +73,7 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
             eventCounts[formattedDate].bookingCount++;
             fromDate.add(1, "day"); // Move to the next day
           }
-        } else {
+        } else if (!enquiry.isCheckedOut && !enquiry.isClosedEnquiry) {
           // If it's not a booking, just count it for the 'nonBookingCount'
           const formattedDate = moment(enquiry.fromDate).format("YYYY-MM-DD");
           if (!eventCounts[formattedDate]) {

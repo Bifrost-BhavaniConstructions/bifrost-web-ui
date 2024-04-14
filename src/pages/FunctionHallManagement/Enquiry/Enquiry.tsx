@@ -199,7 +199,7 @@ const Enquiry: React.FC<QueriesProps> = ({
           )
           .filter((enquiry) =>
             !!date
-              ? true
+              ? !enquiry.isCheckedOut && !enquiry.isClosedEnquiry
               : closed
               ? enquiry.isClosedEnquiry
               : completed
