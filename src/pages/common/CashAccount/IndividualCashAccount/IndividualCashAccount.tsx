@@ -10,6 +10,7 @@ import { PlatformEnum } from "../../../../enums/PlatformEnum";
 import { useNavigate } from "react-router-dom";
 import { Transaction } from "../../../../types/CashAccount/Transaction";
 import { TransactionWithFunctionHallName } from "../AllTransactions/AllTransactions";
+import TabSelect from "@/components/TabSelect";
 
 interface IndividualCashAccountProps {
   cashAccount: CashAccount;
@@ -63,38 +64,41 @@ const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
 
   return (
     <div className="flex w-full h-full flex-col">
-      <div className="flex w-full p-[16px] bg-low-bg rounded-[10px] justify-between">
-        <div className="flex flex-3 justify-center items-start flex-col">
-          <div className="text-[12px] font-light">Cash Account</div>
-          <div className="font-semibold">{cashAccount.user.name}</div>
+      <div className="flex flex-col px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex font-airbnb font-black text-center text-[24px] ">
+          {cashAccount.user.name}'s Cash Account
         </div>
-        <div className="flex flex-2 justify-center items-end flex-col">
-          <div className="text-[12px] font-light">Balance</div>
-          <div className="font-semibold">₹{cashAccount.balance}</div>
+        <div className="flex font-airbnb font-black text-center text-[18px] ">
+          ₹{cashAccount.balance}
         </div>
       </div>
-      <Radio
-        options={[
-          {
-            text: <div className="flex">Add Balance</div>,
-            onClick: () => {
-              setTransactionPopup(TransactionTypeEnum.ADD_BALANCE);
+      <div className="flex flex-col py-[8px] justify-center items-center md:relative">
+        <TabSelect
+          options={[
+            {
+              text: "Add Balance",
+              onClick: () => {
+                setTransactionPopup(TransactionTypeEnum.ADD_BALANCE);
+              },
             },
-          },
-          {
-            text: <div className="flex">Transfer</div>,
-            onClick: () => {
-              setTransactionPopup(TransactionTypeEnum.TRANSFER);
+            {
+              text: "Transfer",
+              onClick: () => {
+                setTransactionPopup(TransactionTypeEnum.TRANSFER);
+              },
             },
-          },
-          {
-            text: <div className="flex">Add Transaction</div>,
-            onClick: () => {
-              setOpenGeneralTransactionPopup(true);
+            {
+              text: "Add Transaction",
+              onClick: () => {
+                setOpenGeneralTransactionPopup(true);
+              },
             },
-          },
-        ]}
-      />
+          ]}
+          tabIndex={-1}
+          setTabIndex={() => {}}
+          isJustSelector
+        />
+      </div>
       <div className="flex flex-col">
         <h3 className="flex w-full p-[10px] font-semibold text-[14px]">
           Recent Transactions

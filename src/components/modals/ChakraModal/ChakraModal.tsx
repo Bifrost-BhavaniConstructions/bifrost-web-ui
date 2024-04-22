@@ -64,7 +64,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
     <>
       <Modal
         isCentered
-        size="sm"
+        size="2xl"
         isOpen={isOpen}
         scrollBehavior={"inside"}
         onClose={closeModal}

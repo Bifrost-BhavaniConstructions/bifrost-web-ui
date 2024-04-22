@@ -21,21 +21,23 @@ const Home: React.FC<HomeProps> = () => {
   // Hook Functions
 
   return (
-    <div className="flex h-[calc(100%-88px)] w-[100%] flex-col p-[16px]">
-      <div className="flex font-airbnb font-black text-[24px]">
+    <div className="flex h-[calc(100%-40px)] md:h-full w-[100%] overflow-y-auto md:overflow-y-hidden flex-col p-[16px]">
+      <div className="flex font-airbnb font-black justify-center text-[24px] pb-[24px] pt-[8px]">
         Function Halls
       </div>
-      {functionHalls.map((fH) => {
-        return (
-          <IndividualFunctionHall
-            key={fH._id!}
-            functionHall={fH}
-            onClick={() => {
-              navigate("/function-hall-management/function-hall/" + fH._id);
-            }}
-          />
-        );
-      })}
+      <div className="flex flex-col flex-1 md:flex-row flex-wrap gap-[8px]">
+        {functionHalls.map((fH) => {
+          return (
+            <IndividualFunctionHall
+              key={fH._id!}
+              functionHall={fH}
+              onClick={() => {
+                navigate("/function-hall-management/function-hall/" + fH._id);
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

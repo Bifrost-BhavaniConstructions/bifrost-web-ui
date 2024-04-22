@@ -7,6 +7,8 @@ import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import AddPeopleModal from "../../../components/modals/AddPeopleModal";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
 import { User } from "../../../types/User";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 interface PeopleProps {
   platform: PlatformEnum;
@@ -75,26 +77,30 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
 
   // Hook Functions
   return (
-    <div className="h-[calc(100%-90px)] overflow-y-auto overflow-x-hidden">
-      <div className="flex flex-col px-[24px] py-[16px]">
-        <div className="flex font-airbnb font-black text-[24px]">People</div>
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden p-[16px]">
+      <div className="flex flex-row px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex font-airbnb font-black text-center text-[24px] ">
+          Manage People
+        </div>
       </div>
       {(platform === PlatformEnum.FUNCTION_HALL
         ? functionHallManagementUserRoleData
         : siteManagementUserRoleData
       ).map((userRole) => (
-        <div key={userRole.role} className="flex flex-col px-[24px] py-[16px]">
+        <div key={userRole.role} className="flex flex-col px-[8px] py-[16px]">
           <div className="flex font-airbnb font-bold text-[18px] justify-between">
             <div className="flex justify-center items-center">
               {userRole.name}
             </div>
             <div className="flex">
-              <TailwindButton
+              <Button
+                variant="secondary"
                 onClick={() => {
                   setAddRoleUser(userRole.role);
                 }}
-                text="Add +"
-              />
+              >
+                <PlusIcon />
+              </Button>
             </div>
           </div>
           <div className="overflow-x-auto flex flex-row overflow-y-hidden mt-[8px]">
@@ -107,7 +113,7 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
                     setAddRoleUser(userRole.role);
                     setEditUser(user);
                   }}
-                  className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] bg-low-bg rounded-[12px] justify-center items-center mr-[10px]"
+                  className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] rounded-xl border bg-card text-card-foreground shadow justify-center items-center mr-[10px] cursor-pointer"
                 >
                   <div className="flex flex-[3] justify-center items-center">
                     <Avatar name={user.name} round size="72" />

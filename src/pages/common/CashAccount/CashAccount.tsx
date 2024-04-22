@@ -31,7 +31,7 @@ const CashAccount: React.FC<CashAccountProps> = ({ platform }) => {
   }, [user]);
 
   return (
-    <div className="flex h-[calc(100%-88px)] w-[100%] flex-col p-[8px] overflow-y-auto">
+    <div className="flex h-full md:h-full w-[100%] flex-col p-[8px] overflow-y-auto">
       {cashAccount && (
         <IndividualCashAccount cashAccount={cashAccount} platform={platform} />
       )}

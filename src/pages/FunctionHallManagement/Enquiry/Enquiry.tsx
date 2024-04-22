@@ -4,7 +4,7 @@ import TabSelect from "../../../components/TabSelect";
 import { useStoreState } from "../../../store/hooks";
 import IndividualEnquiry from "./IndividualEnquiry";
 import AddEnquiryModal from "../../../components/modals/AddEnquiryModal";
-import { Button, Portal, Tag, TagLabel } from "@chakra-ui/react";
+import { Portal, Tag, TagLabel } from "@chakra-ui/react";
 import ChakraSelect from "../../../components/ChakraSelect";
 import LabelledInput from "../../../components/LabelledFormInputs/LabelledInput";
 import { en } from "@fullcalendar/core/internal-common";
@@ -22,7 +22,7 @@ import {
 import { restoreEnquiry } from "@/adapters/EnquiryAdapter";
 import { DeleteIcon, SettingsIcon } from "@chakra-ui/icons";
 import { ArrowUturnUpIcon } from "@heroicons/react/20/solid";
-import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
+import { AdjustmentsVerticalIcon, FunnelIcon } from "@heroicons/react/24/solid";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +34,9 @@ import {
 } from "@/components/ui/dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { UserRoleEnum } from "@/enums/UserRoleEnum";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 
 interface QueriesProps {
   date?: Date;
@@ -114,42 +117,57 @@ const Enquiry: React.FC<QueriesProps> = ({
   }, [filter, filteredFunctionHalls]);
 
   return (
-    <div className="flex flex-col h-[calc(100%-88px)]">
-      {!(closed || completed) && (
-        <div className="flex w-full p-[8px]">
+    <div
+      className={cn(
+        "h-full w-full md:h-full md:w-full overflow-y-hidden md:overflow-y-auto overflow-x-hidden p-[16px] relative md:block",
+      )}
+    >
+      <div className="flex flex-row px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex font-airbnb font-black text-center text-[24px] ">
+          {completed
+            ? "Completed Bookings"
+            : closed
+            ? "Closed Enquiries/Bookings"
+            : "Enquiries/Bookings"}
+        </div>
+        {!(closed || completed || !!date) && (
           <div
-            className="flex px-[20px] py-[12px] justify-center bg-low-bg rounded-[8px] w-full h-full"
-            onClick={() => {
-              setOpenEnquiry(true);
-            }}
+            className={cn(
+              !isDesktop
+                ? "absolute bottom-0 w-full left-auto p-[8px]"
+                : "absolute right-0 top-auto",
+            )}
           >
-            Add Enquiry
+            <Button
+              size={isDesktop ? "default" : "lg"}
+              className="w-full"
+              onClick={() => {
+                setOpenEnquiry(true);
+              }}
+            >
+              Add Enquiry
+            </Button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       {!completed && (
-        <TabSelect
-          options={[
-            {
-              text: !closed ? "Enquiry" : "Closed Enquiries",
-            },
-            {
-              text: !closed ? "Bookings" : "Closed Bookings",
-            },
-          ]}
-          tabIndex={selectedTab}
-          setTabIndex={setSelectedTab}
-        />
-      )}
-      {completed && (
-        <div className="flex flex-row px-[24px] py-[16px] justify-between">
-          <div className="flex font-airbnb font-black text-[24px]">
-            Completed Bookings
-          </div>
+        <div className="flex w-full justify-center items-center">
+          <TabSelect
+            options={[
+              {
+                text: !closed ? "Enquiry" : "Closed Enquiries",
+              },
+              {
+                text: !closed ? "Bookings" : "Closed Bookings",
+              },
+            ]}
+            tabIndex={selectedTab}
+            setTabIndex={setSelectedTab}
+          />
         </div>
       )}
-      <div className="w-full flex flex-row px-[16px] pb-[8px]">
-        <div className="flex flex-grow px-[8px]">
+      <div className="w-full flex flex-row md:px-[16px] pb-[8px]">
+        <div className="flex flex-grow pr-[8px]">
           <LabelledInput
             name={""}
             value={search}
@@ -158,20 +176,30 @@ const Enquiry: React.FC<QueriesProps> = ({
             inputProps={{ placeholder: "search" }}
           />
         </div>
-        <div className="flex flex-col justify-center items-center">
-          <div
+        <div className="flex flex-col justify-end items-center pb-[2px]">
+          <Button
+            size={"default"}
+            className="md:w-full"
             onClick={() => {
               setOpenDrawer(true);
             }}
-            className={`flex p-[8px] w-[40px] h-[40px] text-accent mt-[4px] justify-center items-center rounded-[4px] bg-low-bg ${
-              filterApplied ? "bg-accent-color" : "bg-low-bg"
-            }`}
+            variant={filterApplied ? "secondary" : "outline"}
           >
-            <AdjustmentsVerticalIcon color="white" width={"14px"} />
-          </div>
+            <FunnelIcon color="white" width={"14px"} />
+            <CaretSortIcon color="white" width={"14px"} />
+          </Button>
         </div>
       </div>
-      <div className="w-full h-[calc(100%-72px)] overflow-y-auto overflow-x-hidden p-[8px]">
+      <div
+        className={cn(
+          "w-full flex flex-col gap-[8px] md:h-auto flex-grow overflow-y-auto overflow-x-hidden py-[8px] md:px-[26px]",
+          closed
+            ? "h-[calc(100%-180px)]"
+            : completed
+            ? "h-[calc(100%-120px)]"
+            : "h-[calc(100%-220px)]",
+        )}
+      >
         {enquiries
           .filter((enquiry) =>
             functionHall ? enquiry.functionHall._id === functionHall : true,
@@ -241,12 +269,12 @@ const Enquiry: React.FC<QueriesProps> = ({
           .filter((enquiry) =>
             search.trim() !== ""
               ? (
-                  enquiry.primaryContactNumber.toString() +
+                  enquiry.primaryContactNumber.toString().toLowerCase() +
                   " " +
-                  enquiry.name +
+                  enquiry.name.toLowerCase() +
                   " " +
-                  moment(enquiry.fromDate).format("DD/MM/YYYY")
-                ).includes(search)
+                  moment(enquiry.fromDate).format("DD/MM/YYYY").toLowerCase()
+                ).includes(search.toLowerCase())
               : true,
           )
           .map((enquiry) => (
@@ -414,7 +442,7 @@ const Enquiry: React.FC<QueriesProps> = ({
             <DrawerHeader>
               <DrawerTitle>Sort / Filter</DrawerTitle>
             </DrawerHeader>
-            <div className="flex flex-col w-full z-[200]">
+            <div className="flex flex-col w-full z-[200] px-[16px]">
               <div className="flex flex-row justify-start items-start flex-grow w-full gap-[4px]">
                 <ChakraSelect
                   fullWidth

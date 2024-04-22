@@ -113,18 +113,18 @@ body{
 }
 
 .fc-button-primary{
-    background-color: theme('colors.low-bg') !important;
+    background-color: theme('colors.secondary.DEFAULT') !important;
 }
 
 .fc-theme-standard td{
-    border: 1px solid theme('colors.low-bg') !important;
+    border: 1px solid theme('colors.secondary.DEFAULT') !important;
 }
 .fc-theme-standard .fc-scrollgrid{
-    border: 1px solid theme('colors.low-bg') !important;
+    border: 1px solid theme('colors.secondary.DEFAULT') !important;
 }
 
 .fc-theme-standard td, .fc-theme-standard th{
-    border: 1px solid theme('colors.low-bg') !important;
+    border: 1px solid theme('colors.secondary.DEFAULT') !important;
 }
 
 .fc-icon-chevron-right{
@@ -154,9 +154,15 @@ body{
 }
 
 .fc-popover{
-    background-color: theme('colors.low-bg') !important;;
+    background-color: theme('colors.secondary.DEFAULT') !important;;
 }
 
 .fc-daygrid-day-number{
     flex-grow: 1 !important;
+}
+
+*:focus {
+    outline: 0;
+    outline: none;
+    tap-highlight-color:transparent;
 }

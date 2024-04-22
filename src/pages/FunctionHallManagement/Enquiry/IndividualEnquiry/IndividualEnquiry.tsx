@@ -11,6 +11,14 @@ import {
   PhoneIcon,
   TrashIcon,
 } from "@heroicons/react/20/solid";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import AddEnquiryModal from "../../../../components/modals/AddEnquiryModal";
 import { EnquiryToEnquiryCreateWrapper } from "../../../../helper/Helper";
 import EstimatesModal from "../../../../components/modals/EstimatesModal";
@@ -27,6 +35,25 @@ import {
 import { useStoreActions } from "../../../../store/hooks";
 import CloseEnquiryModal from "../../../../components/modals/CloseEnquiryModal";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
+import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Avvvatars from "avvvatars-react";
+import {
+  CalendarIcon,
+  MixerHorizontalIcon,
+  Pencil2Icon,
+  SewingPinIcon,
+  UpdateIcon,
+} from "@radix-ui/react-icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface IndividualEnquiryProps {
   enquiry: Enquiry;
@@ -42,6 +69,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
   // Variables
 
   // State Variables - Hooks
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [editEnquiry, setEditEnquiry] = React.useState<Enquiry | undefined>();
   const [updateStatus, setUpdateStatus] = React.useState<boolean>(false);
   const [estimates, setEstimates] = React.useState<Estimate[]>([]);
@@ -62,132 +90,180 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
   // Hook Functions
 
   return (
-    <div
-      className={`flex flex-col p-[8px] rounded-[8px] ${
-        enquiry.isFloating ? "bg-low-bg-floating" : "bg-low-bg"
-      } mb-[8px]`}
+    <Card
+      className="cursor-pointer hover:bg-primary-foreground flex flex-col select-none focus:outline-none"
+      onClick={() => {
+        if (enquiry.isBooking) {
+          if (!enquiry.isCheckedOut && !enquiry.isClosedEnquiry) {
+            setBookingClicked(!bookingClicked);
+          }
+        } else {
+          if (!enquiry.isClosedEnquiry) {
+            setEnquiryClicked(!enquiryClicked);
+          }
+        }
+      }}
     >
-      <div className="flex">
-        <div
-          className="flex flex-col flex-grow"
-          onClick={() => {
-            if (enquiry.isBooking) {
-              if (!enquiry.isCheckedOut) {
-                setBookingClicked(!bookingClicked);
-              }
-            } else {
-              if (!enquiry.isClosedEnquiry) {
-                setEnquiryClicked(!enquiryClicked);
-              }
-            }
-          }}
-        >
+      <div className="flex flex-row">
+        <CardHeader className="pr-0 flex-grow">
           <div className="text-[16px] font-bold">{enquiry.name}</div>
-          <div className="text-[12px] font-light">
-            {`${new Date(enquiry.fromDate).toDateString()} [${new Date(
-              enquiry.fromDate,
-            ).toLocaleTimeString("en-US")}]`}
-          </div>
-          <div className="text-[12px] font-light">
-            {`${new Date(enquiry.toDate).toDateString()} [${new Date(
-              enquiry.toDate,
-            ).toLocaleTimeString("en-US")}]`}
-          </div>
-          <div className="text-[14px] flex font-light mt-[4px]">
-            <div className="flex flex-7 flex-col">
-              <div className="flex mt-[4px]">
-                <Tag size={"sm"} variant="subtle" colorScheme="cyan">
-                  <TagLeftIcon boxSize="12px" as={InformationCircleIcon} />
-                  <TagLabel>{enquiry.enquiryType.name}</TagLabel>
-                </Tag>
-              </div>
-              <div className="flex mt-[4px]">
-                <Tag size={"sm"} variant="subtle" colorScheme="cyan">
-                  <TagLeftIcon boxSize="12px" as={BuildingLibraryIcon} />
-                  <TagLabel>{enquiry.functionHall.name}</TagLabel>
-                </Tag>
-              </div>
-            </div>
-          </div>
-        </div>
-        {enquiry.isBooking && !enquiry.isCheckedOut && (
-          <div className="flex justify-between flex-col items-end mx-[11px]">
-            <div
-              onClick={() => {
-                setCheckIn(true);
-                setUpdateStatus(true);
-              }}
-              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
-            >
-              <ClipboardDocumentListIcon color={"white"} width={"14px"} />
-            </div>
-          </div>
-        )}
-        {((enquiry.isBooking && !enquiry.isCheckedIn) ||
-          !enquiry.isBooking) && (
-          <div className="flex justify-between flex-col items-end mx-[11px]">
-            <div
+          <CardDescription className={"flex gap-[4px]"}>
+            <CalendarIcon className="mt-[2px]" />
+            {`${new Date(enquiry.fromDate).toDateString()} ${
+              enquiry.fromDate !== enquiry.toDate
+                ? `- ${new Date(enquiry.toDate).toDateString()}`
+                : ""
+            }`}
+          </CardDescription>
+          <CardDescription className={"flex gap-[4px]"}>
+            <Badge variant="secondary" className={"mr-[4px] bg-yellow-700"}>
+              {enquiry.enquiryType.name}
+            </Badge>
+            {isDesktop && (
+              <Badge variant="secondary" className={"mr-[4px] bg-low-bg"}>
+                {enquiry.functionHall.name}
+              </Badge>
+            )}
+          </CardDescription>
+          {!isDesktop && (
+            <CardDescription>
+              <Badge variant="secondary" className={"mr-[4px] bg-low-bg"}>
+                {enquiry.functionHall.name}
+              </Badge>
+            </CardDescription>
+          )}
+        </CardHeader>
+        <CardHeader className="pl-0">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="icon">
+                <MixerHorizontalIcon className="h-5 w-5" />
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Enquiry Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {enquiry.isBooking && !enquiry.isCheckedOut && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    setCheckIn(true);
+                    setUpdateStatus(true);
+                  }}
+                >
+                  <UpdateIcon
+                    color={"white"}
+                    width={"16px"}
+                    className="mr-[8px]"
+                  />
+                  Update Status
+                </DropdownMenuItem>
+              )}
+              {!enquiry.isCheckedOut && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    setEditEnquiry(enquiry);
+                  }}
+                >
+                  <Pencil2Icon
+                    color={"white"}
+                    width={"16px"}
+                    className="mr-[8px]"
+                  />
+                  Edit Enquiry
+                </DropdownMenuItem>
+              )}
+
+              <DropdownMenuItem
+                onClick={() => {
+                  setEstimates(enquiry.estimates);
+                }}
+              >
+                <CurrencyRupeeIcon
+                  color={"white"}
+                  width={"16px"}
+                  className="mr-[8px]"
+                />
+                View Estimates
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setFollowUp(true);
+                }}
+              >
+                <PhoneIcon
+                  color={"white"}
+                  width={"16px"}
+                  className="mr-[8px]"
+                />
+                Follow up
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {!enquiry.isCheckedOut && (
+            <Button
+              variant="destructive"
+              size="icon"
               onClick={async () => {
-                !closed
-                  ? setCloseEnquiry(true)
-                  : await restoreEnquiry(enquiry._id);
-                fetchEnquiries();
+                if (!closed) {
+                  setCloseEnquiry(true);
+                } else {
+                  await restoreEnquiry(enquiry._id);
+                  fetchEnquiries();
+                }
               }}
-              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
             >
               {!closed ? (
                 <TrashIcon color={"white"} width={"14px"} />
               ) : (
                 <ArrowUturnUpIcon color={"white"} width={"14px"} />
               )}
-            </div>
-          </div>
-        )}
-        <div className="flex justify-between flex-col items-end">
-          {!enquiry.isCheckedOut && (
-            <div
-              onClick={() => {
-                setEditEnquiry(enquiry);
-              }}
-              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
-            >
-              <PencilSquareIcon color={"white"} width={"14px"} />
-            </div>
+            </Button>
           )}
-          <div
-            onClick={() => {
-              setEstimates(enquiry.estimates);
+        </CardHeader>
+        {checkIn && (
+          <CheckInModal
+            closeCallback={() => {
+              setCheckIn(false);
+              setUpdateStatus(false);
             }}
-            className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
-          >
-            <CurrencyRupeeIcon color={"white"} width={"14px"} />
-          </div>
-          <div
-            onClick={() => {
-              setFollowUp(true);
+            open={checkIn}
+            enquiry={enquiry}
+            functionHall={enquiry.functionHall}
+            isUpdateStatus={updateStatus}
+          />
+        )}
+        {closeEnquiry && (
+          <CloseEnquiryModal
+            open={closeEnquiry}
+            closeCallback={() => {
+              setCloseEnquiry(false);
+              fetchEnquiries();
             }}
-            className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
-          >
-            <PhoneIcon color={"white"} width={14} />
-          </div>
-        </div>
-        <AddEnquiryModal
-          closeCallback={() => {
-            setEditEnquiry(undefined);
-          }}
-          open={!!editEnquiry?._id}
-          editEnquiry={
-            editEnquiry && EnquiryToEnquiryCreateWrapper(editEnquiry)
-          }
-        />
-        <EstimatesModal
-          closeCallback={() => {
-            setEstimates([]);
-          }}
-          enquiry={enquiry}
-          open={estimates.length > 0}
-          estimates={estimates}
-        />
+            enquiryId={enquiry._id}
+          />
+        )}
+        {!!editEnquiry?._id && (
+          <AddEnquiryModal
+            closeCallback={() => {
+              setEditEnquiry(undefined);
+            }}
+            open={!!editEnquiry?._id}
+            editEnquiry={
+              editEnquiry && EnquiryToEnquiryCreateWrapper(editEnquiry)
+            }
+          />
+        )}
+        {estimates.length > 0 && (
+          <EstimatesModal
+            closeCallback={() => {
+              setEstimates([]);
+            }}
+            enquiry={enquiry}
+            open={estimates.length > 0}
+            estimates={estimates}
+          />
+        )}
         {followUp && (
           <FollowUpModal
             open={followUp}
@@ -201,94 +277,90 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
         )}
       </div>
       {enquiryClicked && (
-        <div className="flex flex-1 p-[8px] mt-[12px] bg-main-bg rounded-[6px] text-[14px] font-normal">
-          <div
-            onClick={() => {
+        <CardFooter className="flex justify-between">
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
               setAddEstimate(true);
             }}
-            className="flex flex-1 justify-center items-center border-r-2 py-[6px]"
+            variant="secondary"
           >
             Update Estimate
-          </div>
-          <div
-            onClick={() => {
+          </Button>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
               setAcceptBooking(true);
             }}
-            className="flex flex-1 justify-center items-center border-l-2"
+            variant="outline"
+            className="bg-main-bg-success"
           >
             Accept Booking
-          </div>
-          <AddEnquiryModal
-            closeCallback={() => {
-              setAddEstimate(false);
-            }}
-            open={addEstimate}
-            addEstimate={addEstimate}
-            latestEstimate={enquiry.estimates[0]}
-            enquiryId={enquiry._id}
-          />
-          <AcceptBookingModal
-            closeCallback={() => {
-              setAcceptBooking(false);
-            }}
-            open={acceptBooking}
-            enquiryId={enquiry._id}
-          />
-        </div>
+          </Button>
+          {addEstimate && (
+            <AddEnquiryModal
+              closeCallback={() => {
+                setAddEstimate(false);
+              }}
+              open={addEstimate}
+              addEstimate={addEstimate}
+              latestEstimate={enquiry.estimates[0]}
+              enquiryId={enquiry._id}
+            />
+          )}
+          {acceptBooking && (
+            <AcceptBookingModal
+              closeCallback={() => {
+                setAcceptBooking(false);
+              }}
+              open={acceptBooking}
+              enquiryId={enquiry._id}
+            />
+          )}
+        </CardFooter>
       )}
-      <CheckInModal
-        closeCallback={() => {
-          setCheckIn(false);
-          setUpdateStatus(false);
-        }}
-        open={checkIn}
-        enquiry={enquiry}
-        functionHall={enquiry.functionHall}
-        isUpdateStatus={updateStatus}
-      />
-      <CloseEnquiryModal
-        open={closeEnquiry}
-        closeCallback={() => {
-          setCloseEnquiry(false);
-          fetchEnquiries();
-        }}
-        enquiryId={enquiry._id}
-      />
       {bookingClicked && (
-        <div className="flex flex-1 p-[8px] mt-[12px] bg-main-bg rounded-[6px] text-[14px] font-normal">
-          <div
-            onClick={() => {
+        <CardFooter className="flex justify-between">
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
               setAcceptPayment(true);
             }}
-            className="flex flex-1 justify-center items-center border-r-2 py-[6px]"
+            variant="secondary"
           >
             Accept Payment
-          </div>
-          <div
-            onClick={() => {
+          </Button>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
               enquiry.isCheckedIn ? setCheckOut(true) : setCheckIn(true);
             }}
-            className="flex flex-1 justify-center items-center border-l-2"
+            variant="outline"
+            className="bg-main-bg-success"
           >
             {enquiry.isCheckedIn ? "Check Out" : "Check In"}
-          </div>
-          <AcceptPaymentModal
-            closeCallback={() => {
-              setAcceptPayment(false);
-            }}
-            open={acceptPayment}
-            enquiryId={enquiry._id}
-          />
-          <CheckOutModal
-            closeCallback={() => {
-              setCheckOut(false);
-            }}
-            open={checkOut}
-            enquiry={enquiry}
-          />
-        </div>
+          </Button>
+          {acceptPayment && (
+            <AcceptPaymentModal
+              closeCallback={() => {
+                setAcceptPayment(false);
+              }}
+              open={acceptPayment}
+              enquiryId={enquiry._id}
+            />
+          )}
+          {checkOut && (
+            <CheckOutModal
+              closeCallback={() => {
+                setCheckOut(false);
+              }}
+              open={checkOut}
+              enquiry={enquiry}
+            />
+          )}
+        </CardFooter>
       )}
-    </div>
+    </Card>
   );
 };
 

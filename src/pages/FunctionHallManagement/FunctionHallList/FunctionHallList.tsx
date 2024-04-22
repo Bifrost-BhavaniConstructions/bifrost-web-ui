@@ -9,6 +9,9 @@ import {
   addFunctionHall,
   updateFunctionHall,
 } from "../../../adapters/FunctionHallAdapter";
+import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { cn } from "@/lib/utils";
 
 interface FunctionHallListProps {}
 
@@ -21,6 +24,7 @@ const FunctionHallList: React.FC<FunctionHallListProps> = () => {
   // Variables
 
   // State Variables - Hooks
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [open, setOpen] = React.useState(false);
   const [editFunctionHall, setEditFunctionHall] = React.useState<
     FunctionHall | undefined
@@ -50,26 +54,55 @@ const FunctionHallList: React.FC<FunctionHallListProps> = () => {
   // Hook Functions
 
   return (
-    <div className="h-[calc(100%-90px)] overflow-y-auto overflow-x-hidden">
-      <div className="flex flex-row px-[24px] py-[16px] justify-between">
-        <div className="flex font-airbnb font-black text-[24px]">
-          Function Halls
+    <div
+      className={cn(
+        "h-full w-full md:h-full md:w-full overflow-y-hidden md:overflow-y-auto overflow-x-hidden p-[16px] relative md:block",
+      )}
+    >
+      <div className="flex flex-row px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex font-airbnb font-black text-center text-[24px] ">
+          Manage Function Halls
         </div>
-        <TailwindButton
-          onClick={() => {
-            setOpen(true);
-          }}
-          text="Add +"
-        />
+        {
+          <div
+            className={cn(
+              !isDesktop
+                ? "absolute bottom-0 w-full left-auto p-[8px]"
+                : "absolute right-0 top-auto",
+            )}
+          >
+            <Button
+              size={isDesktop ? "default" : "lg"}
+              className="w-full"
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              Add
+            </Button>
+          </div>
+        }
       </div>
-      <div className="flex flex-col p-[8px]">
-        {functionHalls.map((functionHall) => (
-          <IndividualFunctionHall
-            functionHall={functionHall}
-            onClick={() => {
-              setEditFunctionHall(functionHall);
-            }}
-          />
+      <div
+        className={cn(
+          "flex flex-col p-[8px] gap-[10px] overflow-y-auto",
+          isDesktop ? "" : "h-[calc(100%-140px)]",
+        )}
+      >
+        {functionHalls.map((functionHall, i) => (
+          <div
+            className={
+              i === functionHalls.length - 1 && !isDesktop ? "mb-[20px]" : ""
+            }
+          >
+            <IndividualFunctionHall
+              functionHall={functionHall}
+              onClick={() => {
+                setEditFunctionHall(functionHall);
+              }}
+              isManage
+            />
+          </div>
         ))}
       </div>
       <AddOrUpdateFunctionHallModal

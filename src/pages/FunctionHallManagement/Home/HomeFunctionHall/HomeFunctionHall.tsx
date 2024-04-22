@@ -11,6 +11,8 @@ import AddEnquiryModal from "../../../../components/modals/AddEnquiryModal";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
 import { EyeIcon } from "@heroicons/react/20/solid";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 
 interface HomeFunctionHallProps {}
 
@@ -143,45 +145,47 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
   }, [fh_id]);
 
   return (
-    <div className="flex h-[90%] flex-grow overflow-x-auto overflow-y-hidden">
+    <div className="flex h-full md:h-full flex-grow overflow-x-auto overflow-y-hidden">
       {functionHall && (
         <>
           <div
             key={functionHall._id}
-            className="flex flex-col md:flex-row min-w-[100vw] h-[100%] p-[10px] pt-0 md:justify-between md:items-start"
+            className="flex flex-col min-w-[100vw] md:min-w-full h-[100%] p-[10px] md:justify-between md:items-start"
           >
-            <div className="flex md:flex-col justify-center items-center md:items-start">
-              <div className="flex flex-grow text-[24px] font-bold p-[12px]">
-                {functionHall.name}
+            <div className="flex justify-center items-center w-full">
+              <div className="flex flex-row flex-grow px-[24px] pb-[8px] md:pb-[24px] pt-[8px] justify-center items-center md:relative">
+                <div className="flex font-airbnb font-black md:text-center text-[30px] ">
+                  {functionHall.name}
+                </div>
               </div>
               <div className="flex flex-col">
                 <div className="flex ">
                   <div className="flex flex-grow rounded-[4px] flex-col">
                     <div className="flex flex-1 flex-grow p-[4px] rounded-[4px]">
-                      <div
+                      <Button
+                        variant="secondary"
                         onClick={() => {
                           setOpenEnquiry(true);
                         }}
-                        className="flex flex-grow p-[12px] bg-low-bg rounded-[4px] justify-center items-center"
                       >
-                        <AddIcon fontSize={12} />
-                      </div>
+                        <PlusIcon />
+                      </Button>
                     </div>
                     <div className="flex flex-1 flex-grow p-[4px] rounded-[4px]">
-                      <div
+                      <Button
+                        variant="secondary"
                         onClick={() => {
                           navigate("/function-hall-management/queries");
                         }}
-                        className="flex flex-grow p-[12px] bg-low-bg rounded-[4px] justify-center items-center"
                       >
                         <EyeIcon width={16} />
-                      </div>
+                      </Button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-grow w-full md:w-[50%] md:flex-grow-0 md:h-[100%]">
+            <div className="flex flex-grow w-full md:flex-grow-0 md:h-[100%]">
               <div className="flex flex-grow ">
                 <FullCalendar
                   key={functionHall._id}

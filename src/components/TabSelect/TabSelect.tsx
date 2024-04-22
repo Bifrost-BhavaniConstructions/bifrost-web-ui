@@ -1,18 +1,23 @@
 import React from "react";
 import "./TabSelect.css";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 interface TabSelectProps {
   options: {
     text: string;
+    onClick?: Function;
   }[];
   tabIndex: number;
   setTabIndex: Function;
+  isJustSelector?: Boolean;
 }
 
 const TabSelect: React.FC<TabSelectProps> = ({
   options,
   tabIndex,
   setTabIndex,
+  isJustSelector = false,
 }) => {
   // Objects
 
@@ -25,23 +30,34 @@ const TabSelect: React.FC<TabSelectProps> = ({
   // Hook Functions
 
   return (
-    <div className="flex w-full p-[8px]">
-      <div className="flex w-full bg-low-bg rounded-[8px] flex-wrap p-[8px]">
+    <Tabs
+      defaultValue={"0"}
+      value={tabIndex.toString()}
+      className={cn(
+        "flex w-[400px] justify-center items-center",
+        isJustSelector ? "" : "pb-[24px]",
+      )}
+      onValueChange={(e) => console.log(e)}
+    >
+      <TabsList className={isJustSelector ? "gap-[4px]" : ""}>
         {options.map((option, index) => (
-          <div
-            key={option.text}
-            className={`flex justify-center py-[8px] rounded-[4px] w-[50%] ${
-              tabIndex === index ? "bg-main-bg" : "bg-low-bg"
-            }`}
+          <TabsTrigger
+            value={index.toString()}
             onClick={() => {
-              setTabIndex(index);
+              console.log(index);
+              if (isJustSelector) {
+                if (option.onClick) {
+                  option.onClick();
+                }
+              } else setTabIndex(index);
             }}
+            className={isJustSelector ? "bg-background text-foreground" : ""}
           >
             {option.text}
-          </div>
+          </TabsTrigger>
         ))}
-      </div>
-    </div>
+      </TabsList>
+    </Tabs>
   );
 };
 

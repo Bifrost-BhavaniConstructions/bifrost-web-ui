@@ -5,6 +5,9 @@ import { useStoreActions, useStoreState } from "../../store/hooks";
 import SiteManagementNavBar from "../../components/Dock";
 import { loginUserWithToken } from "../../adapters/AuthAdapter";
 import { PlatformEnum } from "../../enums/PlatformEnum";
+import Dock from "@/components/Dock";
+import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface SiteManagementHomeProps {}
 
@@ -14,6 +17,7 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
   // Variables
 
   // State Variables - Hooks
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { dataFetched, user } = useStoreState((state) => state.userStore);
   const { setUser, setDataFetched } = useStoreActions(
     (actions) => actions.userStore,
@@ -64,14 +68,21 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
   }, [dataFetched, user, navigate, setUser, setDataFetched]);
 
   return (
-    <div className="w-[100%] h-[100%] bg-main-bg">
+    <div className="w-[100%] h-[100%] bg-background">
       {user && (
-        <>
-          <div className="p-2">
-            <SiteManagementNavBar platform={PlatformEnum.SITE} />
+        <div className="flex flex-col md:flex-row h-full">
+          <div className="md:min-w-[250px] md:max-w-[250px] min-w-full">
+            <Dock platform={PlatformEnum.SITE} />
           </div>
-          <Outlet />
-        </>
+          <div
+            className={cn(
+              "flex flex-1",
+              isDesktop ? "" : "min-w-full max-h-[calc(100%-56px)]",
+            )}
+          >
+            <Outlet />
+          </div>
+        </div>
       )}
     </div>
   );

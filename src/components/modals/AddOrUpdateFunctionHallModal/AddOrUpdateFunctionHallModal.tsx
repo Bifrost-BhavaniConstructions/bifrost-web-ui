@@ -73,7 +73,7 @@ const AddOrUpdateFunctionHallModal: React.FC<
         closeCallback();
       }}
       open={open}
-      title={"Add Function Hall"}
+      title={editFunctionHall ? "Add Function Hall" : "Edit Function Hall"}
       action={() => {
         cta(functionHall);
       }}

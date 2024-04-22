@@ -57,7 +57,7 @@ const AllTransactions: React.FC<AllTransactionsProps> = () => {
   }, [user]);
 
   return (
-    <div className="flex h-[calc(100%-88px)] w-[100%] flex-col p-[8px] overflow-y-auto">
+    <div className="flex h-full w-[100%] flex-col p-[8px] overflow-y-auto">
       <div className="flex flex-col">
         <h3 className="flex w-full p-[10px] font-semibold text-[14px]">
           All Transactions
