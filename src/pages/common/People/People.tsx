@@ -87,7 +87,10 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
         ? functionHallManagementUserRoleData
         : siteManagementUserRoleData
       ).map((userRole) => (
-        <div key={userRole.role} className="flex flex-col px-[8px] py-[16px]">
+        <div
+          key={userRole.role}
+          className="flex flex-col px-[8px] py-[16px] max-w-full"
+        >
           <div className="flex font-airbnb font-bold text-[18px] justify-between">
             <div className="flex justify-center items-center">
               {userRole.name}
@@ -103,7 +106,7 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
               </Button>
             </div>
           </div>
-          <div className="overflow-x-auto flex flex-row overflow-y-hidden mt-[8px]">
+          <div className="overflow-x-auto flex max-w-full w-full flex-row overflow-y-hidden mt-[8px]">
             {users
               .filter((user) => user.role === userRole.role)
               .map((user) => (

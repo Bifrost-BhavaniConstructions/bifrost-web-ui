@@ -16,6 +16,7 @@ import Enquiry from "../../../types/FunctionHall/Enquiry";
 import { RoomStatus } from "../../../types/FunctionHall/Room";
 import ChakraSelect from "../../ChakraSelect";
 import { PowerMeterStatus } from "../../../types/FunctionHall/PowerMeter";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface AcceptBookingModalProps {
   open: boolean;
@@ -40,6 +41,8 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
   );
 
   // State Variables - Hooks
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
   const [tabIndex, setTabIndex] = React.useState(0);
   const [inventorySearch, setInventorySearch] = React.useState<string>("");
   const [rooms, setRooms] = React.useState<RoomStatus[]>(
@@ -131,27 +134,75 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
       }}
       actionText={"Submit"}
     >
-      <TabSelect
-        options={[
-          {
-            text: "Rooms",
-          },
-          {
-            text: "Meter Readings",
-          },
-          {
-            text: "Security Guards",
-          },
-          {
-            text: "Inventory",
-          },
-          {
-            text: "Generators",
-          },
-        ]}
-        tabIndex={tabIndex}
-        setTabIndex={setTabIndex}
-      />
+      {!isDesktop ? (
+        <ChakraSelect
+          name=""
+          placeholder={"select service"}
+          value={tabIndex.toString()}
+          values={[
+            {
+              name: "Rooms",
+              value: "0",
+            },
+            {
+              name: "Meter Readings",
+              value: "1",
+            },
+            {
+              name: "Security Guards",
+              value: "2",
+            },
+            {
+              name: "Inventory",
+              value: "3",
+            },
+            {
+              name: "Generators",
+              value: "4",
+            },
+          ]}
+          onValueChange={(value) => {
+            setTabIndex(parseInt(value));
+          }}
+        />
+      ) : (
+        <TabSelect
+          options={[
+            {
+              text: "Rooms",
+              onClick: () => {
+                setTabIndex(0);
+              },
+            },
+            {
+              text: "Meter Readings",
+              onClick: () => {
+                setTabIndex(1);
+              },
+            },
+            {
+              text: "Security Guards",
+              onClick: () => {
+                setTabIndex(2);
+              },
+            },
+            {
+              text: "Inventory",
+              onClick: () => {
+                setTabIndex(3);
+              },
+            },
+            {
+              text: "Generators",
+              onClick: () => {
+                setTabIndex(4);
+              },
+            },
+          ]}
+          tabIndex={tabIndex}
+          setTabIndex={setTabIndex}
+        />
+      )}
       {tabIndex === 0 && (
         <div className="flex p-[8px] flex-col">
           <div className="flex justify-between items-center font-light text-[12px] opacity-70">

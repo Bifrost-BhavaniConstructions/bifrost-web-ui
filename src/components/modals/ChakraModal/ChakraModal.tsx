@@ -2,7 +2,6 @@ import React from "react";
 import "./ChakraModal.css";
 
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,6 +12,7 @@ import {
   ModalProps,
   useDisclosure,
 } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
 
 interface ChakraModalProps {
   open: boolean;
@@ -71,27 +71,26 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
         {...modalProps}
       >
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) " />
-        <ModalContent bg="brand.main-bg">
+        <ModalContent className="bg-background">
           <ModalHeader className="font-bold text-[16px]">{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody minH={`${minH}px`}>{children}</ModalBody>
           <ModalFooter>
             <Button
               variant="ghost"
-              className="font-normal text-[12px]"
+              className="font-normal"
               onClick={closeModal}
             >
               Close
             </Button>
             {actionText && actionText !== "" && (
               <Button
-                variant="solid"
-                bg="brand.low-bg"
-                className="font-normal text-[12px]"
+                variant="default"
+                className="font-normal ml-[8px]"
                 onClick={() => {
                   action();
                 }}
-                isDisabled={isButtonDisabled}
+                disabled={isButtonDisabled}
               >
                 {actionText}
               </Button>

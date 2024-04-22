@@ -34,7 +34,7 @@ const TabSelect: React.FC<TabSelectProps> = ({
       defaultValue={"0"}
       value={tabIndex.toString()}
       className={cn(
-        "flex w-[400px] justify-center items-center",
+        "flex min-w-[400px] justify-center items-center",
         isJustSelector ? "" : "pb-[24px]",
       )}
       onValueChange={(e) => console.log(e)}
