@@ -185,7 +185,7 @@ const HomeFunctionHall: React.FC<HomeFunctionHallProps> = ({}) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-grow w-full md:flex-grow-0 md:h-[100%]">
+            <div className="flex flex-grow w-full md:flex-grow-0 md:h-[calc(100%-88px)]">
               <div className="flex flex-grow ">
                 <FullCalendar
                   key={functionHall._id}
