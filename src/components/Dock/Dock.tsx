@@ -223,7 +223,14 @@ const Dock: React.FC<DockProps> = ({ platform }) => {
           </div>
           <div className="mt-auto p-4">
             <div className="text-white text-center text-[12px] mb-[24px]">
-              <span className="cursor-pointer">logout</span>
+              <span
+                className="cursor-pointer"
+                onClick={() => {
+                  logoutUser();
+                }}
+              >
+                logout
+              </span>
             </div>
             <Card x-chunk="dashboard-02-chunk-0">
               <CardHeader className="p-2 pt-0 md:p-4">
