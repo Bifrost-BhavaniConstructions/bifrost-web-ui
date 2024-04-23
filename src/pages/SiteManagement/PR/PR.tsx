@@ -39,7 +39,7 @@ const PR: React.FC<PRProps> = () => {
   // Hook Functions
 
   return (
-    <div className="h-[calc(100%-90px)] overflow-y-auto overflow-x-hidden">
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden">
       <div className="flex flex-row px-[24px] py-[16px] justify-between">
         <div className="flex font-airbnb font-black text-[24px]">PRs</div>
         <TailwindButton

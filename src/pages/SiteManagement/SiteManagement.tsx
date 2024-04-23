@@ -60,7 +60,9 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
           fetchCards();
           fetchPurchaseRequests(user._id!);
         })
-        .catch(() => {});
+        .catch(() => {
+          navigate("/login");
+        });
     }
     if (dataFetched && !user) {
       navigate("/login");

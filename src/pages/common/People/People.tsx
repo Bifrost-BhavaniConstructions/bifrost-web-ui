@@ -77,7 +77,7 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
 
   // Hook Functions
   return (
-    <div className="h-full w-full overflow-y-auto overflow-x-hidden p-[16px]">
+    <div className="flex flex-col h-full w-[100%] overflow-y-auto overflow-x-hidden p-[16px]">
       <div className="flex flex-row px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
         <div className="flex font-airbnb font-black text-center text-[24px] ">
           Manage People
@@ -106,7 +106,7 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
               </Button>
             </div>
           </div>
-          <div className="overflow-x-auto flex max-w-full w-full flex-row overflow-y-hidden mt-[8px]">
+          <div className="md:flex-wrap md:gap-[12px] gap-[4px] overflow-x-auto flex max-w-full w-full flex-row overflow-y-hidden mt-[8px]">
             {users
               .filter((user) => user.role === userRole.role)
               .map((user) => (
@@ -116,12 +116,12 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
                     setAddRoleUser(userRole.role);
                     setEditUser(user);
                   }}
-                  className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] rounded-xl border bg-card text-card-foreground shadow justify-center items-center mr-[10px] cursor-pointer"
+                  className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] rounded-xl border bg-card text-card-foreground shadow justify-center items-center cursor-pointer"
                 >
                   <div className="flex flex-[3] justify-center items-center">
                     <Avatar name={user.name} round size="72" />
                   </div>
-                  <div className="flex flex-1 items-center text-[14px]">
+                  <div className="flex flex-1 items-center text-[14px] text-center">
                     {user.name}
                   </div>
                   <div className="flex flex-1 text-[12px]">

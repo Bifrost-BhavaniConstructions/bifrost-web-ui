@@ -91,11 +91,11 @@ const Dock: React.FC<DockProps> = ({ platform }) => {
       url: "/site-management/salaries-allowances",
       icon: <HomeIcon color="white" width={18} />,
     },
-    {
-      label: "Manage System",
-      url: "/site-management/manage-system",
-      icon: <HomeIcon color="white" width={18} />,
-    },
+    // {
+    //   label: "Manage System",
+    //   url: "/site-management/manage-system",
+    //   icon: <HomeIcon color="white" width={18} />,
+    // },
   ];
   const functionHallManagementHeader = [
     {

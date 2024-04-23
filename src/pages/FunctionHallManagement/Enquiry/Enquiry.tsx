@@ -37,6 +37,7 @@ import { UserRoleEnum } from "@/enums/UserRoleEnum";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CaretSortIcon } from "@radix-ui/react-icons";
+import { Badge } from "@/components/ui/badge";
 
 interface QueriesProps {
   date?: Date;
@@ -295,7 +296,7 @@ const Enquiry: React.FC<QueriesProps> = ({
       )}
       {isDesktop ? (
         <Dialog open={openDrawer} onOpenChange={setOpenDrawer}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] z-[1501]">
             <DialogHeader>
               <DialogTitle>Sort / Filter</DialogTitle>
               <DialogDescription>
@@ -333,32 +334,26 @@ const Enquiry: React.FC<QueriesProps> = ({
                 <div className="font-light text-[12px] opacity-70 mt-[4px] w-full">
                   function halls
                 </div>
-                <div className="w-full flex flex-row overflow-x-auto shrink-0 px-[16px] pb-[8px] no-scrollbar">
+                <div className="w-full flex flex-row flex-wrap shrink-0 px-[16px] pb-[8px] gap-[10px]">
                   {filteredFunctionHalls.length > 0 && (
-                    <Tag
-                      size={"md"}
-                      variant={"subtle"}
-                      className="flex shrink-0 mr-[4px]"
-                      colorScheme="red"
+                    <Badge
+                      variant="destructive"
                       onClick={() => {
                         setFilteredFunctionHalls([]);
                       }}
                     >
-                      <TagLabel>clear</TagLabel>
-                    </Tag>
+                      clear
+                    </Badge>
                   )}
                   {functionHalls.map((fH) => {
                     return (
-                      <Tag
+                      <Badge
                         key={fH._id}
-                        size={"md"}
                         variant={
                           filteredFunctionHalls.includes(fH._id!)
-                            ? "subtle"
+                            ? "secondary"
                             : "outline"
                         }
-                        className="flex shrink-0 mr-[4px]"
-                        colorScheme="cyan"
                         onClick={() => {
                           if (filteredFunctionHalls.includes(fH._id!)) {
                             setFilteredFunctionHalls(
@@ -374,8 +369,8 @@ const Enquiry: React.FC<QueriesProps> = ({
                           }
                         }}
                       >
-                        <TagLabel>{fH.name}</TagLabel>
-                      </Tag>
+                        {fH.name}
+                      </Badge>
                     );
                   })}
                 </div>
@@ -438,7 +433,7 @@ const Enquiry: React.FC<QueriesProps> = ({
         </Dialog>
       ) : (
         <Drawer open={openDrawer} dismissible onOpenChange={setOpenDrawer}>
-          <DrawerContent>
+          <DrawerContent className="z-[1500]">
             <DrawerHeader>
               <DrawerTitle>Sort / Filter</DrawerTitle>
             </DrawerHeader>

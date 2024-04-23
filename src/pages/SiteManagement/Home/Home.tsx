@@ -36,7 +36,7 @@ const Home: React.FC<HomeProps> = () => {
   // Hook Functions
 
   return (
-    <div className="flex flex-col h-[calc(100%-88px)] overflow-y-auto overflow-x-hidden">
+    <div className="flex flex-col h-full w-full overflow-y-auto overflow-x-hidden">
       <div className="flex flex-row px-[24px] py-[16px] pb-0 pt-0 pr-0 justify-between">
         <div className="w-[40px]"></div>
         <div className="flex w-[calc(100%-40px)] bg-low-bg py-[16px] flex-col rounded-l-[16px]">

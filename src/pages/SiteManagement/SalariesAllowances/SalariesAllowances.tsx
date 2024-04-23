@@ -55,7 +55,7 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
   }, [selectedUser]);
 
   return (
-    <div className="h-[calc(100%-90px)] flex flex-col">
+    <div className="h-full w-full flex flex-col">
       <div className="flex flex-row px-[24px] py-[16px] justify-between">
         <div className="flex font-airbnb font-black text-[24px]">Salaries</div>
         <ChakraSelect

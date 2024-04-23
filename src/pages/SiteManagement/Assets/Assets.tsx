@@ -105,7 +105,7 @@ const Assets: React.FC<AssetsProps> = () => {
   };
 
   return (
-    <div className="h-[calc(100%-90px)] overflow-y-auto overflow-x-hidden">
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden">
       <Radio
         isWrapped={false}
         isHighlighted={true}

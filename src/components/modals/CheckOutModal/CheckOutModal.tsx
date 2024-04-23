@@ -10,7 +10,7 @@ import { GeneratorStatus } from "../../../types/FunctionHall/Generator";
 import AcceptPaymentModal from "../AcceptPaymentModal";
 import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 
-interface InventoryItem {
+export interface InventoryItem {
   [key: string]: any; // Index signature for string keys
   name: string;
   count: number;

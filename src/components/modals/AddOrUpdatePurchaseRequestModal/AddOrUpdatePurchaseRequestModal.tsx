@@ -110,7 +110,7 @@ const AddOrUpdatePurchaseRequestModal: React.FC<
         closeCallback();
       }}
       open={open}
-      title={viewOnly ? "Purchase Request" : "Add Purchase Request"}
+      title={viewOnly ? "Payment Request" : "Add Payment Request"}
       action={() => {
         approveCTA !== undefined
           ? approveCTA(approvalRemarks, approve!)
