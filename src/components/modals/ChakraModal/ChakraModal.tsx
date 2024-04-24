@@ -13,6 +13,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface ChakraModalProps {
   open: boolean;
@@ -20,10 +21,22 @@ interface ChakraModalProps {
   children: React.ReactNode;
   title: string;
   actionText?: string;
+  extraButtonText?: string;
   action: Function;
+  extraButtonAction?: Function;
   modalProps?: ModalProps;
   minH?: number;
   isButtonDisabled?: boolean;
+  isExtraButtonDisabled?: boolean;
+  extraButtonVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link"
+    | null
+    | undefined;
 }
 
 const ChakraModal: React.FC<ChakraModalProps> = ({
@@ -36,6 +49,10 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
   modalProps,
   minH = 400,
   isButtonDisabled,
+  isExtraButtonDisabled,
+  extraButtonText,
+  extraButtonAction,
+  extraButtonVariant = "default",
 }) => {
   // Objects
 
@@ -83,6 +100,18 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
             >
               Close
             </Button>
+            {extraButtonText && extraButtonText !== "" && (
+              <Button
+                className={cn("font-normal ml-[8px]")}
+                variant={extraButtonVariant}
+                onClick={() => {
+                  if (extraButtonAction) extraButtonAction();
+                }}
+                disabled={isExtraButtonDisabled}
+              >
+                {extraButtonText}
+              </Button>
+            )}
             {actionText && actionText !== "" && (
               <Button
                 variant="default"

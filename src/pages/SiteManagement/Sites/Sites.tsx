@@ -51,7 +51,7 @@ const Sites: React.FC<PRProps> = () => {
           text="Add +"
         />
       </div>
-      <div className="flex flex-col p-[8px]">
+      <div className="flex flex-col p-[24px] gap-[10px]">
         {sites.map((site) => (
           <IndividualSite
             site={site}

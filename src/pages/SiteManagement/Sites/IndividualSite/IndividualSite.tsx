@@ -20,7 +20,7 @@ const IndividualSite: React.FC<IndividualSiteProps> = ({ site, onClick }) => {
 
   return (
     <div
-      className="flex w-full flex-col p-[16px] bg-low-bg rounded-[12px] mb-[16px]"
+      className="flex w-full flex-col p-[16px] rounded-xl border bg-card text-card-foreground shadow cursor-pointer"
       onClick={() => {
         onClick();
       }}

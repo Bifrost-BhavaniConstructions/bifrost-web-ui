@@ -3,6 +3,8 @@ import "./AddOrUpdateSiteModal.css";
 import ChakraModal from "../ChakraModal";
 import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 import { Site } from "../../../types/SiteManagement/Site";
+import { deleteSite } from "@/adapters/SiteManagementAdapter";
+import { useStoreActions } from "@/store/hooks";
 
 interface AddOrUpdateSiteModalProps {
   open: boolean;
@@ -25,9 +27,18 @@ const AddOrUpdateSiteModal: React.FC<AddOrUpdateSiteModalProps> = ({
 
   // Variables
   const [site, setSite] = React.useState(emptySite);
+  const { fetchSites } = useStoreActions(
+    (actions) => actions.siteManagementStore,
+  );
   // Functions
   const validateSite: () => boolean = () => {
     return site.name !== "" && site.address !== "";
+  };
+
+  const siteDelete = async () => {
+    await deleteSite(site._id!);
+    fetchSites();
+    closeCallback();
   };
 
   // Hook Functions
@@ -44,12 +55,18 @@ const AddOrUpdateSiteModal: React.FC<AddOrUpdateSiteModalProps> = ({
         closeCallback();
       }}
       open={open}
-      title={"Add Site"}
+      title={editSite ? "Edit Site" : "Add Site"}
       action={() => {
         cta(site);
       }}
       actionText={"Submit"}
       isButtonDisabled={!validateSite()}
+      extraButtonText={editSite ? "Delete" : ""}
+      isExtraButtonDisabled={false}
+      extraButtonVariant={"destructive"}
+      extraButtonAction={() => {
+        siteDelete();
+      }}
     >
       <LabelledInput
         required

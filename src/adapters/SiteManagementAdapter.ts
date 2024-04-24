@@ -42,6 +42,15 @@ export const updateSite: (site: Site) => Promise<Site> = async (site) => {
     throw new Error(JSON.stringify(axiosError.response!.data));
   }
 };
+export const deleteSite: (siteId: string) => Promise<void> = async (siteId) => {
+  try {
+    await httpClient.delete(`/site-management/delete/${siteId}`);
+  } catch (e: any) {
+    const axiosError = e as AxiosError;
+    //console.log(axiosError);
+    throw new Error(JSON.stringify(axiosError.response!.data));
+  }
+};
 
 //Vehicles
 
