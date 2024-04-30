@@ -68,14 +68,12 @@ const CashAccountOverview: React.FC<CashAccountOverviewProps> = () => {
 
   return user && cashAccount ? (
     <div className="flex w-full flex-col">
-      <div className="flex w-full p-[16px] py-[8px] rounded-[10px] bg-low-bg justify-between">
-        <div className="flex flex-3 justify-center items-start flex-col">
-          <div className="text-[12px] font-light">Cash Account Overview</div>
-          <div className="font-semibold">{cashAccount.user.name}</div>
+      <div className="flex flex-col px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex font-airbnb font-black text-center text-[24px] ">
+          Account Overview
         </div>
-        <div className="flex flex-2 justify-center items-end flex-col">
-          <div className="text-[12px] font-light">Balance</div>
-          <div className="font-semibold">₹{cashAccount.balance}</div>
+        <div className="flex font-airbnb font-black text-center text-[18px] ">
+          ₹{cashAccount.balance}
         </div>
       </div>
       <div className="flex flex-col">

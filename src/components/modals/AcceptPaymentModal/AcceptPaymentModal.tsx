@@ -20,6 +20,7 @@ interface AcceptBookingModalProps {
   closeCallback: Function;
   enquiryId: string;
   amount?: number;
+  zIndex?: number;
 }
 
 const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
@@ -27,6 +28,7 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
   open,
   enquiryId,
   amount,
+  zIndex = 1500,
 }) => {
   // Objects
 
@@ -109,6 +111,7 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
             : !amount
           : !(paymentAmount > 0)
       }
+      zIndex={zIndex}
     >
       <LabelledInput
         name={"payment"}

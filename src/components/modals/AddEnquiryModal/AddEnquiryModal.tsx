@@ -24,6 +24,7 @@ interface AddEnquiryModalProps {
   addEstimate?: boolean;
   enquiryId?: string;
   latestEstimate?: Estimate;
+  zIndex?: number;
 }
 
 const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
@@ -33,6 +34,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   addEstimate,
   enquiryId,
   latestEstimate,
+  zIndex = 1500,
 }) => {
   // Objects
   const latestDate = new Date();
@@ -189,6 +191,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
 
   return (
     <ChakraModal
+      zIndex={zIndex}
       closeCallback={() => {
         setEnquiry(emptyEnquiry);
         closeCallback();

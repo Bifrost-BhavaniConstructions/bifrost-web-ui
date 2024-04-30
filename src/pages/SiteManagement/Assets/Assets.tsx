@@ -26,10 +26,16 @@ import AddOrUpdateCardModal from "../../../components/modals/AddOrUpdateCardModa
 import ReassignAssetModal from "../../../components/modals/AddOrUpdateVehicleModal/ReassignAssetModal";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import { AssetTypeEnum } from "../../../enums/AssetTypeEnum";
+import TabSelect from "@/components/TabSelect";
+import { Button } from "@/components/ui/button";
+import { AddIcon } from "@chakra-ui/icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 interface AssetsProps {}
 
 const Assets: React.FC<AssetsProps> = () => {
+  const [tabIndex, setTabIndex] = React.useState(0);
+
   // Objects
   const { vehicles, phones, cards } = useStoreState(
     (state) => state.siteManagementStore,
@@ -105,43 +111,58 @@ const Assets: React.FC<AssetsProps> = () => {
   };
 
   return (
-    <div className="h-full w-full overflow-y-auto overflow-x-hidden">
-      <Radio
-        isWrapped={false}
-        isHighlighted={true}
-        options={[
-          {
-            text: <div className="flex">Vehicles</div>,
-            onClick: () => {
-              setCurrentAsset(AssetTypeEnum.VEHICLE);
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden p-[16px]">
+      <div className="flex flex-col px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex font-airbnb font-black text-center text-[24px] ">
+          Asset Management
+        </div>
+      </div>
+      <div className="flex w-full justify-center items-center">
+        <TabSelect
+          options={[
+            {
+              text: <div className="flex">Vehicles</div>,
+              onClick: () => {
+                setCurrentAsset(AssetTypeEnum.VEHICLE);
+                setTabIndex(0);
+              },
+              index: 0,
             },
-          },
-          {
-            text: <div className="flex">Cards</div>,
-            onClick: () => {
-              setCurrentAsset(AssetTypeEnum.CARD);
+            {
+              text: <div className="flex">Cards</div>,
+              onClick: () => {
+                setCurrentAsset(AssetTypeEnum.CARD);
+                setTabIndex(1);
+              },
+              index: 1,
             },
-          },
-          {
-            text: <div className="flex">Phones</div>,
-            onClick: () => {
-              setCurrentAsset(AssetTypeEnum.PHONE);
+            {
+              text: <div className="flex">Phones</div>,
+              onClick: () => {
+                setCurrentAsset(AssetTypeEnum.PHONE);
+                setTabIndex(2);
+              },
+              index: 2,
             },
-          },
-        ]}
-      />
+          ]}
+          tabIndex={tabIndex}
+          setTabIndex={setTabIndex}
+          handleClick
+        />
+      </div>
       {currentAsset === AssetTypeEnum.VEHICLE && (
         <>
           <div className="flex flex-row px-[24px] py-[16px] justify-between">
             <div className="flex font-airbnb font-black text-[24px]">
               Vehicles
             </div>
-            <TailwindButton
+            <Button
               onClick={() => {
                 setOpen(true);
               }}
-              text="Add +"
-            />
+            >
+              <PlusIcon />
+            </Button>
           </div>
           <div className="flex flex-col p-[8px]">
             {vehicles.map((vehicle) => (
@@ -191,12 +212,13 @@ const Assets: React.FC<AssetsProps> = () => {
             <div className="flex font-airbnb font-black text-[24px]">
               Phones
             </div>
-            <TailwindButton
+            <Button
               onClick={() => {
                 setOpen(true);
               }}
-              text="Add +"
-            />
+            >
+              <PlusIcon />
+            </Button>
           </div>
           <div className="flex flex-col p-[8px]">
             {phones.map((phone) => (
@@ -243,12 +265,13 @@ const Assets: React.FC<AssetsProps> = () => {
         <>
           <div className="flex flex-row px-[24px] py-[16px] justify-between">
             <div className="flex font-airbnb font-black text-[24px]">Cards</div>
-            <TailwindButton
+            <Button
               onClick={() => {
                 setOpen(true);
               }}
-              text="Add +"
-            />
+            >
+              <PlusIcon />
+            </Button>
           </div>
           <div className="flex flex-col p-[8px]">
             {cards.map((card) => (

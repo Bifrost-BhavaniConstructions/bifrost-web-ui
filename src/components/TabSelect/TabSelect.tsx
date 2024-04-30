@@ -1,16 +1,18 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import "./TabSelect.css";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 interface TabSelectProps {
   options: {
-    text: string;
+    text: ReactNode;
     onClick?: Function;
+    index?: number;
   }[];
   tabIndex: number;
   setTabIndex: Function;
   isJustSelector?: Boolean;
+  handleClick?: Boolean;
 }
 
 const TabSelect: React.FC<TabSelectProps> = ({
@@ -18,6 +20,7 @@ const TabSelect: React.FC<TabSelectProps> = ({
   tabIndex,
   setTabIndex,
   isJustSelector = false,
+  handleClick = false,
 }) => {
   // Objects
 
@@ -35,7 +38,7 @@ const TabSelect: React.FC<TabSelectProps> = ({
       value={tabIndex.toString()}
       className={cn(
         "flex min-w-[400px] justify-center items-center",
-        isJustSelector ? "" : "pb-[24px]",
+        isJustSelector || handleClick ? "" : "pb-[24px]",
       )}
       onValueChange={(e) => console.log(e)}
     >
@@ -45,13 +48,17 @@ const TabSelect: React.FC<TabSelectProps> = ({
             value={index.toString()}
             onClick={() => {
               console.log(index);
-              if (isJustSelector) {
+              if (isJustSelector || handleClick) {
                 if (option.onClick) {
                   option.onClick();
                 }
               } else setTabIndex(index);
             }}
-            className={isJustSelector ? "bg-background text-foreground" : ""}
+            className={
+              isJustSelector && !handleClick
+                ? "bg-background text-foreground"
+                : ""
+            }
           >
             {option.text}
           </TabsTrigger>

@@ -24,6 +24,7 @@ interface AcceptBookingModalProps {
   enquiry: Enquiry;
   functionHall: FunctionHall;
   isUpdateStatus: boolean;
+  zIndex?: number;
 }
 
 const CheckInModal: React.FC<AcceptBookingModalProps> = ({
@@ -32,6 +33,7 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
   enquiry,
   functionHall,
   isUpdateStatus,
+  zIndex = 1500,
 }) => {
   // Objects
 
@@ -124,6 +126,7 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
 
   return (
     <ChakraModal
+      zIndex={zIndex}
       closeCallback={() => {
         closeCallback();
       }}

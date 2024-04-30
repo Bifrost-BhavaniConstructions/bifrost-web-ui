@@ -16,6 +16,7 @@ interface EstimatesProps {
   open: boolean;
   enquiry: Enquiry;
   estimates: Estimate[];
+  zIndex?: number;
 }
 
 const EstimatesModal: React.FC<EstimatesProps> = ({
@@ -23,6 +24,7 @@ const EstimatesModal: React.FC<EstimatesProps> = ({
   closeCallback,
   enquiry,
   estimates,
+  zIndex = 1500,
 }) => {
   // Objects
 
@@ -182,6 +184,7 @@ const EstimatesModal: React.FC<EstimatesProps> = ({
 
   return (
     <ChakraModal
+      zIndex={zIndex}
       closeCallback={() => {
         closeCallback();
       }}

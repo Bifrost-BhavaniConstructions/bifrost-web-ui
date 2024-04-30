@@ -8,12 +8,14 @@ interface CloseEnquiryModalProps {
   open: boolean;
   closeCallback: Function;
   enquiryId: string;
+  zIndex?: number;
 }
 
 const CloseEnquiryModal: React.FC<CloseEnquiryModalProps> = ({
   closeCallback,
   open,
   enquiryId,
+  zIndex = 1500,
 }) => {
   // Objects
 
@@ -28,6 +30,7 @@ const CloseEnquiryModal: React.FC<CloseEnquiryModalProps> = ({
 
   return (
     <ChakraModal
+      zIndex={zIndex}
       closeCallback={() => {
         setRemark("");
         setRefundAmount(0);

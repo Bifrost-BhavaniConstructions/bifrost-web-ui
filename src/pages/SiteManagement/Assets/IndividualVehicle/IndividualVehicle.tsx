@@ -7,17 +7,20 @@ import {
   UserIcon,
 } from "@heroicons/react/20/solid";
 import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
 
 interface IndividualSiteProps {
   vehicle: Vehicle;
   onClick: Function;
   reassignFunction: (vehicleId: string) => void;
+  readonly?: Boolean;
 }
 
 const IndividualVehicle: React.FC<IndividualSiteProps> = ({
   vehicle,
   onClick,
   reassignFunction,
+  readonly,
 }) => {
   // Objects
 
@@ -30,7 +33,7 @@ const IndividualVehicle: React.FC<IndividualSiteProps> = ({
   // Hook Functions
 
   return (
-    <div className="flex w-full p-[16px] bg-low-bg rounded-[12px] mb-[16px]">
+    <div className="flex w-full p-[16px] rounded-xl border bg-card text-card-foreground shadow mb-[16px]">
       <div className="flex flex-1 flex-col">
         <div className="flex font-normal text-[18px]">{vehicle.name}</div>
         <div className="flex font-light text-[14px] font-mono">
@@ -45,24 +48,26 @@ const IndividualVehicle: React.FC<IndividualSiteProps> = ({
           </div>
         )}
       </div>
-      <div className="flex min-h-[72px] justify-evenly flex-col items-end">
-        <div
-          onClick={() => {
-            onClick();
-          }}
-          className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
-        >
-          <EditIcon width={"14px"} />
+      {!readonly && (
+        <div className="flex min-h-[72px] justify-evenly flex-col items-end">
+          <Button
+            onClick={() => {
+              onClick();
+            }}
+            className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-card-foreground"
+          >
+            <EditIcon width={"14px"} />
+          </Button>
+          <Button
+            onClick={() => {
+              reassignFunction(vehicle._id!);
+            }}
+            className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-card-foreground"
+          >
+            <ArrowPathRoundedSquareIcon width={"14px"} />
+          </Button>
         </div>
-        <div
-          onClick={() => {
-            reassignFunction(vehicle._id!);
-          }}
-          className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
-        >
-          <ArrowPathRoundedSquareIcon width={"14px"} />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

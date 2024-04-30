@@ -84,7 +84,6 @@ const AddOrUpdatePurchaseRequestModal: React.FC<
       purchaseRequest.approver !== "" &&
       purchaseRequest.name !== "" &&
       purchaseRequest.remarks !== "" &&
-      purchaseRequest.destinationBankAccount.accountHolder !== "" &&
       purchaseRequest.destinationBankAccount.bankName !== "" &&
       purchaseRequest.destinationBankAccount.accountNo !== "" &&
       purchaseRequest.destinationBankAccount.ifsc !== "" &&

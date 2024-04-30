@@ -65,9 +65,7 @@ const IndividualAttendanceTransaction: React.FC<IndividualTransactionProps> = ({
   return (
     <div className="flex p-[10px] flex-col">
       <div
-        className={`flex w-full flex-col ${
-          light ? "bg-low-bg" : "bg-main-bg"
-        } rounded-[4px]`}
+        className={`flex w-full flex-col rounded-xl border bg-card text-card-foreground shadow`}
       >
         <div className="flex p-[12px]">
           <div className="flex flex-1 flex-col items-start justify-center">
@@ -93,7 +91,7 @@ const IndividualAttendanceTransaction: React.FC<IndividualTransactionProps> = ({
             </div>
           </div>
           <div className="flex flex-1 flex-col justify-center items-center ">
-            <div className="font-medium text-[14px] text-accent">
+            <div className="font-medium text-[14px] text-muted-foreground">
               ₹{transaction.amount ? transaction.amount : "0"}
             </div>
           </div>

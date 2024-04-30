@@ -17,6 +17,7 @@ import PayVariableModal from "../../../components/modals/PayVariableModal";
 import { AttendanceTransaction } from "../../../types/SiteManagement/AttendanceTransaction";
 import IndividualAttendanceTransaction from "../Attendance/IndividualAttendanceTransaction";
 import { SalaryTransactionTypeEnum } from "../../../enums/SalaryTransactionTypeEnum";
+import { Button } from "@/components/ui/button";
 
 interface SalariesAllowancesProps {}
 
@@ -44,10 +45,20 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
 
   // Hook Functions
   React.useEffect(() => {
+    setVariableLastMonth(0);
+    setTransactions([]);
+  }, [selectedUser]);
+  React.useEffect(() => {
     if (selectedUser) {
-      getPayoutLastMonth(selectedUser._id!).then((res) =>
-        setVariableLastMonth(res),
-      );
+      if (
+        [UserRoleEnum.VENDOR, UserRoleEnum.DRIVER].includes(selectedUser.role)
+      ) {
+        getPayoutLastMonth(selectedUser._id!).then((res) =>
+          setVariableLastMonth(res),
+        );
+      } else {
+        setVariableLastMonth(0);
+      }
       getAttendanceTransactions(selectedUser._id!).then((res) =>
         setTransactions(res),
       );
@@ -58,23 +69,25 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
     <div className="h-full w-full flex flex-col">
       <div className="flex flex-row px-[24px] py-[16px] justify-between">
         <div className="flex font-airbnb font-black text-[24px]">Salaries</div>
-        <ChakraSelect
-          name=""
-          placeholder={"select user"}
-          value={selectedUser?._id!}
-          values={siteUsers
-            .filter((fH) => fH.role !== UserRoleEnum.SUPER_ADMIN)
-            .map((fH) => ({
-              name: fH.name,
-              value: fH._id!,
-            }))}
-          onValueChange={(value) => {
-            setSelectedUser(siteUsers.filter((f) => f._id === value)[0]);
-          }}
-        />
+        <div>
+          <ChakraSelect
+            name=""
+            placeholder={"select user"}
+            value={selectedUser?._id!}
+            values={siteUsers
+              .filter((fH) => fH.role !== UserRoleEnum.SUPER_ADMIN)
+              .map((fH) => ({
+                name: fH.name,
+                value: fH._id!,
+              }))}
+            onValueChange={(value) => {
+              setSelectedUser(siteUsers.filter((f) => f._id === value)[0]);
+            }}
+          />
+        </div>
       </div>
       {selectedUser && (
-        <div className="flex flex-row px-[16px] justify-between items-end">
+        <div className="flex flex-row px-[16px] justify-center items-center">
           <TabSelect
             options={[
               {
@@ -100,12 +113,13 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
             </div>
           </div>
           <div className="flex items-end">
-            <TailwindButton
+            <Button
               onClick={() => {
                 setOpen(true);
               }}
-              text="Advance/Deduction +"
-            />
+            >
+              Advance/Deduction +
+            </Button>
           </div>
         </div>
       )}
@@ -120,12 +134,13 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
             </div>
           </div>
           <div className="flex items-end">
-            <TailwindButton
+            <Button
               onClick={() => {
                 setOpen(true);
               }}
-              text="Advance/Deduction +"
-            />
+            >
+              Advance/Deduction +
+            </Button>
           </div>
         </div>
       )}
@@ -133,9 +148,17 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
         <AddAdvanceDeductionModal
           closeCallback={() => {
             setOpen(false);
-            getPayoutLastMonth(selectedUser._id!).then((res) =>
-              setVariableLastMonth(res),
-            );
+            if (
+              [UserRoleEnum.VENDOR, UserRoleEnum.DRIVER].includes(
+                selectedUser.role,
+              )
+            ) {
+              getPayoutLastMonth(selectedUser._id!).then((res) =>
+                setVariableLastMonth(res),
+              );
+            } else {
+              setVariableLastMonth(0);
+            }
             getAttendanceTransactions(selectedUser._id!).then((res) =>
               setTransactions(res),
             );
@@ -167,14 +190,14 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
       </div>
       {selectedUser && selectedTab === 0 && (
         <div className="flex w-full p-[8px]">
-          <div
-            className="flex px-[20px] py-[12px] justify-center bg-low-bg rounded-[8px] w-full h-full"
+          <Button
+            className="justify-center w-full h-full"
             onClick={() => {
               setOpenSalary(true);
             }}
           >
             Pay Salary
-          </div>
+          </Button>
           <PaySalaryModal
             closeCallback={() => {
               setOpenSalary(false);
@@ -193,14 +216,14 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
       )}
       {selectedUser && selectedTab === 1 && (
         <div className="flex w-full p-[8px]">
-          <div
-            className="flex px-[20px] py-[12px] justify-center bg-low-bg rounded-[8px] w-full h-full"
+          <Button
+            className="justify-center w-full h-full"
             onClick={() => {
               setOpenVariable(true);
             }}
           >
             Pay Variable Pay
-          </div>
+          </Button>
           <PayVariableModal
             closeCallback={() => {
               setOpenVariable(false);

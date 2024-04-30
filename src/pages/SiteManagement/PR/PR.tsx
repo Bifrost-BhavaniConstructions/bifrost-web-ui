@@ -7,6 +7,8 @@ import { PurchaseRequestCreateWrapper } from "../../../types/SiteManagement/Purc
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import IndividualPurchaseRequest from "./IndividualPurchaseRequest";
 import Radio from "../../../components/Radio";
+import TabSelect from "@/components/TabSelect";
+import { Button } from "@/components/ui/button";
 
 interface PRProps {}
 
@@ -39,35 +41,33 @@ const PR: React.FC<PRProps> = () => {
   // Hook Functions
 
   return (
-    <div className="h-full w-full overflow-y-auto overflow-x-hidden">
-      <div className="flex flex-row px-[24px] py-[16px] justify-between">
-        <div className="flex font-airbnb font-black text-[24px]">PRs</div>
-        <TailwindButton
-          onClick={() => {
-            setOpen(true);
-          }}
-          text="Add +"
-        />
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden p-[16px]">
+      <div className="flex px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex flex-grow font-airbnb font-black justify-center items-center text-center text-[24px] ">
+          PRs
+        </div>
+        <div>
+          <Button
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
+            Add +
+          </Button>
+        </div>
       </div>
       <div className="flex flex-col p-[8px]">
-        <Radio
-          isWrapped={false}
-          isHighlighted={true}
-          noPadding
+        <TabSelect
           options={[
             {
               text: <div className="flex">Your PRs</div>,
-              onClick: () => {
-                setCurrentTab(0);
-              },
             },
             {
               text: <div className="flex">Approval List</div>,
-              onClick: () => {
-                setCurrentTab(1);
-              },
             },
           ]}
+          tabIndex={currentTab}
+          setTabIndex={setCurrentTab}
         />
       </div>
       <div className="flex flex-col p-[8px]">

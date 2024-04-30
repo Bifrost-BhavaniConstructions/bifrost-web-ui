@@ -28,6 +28,7 @@ import {
   deletePurchaseRequest,
 } from "../../../../adapters/SiteManagementAdapter";
 import { useStoreActions, useStoreState } from "../../../../store/hooks";
+import { Button } from "@/components/ui/button";
 
 interface IndividualPurchaseRequestProps {
   purchaseRequest: PurchaseRequest;
@@ -92,7 +93,7 @@ const IndividualPurchaseRequest: React.FC<IndividualPurchaseRequestProps> = ({
   // Hook Functions
 
   return (
-    <div className="flex w-full p-[16px] bg-low-bg rounded-[12px] mb-[16px]">
+    <div className="flex w-full p-[16px] rounded-xl border bg-card text-card-foreground shadow mb-[16px]">
       <div
         className="flex flex-grow flex-col"
         onClick={() => {
@@ -103,7 +104,7 @@ const IndividualPurchaseRequest: React.FC<IndividualPurchaseRequestProps> = ({
           <div className="flex-[4] flex font-normal justify-center items-start flex-col ">
             <div className="flex text-[18px] ">{purchaseRequest.name}</div>
           </div>
-          <div className="flex-1 font-bold text-[24px] justify-center items-center text-center">
+          <div className="flex-1 font-bold text-[24px] justify-center items-end text-right">
             ₹{purchaseRequest.amount}
           </div>
         </div>
@@ -168,57 +169,59 @@ const IndividualPurchaseRequest: React.FC<IndividualPurchaseRequestProps> = ({
       {openSideBar &&
         (isForApproval ? (
           <div className="flex flex-col pl-[8px] justify-between items-end">
-            <div
+            <Button
               onClick={() => {
                 setOpenView(true);
               }}
-              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
+              className="flex p-[8px] w-[30px] h-[30px]"
             >
               <EyeIcon width={"14px"} />
-            </div>
+            </Button>
             {!endStates.includes(purchaseRequest.status) && (
-              <div
+              <Button
                 onClick={() => {
                   purchaseRequest.status === PurchaseRequestStatusEnum.APPROVED
                     ? setOpenConfirmationPopup(true)
                     : setOpenApprovalPopup(true);
                 }}
-                className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg-success"
+                className="flex p-[8px] w-[30px] h-[30px]"
               >
                 <CheckIcon width={"14px"} />
-              </div>
+              </Button>
             )}
             {!endStates.includes(purchaseRequest.status) && (
-              <div
+              <Button
                 onClick={() => {
                   purchaseRequest.status === PurchaseRequestStatusEnum.APPROVED
                     ? setOpenConfirmationPopup(false)
                     : setOpenApprovalPopup(false);
                 }}
-                className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg-error"
+                variant={"destructive"}
+                className="flex p-[8px] w-[30px] h-[30px]"
               >
                 <XMarkIcon width={"14px"} />
-              </div>
+              </Button>
             )}
           </div>
         ) : (
           <div className="flex flex-col pl-[8px] justify-between items-end">
-            <div
+            <Button
               onClick={() => {
                 setOpenView(true);
               }}
-              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg"
+              className="flex p-[8px] w-[30px] h-[30px]"
             >
               <EyeIcon width={"14px"} />
-            </div>
-            <div
+            </Button>
+            <Button
               onClick={() => {
                 setOpenDelete(true);
               }}
-              className="flex p-[8px] w-[30px] h-[30px] text-accent rounded-[4px] bg-main-bg-error"
+              variant="destructive"
+              className="flex p-[8px] w-[30px] h-[30px]"
             >
               <TrashIcon width={"14px"} />
-            </div>
+            </Button>
           </div>
         ))}
       {openView && (

@@ -15,12 +15,14 @@ interface AcceptBookingModalProps {
   open: boolean;
   closeCallback: Function;
   enquiryId: string;
+  zIndex?: number;
 }
 
 const AcceptBookingModal: React.FC<AcceptBookingModalProps> = ({
   closeCallback,
   open,
   enquiryId,
+  zIndex = 1500,
 }) => {
   // Objects
 
@@ -55,6 +57,7 @@ const AcceptBookingModal: React.FC<AcceptBookingModalProps> = ({
 
   return (
     <ChakraModal
+      zIndex={zIndex}
       closeCallback={() => {
         setPaymentAmount(0);
         closeCallback();

@@ -16,6 +16,7 @@ interface AcceptBookingModalProps {
   enquiryId: string;
   followups: FollowUp[];
   contactNumber: number;
+  zIndex?: number;
 }
 
 const FollowUpModal: React.FC<AcceptBookingModalProps> = ({
@@ -24,6 +25,7 @@ const FollowUpModal: React.FC<AcceptBookingModalProps> = ({
   enquiryId,
   followups,
   contactNumber,
+  zIndex = 1500,
 }) => {
   // Objects
 
@@ -57,6 +59,7 @@ const FollowUpModal: React.FC<AcceptBookingModalProps> = ({
 
   return (
     <ChakraModal
+      zIndex={zIndex}
       closeCallback={() => {
         setRemark("");
         closeCallback();

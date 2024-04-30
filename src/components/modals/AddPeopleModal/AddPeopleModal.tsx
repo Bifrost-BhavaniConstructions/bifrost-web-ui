@@ -13,6 +13,7 @@ import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
 import { useStoreActions } from "../../../store/hooks";
 import TailwindButton from "../../TailwindButton";
+import AssetOverview from "@/pages/SiteManagement/Assets/AssetOverview";
 
 interface AddPeopleModalProps {
   closeCallback: Function;
@@ -29,6 +30,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
   roleToAdd,
   isEdit,
   editUser,
+  platform,
 }) => {
   // Objects
   const emptyUser: User = {
@@ -799,6 +801,12 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
               }}
             />
           </>
+        )}
+        {platform === PlatformEnum.SITE && (
+          <div className="flex flex-col flex-grow flex-1 p-[8px]">
+            <div className="flex px-[16px] font-bold">Assets</div>
+            <AssetOverview user={user} />
+          </div>
         )}
       </Stack>
     </ChakraModal>

@@ -20,12 +20,14 @@ interface EstimatesProps {
   closeCallback: Function;
   open: boolean;
   enquiry: Enquiry;
+  zIndex?: number;
 }
 
 const CheckOutModal: React.FC<EstimatesProps> = ({
   open,
   closeCallback,
   enquiry,
+  zIndex = 1500,
 }) => {
   // Objects
   const estimatesSorted = enquiry.estimates.sort((a, b) =>
@@ -180,6 +182,7 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
       closeCallback={() => {
         closeCallback();
       }}
+      zIndex={zIndex}
       open={open}
       title={"Checkout"}
       action={() => {

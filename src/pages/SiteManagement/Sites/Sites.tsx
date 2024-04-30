@@ -6,6 +6,7 @@ import IndividualSite from "./IndividualSite";
 import AddOrUpdateSiteModal from "../../../components/modals/AddOrUpdateSiteModal";
 import { Site } from "../../../types/SiteManagement/Site";
 import { addSite, updateSite } from "../../../adapters/SiteManagementAdapter";
+import { Button } from "@/components/ui/button";
 
 interface PRProps {}
 
@@ -41,17 +42,22 @@ const Sites: React.FC<PRProps> = () => {
   };
 
   return (
-    <div className="h-full w-full overflow-y-auto overflow-x-hidden">
-      <div className="flex flex-row px-[24px] py-[16px] justify-between">
-        <div className="flex font-airbnb font-black text-[24px]">Sites</div>
-        <TailwindButton
-          onClick={() => {
-            setOpen(true);
-          }}
-          text="Add +"
-        />
+    <div className="h-full w-full p-[16px] overflow-y-auto overflow-x-hidden">
+      <div className="flex px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
+        <div className="flex flex-grow font-airbnb font-black justify-center items-center text-center text-[24px] ">
+          Sites
+        </div>
+        <div>
+          <Button
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
+            Add +
+          </Button>
+        </div>
       </div>
-      <div className="flex flex-col p-[24px] gap-[10px]">
+      <div className="flex flex-col md:p-[24px] gap-[10px]">
         {sites.map((site) => (
           <IndividualSite
             site={site}

@@ -10,16 +10,42 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
+  Tag,
+  TagLabel,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import ChakraSelect from "@/components/ChakraSelect";
+import { Badge } from "@/components/ui/badge";
+import LabelledInput from "@/components/LabelledFormInputs/LabelledInput";
+import { UserRoleEnum } from "@/enums/UserRoleEnum";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 
 interface ChakraModalProps {
   open: boolean;
   closeCallback: Function;
   children: React.ReactNode;
   title: string;
+  description?: string;
   actionText?: string;
   extraButtonText?: string;
   action: Function;
@@ -37,6 +63,7 @@ interface ChakraModalProps {
     | "link"
     | null
     | undefined;
+  zIndex?: number;
 }
 
 const ChakraModal: React.FC<ChakraModalProps> = ({
@@ -44,6 +71,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
   closeCallback,
   children,
   title,
+  description,
   action,
   actionText,
   modalProps,
@@ -53,80 +81,136 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
   extraButtonText,
   extraButtonAction,
   extraButtonVariant = "default",
+  zIndex,
 }) => {
   // Objects
 
   // Variables
 
   // State Variables - Hooks
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Functions
   const closeModal = () => {
     closeCallback();
-    onClose();
   };
 
   // Hook Functions
-  React.useEffect(() => {
-    if (open) {
-      onOpen();
-    } else {
-      closeModal();
-    }
-  }, [open]);
 
   return (
     <>
-      <Modal
-        isCentered
-        size="2xl"
-        isOpen={isOpen}
-        scrollBehavior={"inside"}
-        onClose={closeModal}
-        {...modalProps}
-      >
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) " />
-        <ModalContent className="bg-background">
-          <ModalHeader className="font-bold text-[16px]">{title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody minH={`${minH}px`}>{children}</ModalBody>
-          <ModalFooter>
-            <Button
-              variant="ghost"
-              className="font-normal"
-              onClick={closeModal}
-            >
-              Close
-            </Button>
-            {extraButtonText && extraButtonText !== "" && (
-              <Button
-                className={cn("font-normal ml-[8px]")}
-                variant={extraButtonVariant}
-                onClick={() => {
-                  if (extraButtonAction) extraButtonAction();
-                }}
-                disabled={isExtraButtonDisabled}
-              >
-                {extraButtonText}
-              </Button>
+      {isDesktop ? (
+        <Dialog
+          open={open}
+          onOpenChange={(open) => {
+            if (!open) closeModal();
+          }}
+        >
+          <DialogContent
+            className={cn(
+              "sm:max-w-[425px] md:max-w-[600px]",
+              zIndex ? `z-[${zIndex}]` : "z-[1500]",
             )}
-            {actionText && actionText !== "" && (
+          >
+            <DialogHeader>
+              <DialogTitle>{title}</DialogTitle>
+              <DialogDescription>{description}</DialogDescription>
+            </DialogHeader>
+            <div className="px-[16px] overflow-y-auto max-h-[500px]">
+              {children}
+            </div>
+            <DialogFooter>
               <Button
-                variant="default"
-                className="font-normal ml-[8px]"
-                onClick={() => {
-                  action();
-                }}
-                disabled={isButtonDisabled}
+                variant="ghost"
+                className="font-normal"
+                onClick={closeModal}
               >
-                {actionText}
+                Close
               </Button>
-            )}
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+              {extraButtonText && extraButtonText !== "" && (
+                <Button
+                  className={cn("font-normal ml-[8px]")}
+                  variant={extraButtonVariant}
+                  onClick={() => {
+                    if (extraButtonAction) extraButtonAction();
+                  }}
+                  disabled={isExtraButtonDisabled}
+                >
+                  {extraButtonText}
+                </Button>
+              )}
+              {actionText && actionText !== "" && (
+                <Button
+                  variant="default"
+                  className="font-normal ml-[8px]"
+                  onClick={() => {
+                    action();
+                  }}
+                  disabled={isButtonDisabled}
+                >
+                  {actionText}
+                </Button>
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Drawer
+          open={open}
+          dismissible
+          onOpenChange={(op) => {
+            if (!op) closeModal();
+          }}
+        >
+          <DrawerOverlay
+            className={cn(zIndex ? `z-[${zIndex - 1}]` : "z-[1499]")}
+          />
+          <DrawerContent className={cn(zIndex ? `z-[${zIndex}]` : "z-[1500]")}>
+            <DrawerHeader>
+              <DrawerTitle>{title}</DrawerTitle>
+              <DrawerDescription>{description}</DrawerDescription>
+            </DrawerHeader>
+            <div className="px-[16px] overflow-y-auto max-h-[500px]">
+              {children}
+            </div>
+            <DrawerFooter>
+              <DrawerClose className="w-full">
+                <Button
+                  variant="ghost"
+                  className="font-normal"
+                  onClick={closeModal}
+                >
+                  Close
+                </Button>
+              </DrawerClose>
+              {extraButtonText && extraButtonText !== "" && (
+                <Button
+                  className={cn("font-normal ml-[8px]")}
+                  variant={extraButtonVariant}
+                  onClick={() => {
+                    if (extraButtonAction) extraButtonAction();
+                  }}
+                  disabled={isExtraButtonDisabled}
+                >
+                  {extraButtonText}
+                </Button>
+              )}
+              {actionText && actionText !== "" && (
+                <Button
+                  variant="default"
+                  className="font-normal ml-[8px]"
+                  onClick={() => {
+                    action();
+                  }}
+                  disabled={isButtonDisabled}
+                >
+                  {actionText}
+                </Button>
+              )}
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      )}
     </>
   );
 };
