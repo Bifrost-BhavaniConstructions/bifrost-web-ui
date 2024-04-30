@@ -33,6 +33,7 @@ const FunctionHallDayViewModal: React.FC<AcceptBookingModalProps> = ({
         closeCallback();
       }}
       open={open}
+      zIndex={1500}
       title={
         "Enquiries & Bookings - " + moment(date).format("DD/MM/YYYY").toString()
       }

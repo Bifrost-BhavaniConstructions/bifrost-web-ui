@@ -157,7 +157,8 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
 
   // Hook Functions
   React.useEffect(() => {
-    if (editEnquiry?._id) {
+    if (editEnquiry?._id !== undefined) {
+      console.log(editEnquiry);
       setEnquiry(editEnquiry);
     }
   }, [editEnquiry]);

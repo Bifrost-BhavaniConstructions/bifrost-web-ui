@@ -141,7 +141,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
                 <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="z-[1501]">
+            <DropdownMenuContent align="end" className="z-[1605]">
               <DropdownMenuLabel>Enquiry Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {enquiry.isBooking && !enquiry.isCheckedOut && (
@@ -227,7 +227,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
               setCheckIn(false);
               setUpdateStatus(false);
             }}
-            zIndex={1502}
+            zIndex={1500}
             open={checkIn}
             enquiry={enquiry}
             functionHall={enquiry.functionHall}
@@ -236,7 +236,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
         )}
         {closeEnquiry && (
           <CloseEnquiryModal
-            zIndex={1502}
+            zIndex={1500}
             open={closeEnquiry}
             closeCallback={() => {
               setCloseEnquiry(false);
@@ -247,19 +247,21 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
         )}
         {!!editEnquiry?._id && (
           <AddEnquiryModal
-            zIndex={1502}
+            zIndex={1500}
             closeCallback={() => {
               setEditEnquiry(undefined);
             }}
             open={!!editEnquiry?._id}
             editEnquiry={
-              editEnquiry && EnquiryToEnquiryCreateWrapper(editEnquiry)
+              editEnquiry
+                ? EnquiryToEnquiryCreateWrapper(editEnquiry)
+                : undefined
             }
           />
         )}
         {estimates.length > 0 && (
           <EstimatesModal
-            zIndex={1502}
+            zIndex={1500}
             closeCallback={() => {
               setEstimates([]);
             }}
@@ -270,7 +272,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
         )}
         {followUp && (
           <FollowUpModal
-            zIndex={1502}
+            zIndex={1500}
             open={followUp}
             closeCallback={() => {
               setFollowUp(false);
@@ -304,7 +306,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
           </Button>
           {addEstimate && (
             <AddEnquiryModal
-              zIndex={1502}
+              zIndex={1500}
               closeCallback={() => {
                 setAddEstimate(false);
               }}
@@ -316,7 +318,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
           )}
           {acceptBooking && (
             <AcceptBookingModal
-              zIndex={1502}
+              zIndex={1500}
               closeCallback={() => {
                 setAcceptBooking(false);
               }}
@@ -349,7 +351,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
           </Button>
           {acceptPayment && (
             <AcceptPaymentModal
-              zIndex={1502}
+              zIndex={1500}
               closeCallback={() => {
                 setAcceptPayment(false);
               }}
@@ -359,7 +361,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
           )}
           {checkOut && (
             <CheckOutModal
-              zIndex={1502}
+              zIndex={1500}
               closeCallback={() => {
                 setCheckOut(false);
               }}

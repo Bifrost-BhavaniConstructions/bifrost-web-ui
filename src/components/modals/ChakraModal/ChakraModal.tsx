@@ -22,6 +22,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogOverlay,
   DialogTitle,
 } from "@/components/ui/dialog";
 import ChakraSelect from "@/components/ChakraSelect";
@@ -103,14 +104,16 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
         <Dialog
           open={open}
           onOpenChange={(open) => {
-            if (!open) closeModal();
+            console.log(open);
+            if (!open) {
+              closeModal();
+            }
           }}
         >
+          <DialogOverlay style={{ zIndex: zIndex ? zIndex : 1500 }} />
           <DialogContent
-            className={cn(
-              "sm:max-w-[425px] md:max-w-[600px]",
-              zIndex ? `z-[${zIndex}]` : "z-[1500]",
-            )}
+            className={cn("sm:max-w-[425px] md:max-w-[600px]")}
+            style={{ zIndex: zIndex ? zIndex : 1500 }}
           >
             <DialogHeader>
               <DialogTitle>{title}</DialogTitle>
@@ -163,7 +166,7 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
           }}
         >
           <DrawerOverlay
-            className={cn(zIndex ? `z-[${zIndex - 1}]` : "z-[1499]")}
+            className={cn(zIndex ? `z-[${zIndex}]` : "z-[1500]")}
           />
           <DrawerContent className={cn(zIndex ? `z-[${zIndex}]` : "z-[1500]")}>
             <DrawerHeader>

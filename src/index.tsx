@@ -18,10 +18,10 @@ const bounce = cssTransition({
 });
 
 root.render(
-  <React.StrictMode>
+  <>
     <ChakraProvider theme={theme}>
       <App />
     </ChakraProvider>
     <ToastContainer autoClose={3000} transition={bounce} />
-  </React.StrictMode>,
+  </>,
 );
