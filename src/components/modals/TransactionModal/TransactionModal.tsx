@@ -165,7 +165,9 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                 .filter((user) =>
                   transaction.transactionType ===
                   TransactionTypeEnum.VENDOR_TRANSACTION
-                    ? user.role === UserRoleEnum.FH_VENDOR
+                    ? platform === PlatformEnum.FUNCTION_HALL
+                      ? user.role === UserRoleEnum.FH_VENDOR
+                      : user.role === UserRoleEnum.VENDOR
                     : true,
                 )
                 .map((fH) => ({

@@ -15,12 +15,14 @@ import {
 } from "../../../enums/SiteDutyTypeEnum";
 import LabelledInput from "../../LabelledFormInputs/LabelledInput";
 import moment from "moment";
+import { toast } from "sonner";
 
 interface AddOrUpdateAttendanceModalProps {
   open: boolean;
   closeCallback: Function;
   cta: (attendance: Attendance) => void;
   selectedUserParent?: User;
+  existingDates: string[];
 }
 
 const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
@@ -28,6 +30,7 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
   open,
   cta,
   selectedUserParent,
+  existingDates,
 }) => {
   // Objects
   const emptyAttendance: Attendance = {
@@ -136,7 +139,16 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
         name="date"
         value={moment(attendance.on).format("yyyy-MM-DD")}
         setValue={(_val: string) => {
-          setAttendance({ ...attendance, on: new Date(_val) });
+          const selectedDate = new Date(_val);
+          const currentDate = new Date();
+
+          if (existingDates.includes(_val)) {
+            toast.error("Attendance already marked for that day.");
+          } else if (selectedDate > currentDate) {
+            toast.error("You cannot mark attendance for a future date.");
+          } else {
+            setAttendance({ ...attendance, on: selectedDate });
+          }
         }}
         inputProps={{ type: "date" }}
       />

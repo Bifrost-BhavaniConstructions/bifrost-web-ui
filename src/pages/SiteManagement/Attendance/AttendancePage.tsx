@@ -129,6 +129,7 @@ const AttendancePage: React.FC<AttendanceProps> = () => {
             markAttendance(e);
           }}
           selectedUserParent={selectedUser}
+          existingDates={events.map((event) => event.date)}
         />
       )}
       {!!remark && (
