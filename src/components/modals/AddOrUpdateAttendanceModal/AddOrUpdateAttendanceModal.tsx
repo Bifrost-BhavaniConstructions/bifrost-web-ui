@@ -94,6 +94,11 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
           };
         }),
       });
+    } else if (selectedUser && selectedUser.role === UserRoleEnum.SUPERVISOR) {
+      setAttendance({
+        ...attendance,
+        otPay: selectedUser.supervisorData?.payOT,
+      });
     }
   }, [selectedUser, attendance.shift, attendance.dutyType]);
 
@@ -247,6 +252,20 @@ const AddOrUpdateAttendanceModal: React.FC<AddOrUpdateAttendanceModalProps> = ({
                 />
               );
             })}
+        </>
+      )}
+      {selectedUser && selectedUser.role === UserRoleEnum.SUPERVISOR && (
+        <>
+          <LabelledInput
+            required
+            name="OT pay"
+            value={attendance.otPay!}
+            setValue={(_val: number) => {
+              setAttendance({ ...attendance, otPay: _val });
+            }}
+            inputProps={{ type: "number" }}
+            inputLeftAddon={"₹"}
+          />
         </>
       )}
     </ChakraModal>

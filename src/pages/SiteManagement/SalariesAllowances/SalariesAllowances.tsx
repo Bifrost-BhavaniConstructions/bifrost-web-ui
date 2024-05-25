@@ -2,7 +2,6 @@ import React from "react";
 import "./SalariesAllowances.css";
 import ChakraSelect from "../../../components/ChakraSelect";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
-import TailwindButton from "../../../components/TailwindButton";
 import { useStoreState } from "../../../store/hooks";
 import { User } from "../../../types/User";
 import TabSelect from "../../../components/TabSelect";
@@ -51,7 +50,11 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
   React.useEffect(() => {
     if (selectedUser) {
       if (
-        [UserRoleEnum.VENDOR, UserRoleEnum.DRIVER].includes(selectedUser.role)
+        [
+          UserRoleEnum.VENDOR,
+          UserRoleEnum.DRIVER,
+          UserRoleEnum.SUPERVISOR,
+        ].includes(selectedUser.role)
       ) {
         getPayoutLastMonth(selectedUser._id!).then((res) =>
           setVariableLastMonth(res),
@@ -149,9 +152,11 @@ const SalariesAllowances: React.FC<SalariesAllowancesProps> = () => {
           closeCallback={() => {
             setOpen(false);
             if (
-              [UserRoleEnum.VENDOR, UserRoleEnum.DRIVER].includes(
-                selectedUser.role,
-              )
+              [
+                UserRoleEnum.VENDOR,
+                UserRoleEnum.DRIVER,
+                UserRoleEnum.SUPERVISOR,
+              ].includes(selectedUser.role)
             ) {
               getPayoutLastMonth(selectedUser._id!).then((res) =>
                 setVariableLastMonth(res),

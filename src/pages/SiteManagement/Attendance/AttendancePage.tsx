@@ -68,9 +68,11 @@ const AttendancePage: React.FC<AttendanceProps> = () => {
                   value={selectedUser?._id!}
                   values={siteUsers
                     .filter((fH) =>
-                      [UserRoleEnum.DRIVER, UserRoleEnum.VENDOR].includes(
-                        fH.role,
-                      ),
+                      [
+                        UserRoleEnum.DRIVER,
+                        UserRoleEnum.VENDOR,
+                        UserRoleEnum.SUPERVISOR,
+                      ].includes(fH.role),
                     )
                     .map((fH) => ({
                       name: fH.name,

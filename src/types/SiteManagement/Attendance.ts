@@ -14,6 +14,7 @@ export interface Attendance {
   shift?: SiteShiftEnum;
   role: UserRoleEnum;
   vendorItems?: VendorTypeData[];
+  otPay?: number;
   site: string;
   on: Date;
   dutyType?: SiteDutyTypeEnum;

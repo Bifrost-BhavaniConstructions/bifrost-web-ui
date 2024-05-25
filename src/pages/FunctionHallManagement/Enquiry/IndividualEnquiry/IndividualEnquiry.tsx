@@ -90,288 +90,294 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
   // Hook Functions
 
   return (
-    <Card
-      className="cursor-pointer hover:bg-primary-foreground flex flex-col select-none focus:outline-none"
-      onClick={() => {
-        if (enquiry.isBooking) {
-          if (!enquiry.isCheckedOut && !enquiry.isClosedEnquiry) {
-            setBookingClicked(!bookingClicked);
-          }
-        } else {
-          if (!enquiry.isClosedEnquiry) {
-            setEnquiryClicked(!enquiryClicked);
-          }
-        }
-      }}
-    >
-      <div className="flex flex-row">
-        <CardHeader className="pr-0 flex-grow">
-          <div className="text-[16px] font-bold">{enquiry.name}</div>
-          <CardDescription className={"flex gap-[4px]"}>
-            <CalendarIcon className="mt-[2px]" />
-            {`${new Date(enquiry.fromDate).toDateString()} ${
-              enquiry.fromDate !== enquiry.toDate
-                ? `- ${new Date(enquiry.toDate).toDateString()}`
-                : ""
-            }`}
-          </CardDescription>
-          <CardDescription className={"flex gap-[4px]"}>
-            <Badge variant="secondary" className={"mr-[4px] bg-yellow-700"}>
-              {enquiry.enquiryType.name}
-            </Badge>
-            {isDesktop && (
-              <Badge variant="secondary" className={"mr-[4px] bg-low-bg"}>
-                {enquiry.functionHall.name}
-              </Badge>
-            )}
-          </CardDescription>
-          {!isDesktop && (
-            <CardDescription>
-              <Badge variant="secondary" className={"mr-[4px] bg-low-bg"}>
-                {enquiry.functionHall.name}
-              </Badge>
-            </CardDescription>
-          )}
-        </CardHeader>
-        <CardHeader className="pl-0">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon">
-                <MixerHorizontalIcon className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="z-[1605]">
-              <DropdownMenuLabel>Enquiry Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {enquiry.isBooking && !enquiry.isCheckedOut && (
-                <DropdownMenuItem
-                  onClick={() => {
-                    setCheckIn(true);
-                    setUpdateStatus(true);
-                  }}
-                >
-                  <UpdateIcon
-                    color={"white"}
-                    width={"16px"}
-                    className="mr-[8px]"
-                  />
-                  Update Status
-                </DropdownMenuItem>
-              )}
-              {!enquiry.isCheckedOut && (
-                <DropdownMenuItem
-                  onClick={() => {
-                    setEditEnquiry(enquiry);
-                  }}
-                >
-                  <Pencil2Icon
-                    color={"white"}
-                    width={"16px"}
-                    className="mr-[8px]"
-                  />
-                  Edit Enquiry
-                </DropdownMenuItem>
-              )}
-
-              <DropdownMenuItem
-                onClick={() => {
-                  setEstimates(enquiry.estimates);
-                }}
-              >
-                <CurrencyRupeeIcon
-                  color={"white"}
-                  width={"16px"}
-                  className="mr-[8px]"
-                />
-                View Estimates
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setFollowUp(true);
-                }}
-              >
-                <PhoneIcon
-                  color={"white"}
-                  width={"16px"}
-                  className="mr-[8px]"
-                />
-                Follow up
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {!enquiry.isCheckedOut && (
-            <Button
-              variant="destructive"
-              size="icon"
-              onClick={async () => {
-                if (!closed) {
-                  setCloseEnquiry(true);
-                } else {
-                  await restoreEnquiry(enquiry._id);
-                  fetchEnquiries();
-                }
-              }}
-            >
-              {!closed ? (
-                <TrashIcon color={"white"} width={"14px"} />
-              ) : (
-                <ArrowUturnUpIcon color={"white"} width={"14px"} />
-              )}
-            </Button>
-          )}
-        </CardHeader>
-        {checkIn && (
-          <CheckInModal
-            closeCallback={() => {
-              setCheckIn(false);
-              setUpdateStatus(false);
-            }}
-            zIndex={1500}
-            open={checkIn}
-            enquiry={enquiry}
-            functionHall={enquiry.functionHall}
-            isUpdateStatus={updateStatus}
-          />
-        )}
-        {closeEnquiry && (
-          <CloseEnquiryModal
-            zIndex={1500}
-            open={closeEnquiry}
-            closeCallback={() => {
-              setCloseEnquiry(false);
-              fetchEnquiries();
-            }}
-            enquiryId={enquiry._id}
-          />
-        )}
-        {!!editEnquiry?._id && (
-          <AddEnquiryModal
-            zIndex={1500}
-            closeCallback={() => {
-              setEditEnquiry(undefined);
-            }}
-            open={!!editEnquiry?._id}
-            editEnquiry={
-              editEnquiry
-                ? EnquiryToEnquiryCreateWrapper(editEnquiry)
-                : undefined
+    <>
+      <Card
+        className="cursor-pointer hover:bg-primary-foreground flex flex-col select-none focus:outline-none"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (enquiry.isBooking) {
+            if (!enquiry.isCheckedOut && !enquiry.isClosedEnquiry) {
+              setBookingClicked(!bookingClicked);
             }
-          />
-        )}
-        {estimates.length > 0 && (
-          <EstimatesModal
-            zIndex={1500}
-            closeCallback={() => {
-              setEstimates([]);
-            }}
-            enquiry={enquiry}
-            open={estimates.length > 0}
-            estimates={estimates}
-          />
-        )}
-        {followUp && (
-          <FollowUpModal
-            zIndex={1500}
-            open={followUp}
-            closeCallback={() => {
-              setFollowUp(false);
-            }}
-            enquiryId={enquiry._id}
-            followups={enquiry.followUps}
-            contactNumber={enquiry.primaryContactNumber}
-          />
-        )}
-      </div>
-      {enquiryClicked && (
-        <CardFooter className="flex justify-between">
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              setAddEstimate(true);
-            }}
-            variant="secondary"
-          >
-            Update Estimate
-          </Button>
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              setAcceptBooking(true);
-            }}
-            variant="outline"
-            className="bg-main-bg-success"
-          >
-            Accept Booking
-          </Button>
-          {addEstimate && (
-            <AddEnquiryModal
-              zIndex={1500}
-              closeCallback={() => {
-                setAddEstimate(false);
+          } else {
+            if (!enquiry.isClosedEnquiry) {
+              setEnquiryClicked(!enquiryClicked);
+            }
+          }
+        }}
+      >
+        <div className="flex flex-row">
+          <CardHeader className="pr-0 flex-grow">
+            <div className="text-[16px] font-bold">{enquiry.name}</div>
+            <CardDescription className={"flex gap-[4px]"}>
+              <CalendarIcon className="mt-[2px]" />
+              {`${new Date(enquiry.fromDate).toDateString()} ${
+                enquiry.fromDate !== enquiry.toDate
+                  ? `- ${new Date(enquiry.toDate).toDateString()}`
+                  : ""
+              }`}
+            </CardDescription>
+            <CardDescription className={"flex gap-[4px]"}>
+              <Badge variant="secondary" className={"mr-[4px] bg-yellow-700"}>
+                {enquiry.enquiryType.name}
+              </Badge>
+              {isDesktop && (
+                <Badge variant="secondary" className={"mr-[4px] bg-low-bg"}>
+                  {enquiry.functionHall.name}
+                </Badge>
+              )}
+            </CardDescription>
+            {!isDesktop && (
+              <CardDescription>
+                <Badge variant="secondary" className={"mr-[4px] bg-low-bg"}>
+                  {enquiry.functionHall.name}
+                </Badge>
+              </CardDescription>
+            )}
+          </CardHeader>
+          <CardHeader className="pl-0">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" size="icon">
+                  <MixerHorizontalIcon className="h-5 w-5" />
+                  <span className="sr-only">Toggle user menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="z-[1605]">
+                <DropdownMenuLabel>Enquiry Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {enquiry.isBooking && !enquiry.isCheckedOut && (
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCheckIn(true);
+                      setUpdateStatus(true);
+                    }}
+                  >
+                    <UpdateIcon
+                      color={"white"}
+                      width={"16px"}
+                      className="mr-[8px]"
+                    />
+                    Update Status
+                  </DropdownMenuItem>
+                )}
+                {!enquiry.isCheckedOut && (
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditEnquiry(enquiry);
+                    }}
+                  >
+                    <Pencil2Icon
+                      color={"white"}
+                      width={"16px"}
+                      className="mr-[8px]"
+                    />
+                    Edit Enquiry
+                  </DropdownMenuItem>
+                )}
+
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEstimates(enquiry.estimates);
+                  }}
+                >
+                  <CurrencyRupeeIcon
+                    color={"white"}
+                    width={"16px"}
+                    className="mr-[8px]"
+                  />
+                  View Estimates
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFollowUp(true);
+                  }}
+                >
+                  <PhoneIcon
+                    color={"white"}
+                    width={"16px"}
+                    className="mr-[8px]"
+                  />
+                  Follow up
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {!enquiry.isCheckedOut && (
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  if (!closed) {
+                    setCloseEnquiry(true);
+                  } else {
+                    await restoreEnquiry(enquiry._id);
+                    fetchEnquiries();
+                  }
+                }}
+              >
+                {!closed ? (
+                  <TrashIcon color={"white"} width={"14px"} />
+                ) : (
+                  <ArrowUturnUpIcon color={"white"} width={"14px"} />
+                )}
+              </Button>
+            )}
+          </CardHeader>
+        </div>
+        {enquiryClicked && (
+          <CardFooter className="flex justify-between">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                setAddEstimate(true);
               }}
-              open={addEstimate}
-              addEstimate={addEstimate}
-              latestEstimate={enquiry.estimates[0]}
-              enquiryId={enquiry._id}
-            />
-          )}
-          {acceptBooking && (
-            <AcceptBookingModal
-              zIndex={1500}
-              closeCallback={() => {
-                setAcceptBooking(false);
+              variant="secondary"
+            >
+              Update Estimate
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                setAcceptBooking(true);
               }}
-              open={acceptBooking}
-              enquiryId={enquiry._id}
-            />
-          )}
-        </CardFooter>
+              variant="outline"
+              className="bg-main-bg-success"
+            >
+              Accept Booking
+            </Button>
+          </CardFooter>
+        )}
+        {bookingClicked && (
+          <CardFooter className="flex justify-between">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                setAcceptPayment(true);
+              }}
+              variant="secondary"
+            >
+              Accept Payment
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                enquiry.isCheckedIn ? setCheckOut(true) : setCheckIn(true);
+              }}
+              variant="outline"
+              className="bg-main-bg-success"
+            >
+              {enquiry.isCheckedIn ? "Check Out" : "Check In"}
+            </Button>
+          </CardFooter>
+        )}
+      </Card>
+      {acceptPayment && (
+        <AcceptPaymentModal
+          zIndex={1500}
+          closeCallback={() => {
+            setAcceptPayment(false);
+          }}
+          open={acceptPayment}
+          enquiryId={enquiry._id}
+        />
       )}
-      {bookingClicked && (
-        <CardFooter className="flex justify-between">
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              setAcceptPayment(true);
-            }}
-            variant="secondary"
-          >
-            Accept Payment
-          </Button>
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              enquiry.isCheckedIn ? setCheckOut(true) : setCheckIn(true);
-            }}
-            variant="outline"
-            className="bg-main-bg-success"
-          >
-            {enquiry.isCheckedIn ? "Check Out" : "Check In"}
-          </Button>
-          {acceptPayment && (
-            <AcceptPaymentModal
-              zIndex={1500}
-              closeCallback={() => {
-                setAcceptPayment(false);
-              }}
-              open={acceptPayment}
-              enquiryId={enquiry._id}
-            />
-          )}
-          {checkOut && (
-            <CheckOutModal
-              zIndex={1500}
-              closeCallback={() => {
-                setCheckOut(false);
-              }}
-              open={checkOut}
-              enquiry={enquiry}
-            />
-          )}
-        </CardFooter>
+      {checkOut && (
+        <CheckOutModal
+          zIndex={1500}
+          closeCallback={() => {
+            setCheckOut(false);
+          }}
+          open={checkOut}
+          enquiry={enquiry}
+        />
       )}
-    </Card>
+      {addEstimate && (
+        <AddEnquiryModal
+          zIndex={1500}
+          closeCallback={() => {
+            setAddEstimate(false);
+          }}
+          open={addEstimate}
+          addEstimate={addEstimate}
+          latestEstimate={enquiry.estimates[0]}
+          enquiryId={enquiry._id}
+        />
+      )}
+      {acceptBooking && (
+        <AcceptBookingModal
+          zIndex={1500}
+          closeCallback={() => {
+            setAcceptBooking(false);
+          }}
+          open={acceptBooking}
+          enquiryId={enquiry._id}
+        />
+      )}
+      {checkIn && (
+        <CheckInModal
+          closeCallback={() => {
+            setCheckIn(false);
+            setUpdateStatus(false);
+          }}
+          zIndex={1500}
+          open={checkIn}
+          enquiry={enquiry}
+          functionHall={enquiry.functionHall}
+          isUpdateStatus={updateStatus}
+        />
+      )}
+      {closeEnquiry && (
+        <CloseEnquiryModal
+          zIndex={1500}
+          open={closeEnquiry}
+          closeCallback={() => {
+            setCloseEnquiry(false);
+            fetchEnquiries();
+          }}
+          enquiryId={enquiry._id}
+        />
+      )}
+      {!!editEnquiry?._id && (
+        <AddEnquiryModal
+          zIndex={1500}
+          closeCallback={() => {
+            setEditEnquiry(undefined);
+          }}
+          open={!!editEnquiry?._id}
+          editEnquiry={
+            editEnquiry ? EnquiryToEnquiryCreateWrapper(editEnquiry) : undefined
+          }
+        />
+      )}
+      {estimates.length > 0 && (
+        <EstimatesModal
+          zIndex={1500}
+          closeCallback={() => {
+            setEstimates([]);
+          }}
+          enquiry={enquiry}
+          open={estimates.length > 0}
+          estimates={estimates}
+        />
+      )}
+      {followUp && (
+        <FollowUpModal
+          zIndex={1500}
+          open={followUp}
+          closeCallback={() => {
+            setFollowUp(false);
+          }}
+          enquiryId={enquiry._id}
+          followups={enquiry.followUps}
+          contactNumber={enquiry.primaryContactNumber}
+        />
+      )}
+    </>
   );
 };
 

@@ -296,7 +296,7 @@ const CheckOutModal: React.FC<EstimatesProps> = ({
             }}
           />
           <EstimateField
-            key={"total"}
+            key={"finalAmount"}
             title={"total"}
             tariff={finalAmount}
             isRight

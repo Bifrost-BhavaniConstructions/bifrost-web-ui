@@ -126,7 +126,10 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
               <Button
                 variant="ghost"
                 className="font-normal"
-                onClick={closeModal}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeModal();
+                }}
               >
                 Close
               </Button>
@@ -134,7 +137,8 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
                 <Button
                   className={cn("font-normal ml-[8px]")}
                   variant={extraButtonVariant}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (extraButtonAction) extraButtonAction();
                   }}
                   disabled={isExtraButtonDisabled}
@@ -146,7 +150,8 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
                 <Button
                   variant="default"
                   className="font-normal ml-[8px]"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     action();
                   }}
                   disabled={isButtonDisabled}
@@ -181,7 +186,10 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
                 <Button
                   variant="ghost"
                   className="font-normal"
-                  onClick={closeModal}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    closeModal();
+                  }}
                 >
                   Close
                 </Button>
@@ -190,7 +198,8 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
                 <Button
                   className={cn("font-normal ml-[8px]")}
                   variant={extraButtonVariant}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (extraButtonAction) extraButtonAction();
                   }}
                   disabled={isExtraButtonDisabled}
@@ -202,7 +211,8 @@ const ChakraModal: React.FC<ChakraModalProps> = ({
                 <Button
                   variant="default"
                   className="font-normal ml-[8px]"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     action();
                   }}
                   disabled={isButtonDisabled}
