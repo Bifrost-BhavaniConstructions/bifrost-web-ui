@@ -164,8 +164,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
                 )}
                 {!enquiry.isCheckedOut && (
                   <DropdownMenuItem
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    onClick={() => {
                       setEditEnquiry(enquiry);
                     }}
                   >
