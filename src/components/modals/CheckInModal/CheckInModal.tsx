@@ -301,54 +301,38 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
               setInventorySearch(_val);
             }}
           />
-          {newInventoryTypeList
-            .filter(
-              (it) =>
-                inventorySearch === "" ||
-                it.name.toLowerCase().includes(inventorySearch.toLowerCase()),
+          {newInventoryTypeList.map((type, index) => {
+            if (
+              inventorySearch !== "" &&
+              !type.name.toLowerCase().includes(inventorySearch.toLowerCase())
             )
-            .map((type, index) => {
-              return (
-                <div
-                  key={type.name}
-                  className="flex flex-col mt-[4px] border-t-2"
-                >
-                  <LabelledInput
-                    name={"name"}
-                    value={type.name}
-                    inputProps={{ isDisabled: true }}
-                    setValue={(_val: string) =>
-                      setNewInventoryTypeList(
-                        newInventoryTypeList.map((iT, i) =>
-                          i === index ? { ...iT, name: _val } : iT,
-                        ),
-                      )
-                    }
-                  />
-                  <div className="flex">
-                    <div className="flex  px-[2px]">
-                      <LabelledInput
-                        name={"count"}
-                        value={type.count}
-                        setValue={(_val: number) =>
-                          setNewInventoryTypeList(
-                            newInventoryTypeList.map((iT, i) =>
-                              i === index ? { ...iT, count: _val } : iT,
-                            ),
-                          )
-                        }
-                        inputProps={{ type: "number" }}
-                      />
-                    </div>
-                  </div>
+              return <></>;
+            return (
+              <div
+                key={type.name}
+                className="flex flex-col mt-[4px] border-t-2"
+              >
+                <LabelledInput
+                  name={"name"}
+                  value={type.name}
+                  inputProps={{ isDisabled: true }}
+                  setValue={(_val: string) =>
+                    setNewInventoryTypeList(
+                      newInventoryTypeList.map((iT, i) =>
+                        i === index ? { ...iT, name: _val } : iT,
+                      ),
+                    )
+                  }
+                />
+                <div className="flex">
                   <div className="flex  px-[2px]">
                     <LabelledInput
-                      name={"damage charges"}
-                      value={type.charge}
+                      name={"count"}
+                      value={type.count}
                       setValue={(_val: number) =>
                         setNewInventoryTypeList(
                           newInventoryTypeList.map((iT, i) =>
-                            i === index ? { ...iT, charge: _val } : iT,
+                            i === index ? { ...iT, count: _val } : iT,
                           ),
                         )
                       }
@@ -356,8 +340,23 @@ const CheckInModal: React.FC<AcceptBookingModalProps> = ({
                     />
                   </div>
                 </div>
-              );
-            })}
+                <div className="flex  px-[2px]">
+                  <LabelledInput
+                    name={"damage charges"}
+                    value={type.charge}
+                    setValue={(_val: number) =>
+                      setNewInventoryTypeList(
+                        newInventoryTypeList.map((iT, i) =>
+                          i === index ? { ...iT, charge: _val } : iT,
+                        ),
+                      )
+                    }
+                    inputProps={{ type: "number" }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </>
       )}
       {tabIndex === 4 && (

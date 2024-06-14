@@ -159,7 +159,7 @@ const Enquiry: React.FC<QueriesProps> = ({
                 text: !closed ? "Enquiry" : "Closed Enquiries",
               },
               {
-                text: !closed ? "Bookings" : "Closed Bookings",
+                text: !closed ? "Bookings" : "Cancelled Bookings",
               },
             ]}
             tabIndex={selectedTab}

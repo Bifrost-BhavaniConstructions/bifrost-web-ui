@@ -159,7 +159,7 @@ const AcceptPaymentModal: React.FC<AcceptBookingModalProps> = ({
           </Stack>
         </RadioGroup>
       )}
-      {!!amount && type === "CASH_ACCOUNT" && (
+      {!!amount && amount < 0 && type === "CASH_ACCOUNT" && (
         <ChakraSelect
           name="refund from"
           value={from}
