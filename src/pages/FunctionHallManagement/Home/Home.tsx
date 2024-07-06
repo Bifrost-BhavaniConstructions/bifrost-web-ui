@@ -3,6 +3,9 @@ import "./Home.css";
 import { useNavigate } from "react-router-dom";
 import { useStoreState } from "../../../store/hooks";
 import IndividualFunctionHall from "../FunctionHallList/IndividualFunctionHall";
+import FunctionHall from "@/types/FunctionHall/FunctionHall";
+import { UserRoleEnum } from "@/enums/UserRoleEnum";
+import { useUserFunctionHalls } from "@/hooks/useUserFunctionHalls";
 
 interface HomeProps {}
 
@@ -12,8 +15,7 @@ const Home: React.FC<HomeProps> = () => {
 
   // Variables
 
-  const { functionHalls } = useStoreState((state) => state.functionHallStore);
-
+  const userFunctionHalls = useUserFunctionHalls();
   // State Variables - Hooks
 
   // Functions
@@ -26,7 +28,12 @@ const Home: React.FC<HomeProps> = () => {
         Function Halls
       </div>
       <div className="flex flex-col flex-1 md:flex-row flex-wrap gap-[8px]">
-        {functionHalls.map((fH) => {
+        {userFunctionHalls.length === 0 && (
+          <div className="flex w-full h-full justify-center items-center">
+            N/A
+          </div>
+        )}
+        {userFunctionHalls.map((fH) => {
           return (
             <IndividualFunctionHall
               key={fH._id!}

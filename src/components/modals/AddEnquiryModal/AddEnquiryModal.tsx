@@ -15,6 +15,7 @@ import {
   getPartOfDayEnumFromString,
   PartOfDayEnum,
 } from "../../../enums/PartOfDayEnum";
+import { useUserFunctionHalls } from "@/hooks/useUserFunctionHalls";
 
 interface AddEnquiryModalProps {
   closeCallback: Function;
@@ -76,7 +77,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
   const { fetchEnquiries } = useStoreActions(
     (actions) => actions.functionHallStore,
   );
-
+  const userFunctionHalls = useUserFunctionHalls();
   // Variables
 
   // State Variables - Hooks
@@ -239,7 +240,7 @@ const AddEnquiryModal: React.FC<AddEnquiryModalProps> = ({
               required
               name="function hall"
               value={enquiry.functionHall}
-              values={functionHalls.map((fH) => ({
+              values={userFunctionHalls.map((fH) => ({
                 name: fH.name,
                 value: fH._id!,
               }))}

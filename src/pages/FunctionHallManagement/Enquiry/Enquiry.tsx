@@ -59,6 +59,7 @@ const Enquiry: React.FC<QueriesProps> = ({
 
   // Variables
   const { users } = useStoreState((state) => state.peopleStore);
+  const { user } = useStoreState((state) => state.userStore);
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [openEnquiry, setOpenEnquiry] = React.useState(false);
   const [sortBy, setSortBy] = React.useState("DB");
@@ -204,6 +205,13 @@ const Enquiry: React.FC<QueriesProps> = ({
         {enquiries
           .filter((enquiry) =>
             functionHall ? enquiry.functionHall._id === functionHall : true,
+          )
+          .filter((enquiry) =>
+            user!.role === UserRoleEnum.FH_MANAGER
+              ? user!.managerData!.functionHalls.includes(
+                  enquiry.functionHall._id!,
+                )
+              : true,
           )
           .filter((enquiry) =>
             filteredFunctionHalls.length > 0

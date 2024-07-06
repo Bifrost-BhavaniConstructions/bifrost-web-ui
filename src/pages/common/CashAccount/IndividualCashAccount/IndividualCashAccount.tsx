@@ -64,14 +64,6 @@ const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
 
   return (
     <div className="flex w-full h-full flex-col">
-      <div className="flex flex-col px-[24px] pb-[24px] pt-[8px] justify-center items-center md:relative">
-        <div className="flex font-airbnb font-black text-center text-[24px] ">
-          {cashAccount.user.name}'s Cash Account
-        </div>
-        <div className="flex font-airbnb font-black text-center text-[18px] ">
-          ₹{cashAccount.balance}
-        </div>
-      </div>
       <div className="flex flex-col py-[8px] justify-center items-center md:relative">
         <TabSelect
           options={[
@@ -106,7 +98,10 @@ const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
         {transactionsWithFunctionHallNames
           .slice(0, 10)
           .map((userTransaction) => (
-            <IndividualTransaction transaction={userTransaction} />
+            <IndividualTransaction
+              transaction={userTransaction}
+              cashAccount={cashAccount}
+            />
           ))}
         {userTransactions.length > 10 && (
           <h3
@@ -128,6 +123,7 @@ const IndividualCashAccount: React.FC<IndividualCashAccountProps> = ({
           }}
           transactionType={transactionPopup}
           platform={platform}
+          cashAccount={cashAccount}
         />
       )}
     </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import "./People.css";
-import TailwindButton from "../../../components/TailwindButton";
 import Avatar from "react-avatar";
 import { useStoreState } from "../../../store/hooks";
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
@@ -20,27 +19,64 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
     (user) => user.platforms.includes(platform),
   );
 
+  const user = useStoreState((state) => state.userStore.user)!;
+
   // Variables
   const functionHallManagementUserRoleData = [
     {
       role: UserRoleEnum.SUPER_ADMIN,
       name: "Super Admins",
+      visibleTo: [UserRoleEnum.SUPER_ADMIN],
+      addedBy: [UserRoleEnum.SUPER_ADMIN],
+      viewSimilar: true,
     },
     {
       role: UserRoleEnum.ADMIN,
       name: "Admins",
+      visibleTo: [UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN],
+      addedBy: [UserRoleEnum.SUPER_ADMIN],
+      viewSimilar: false,
     },
     {
       role: UserRoleEnum.FH_MANAGER,
       name: "Managers",
+      visibleTo: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.FH_MANAGER,
+      ],
+      addedBy: [UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN],
+      viewSimilar: false,
     },
     {
       role: UserRoleEnum.FH_SECURITY,
       name: "Security Guards",
+      visibleTo: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.FH_MANAGER,
+      ],
+      addedBy: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.FH_MANAGER,
+      ],
+      viewSimilar: true,
     },
     {
       role: UserRoleEnum.FH_VENDOR,
       name: "Vendors",
+      visibleTo: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.FH_MANAGER,
+      ],
+      addedBy: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.FH_MANAGER,
+      ],
+      viewSimilar: true,
     },
   ];
 
@@ -48,22 +84,57 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
     {
       role: UserRoleEnum.SUPER_ADMIN,
       name: "Super Admins",
+      visibleTo: [UserRoleEnum.SUPER_ADMIN],
+      addedBy: [UserRoleEnum.SUPER_ADMIN],
+      viewSimilar: true,
     },
     {
       role: UserRoleEnum.ADMIN,
       name: "Admins",
+      visibleTo: [UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN],
+      addedBy: [UserRoleEnum.SUPER_ADMIN],
+      viewSimilar: false,
     },
     {
       role: UserRoleEnum.SUPERVISOR,
       name: "Supervisors",
+      visibleTo: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.SUPERVISOR,
+      ],
+      addedBy: [UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN],
+      viewSimilar: false,
     },
     {
       role: UserRoleEnum.DRIVER,
       name: "Drivers",
+      visibleTo: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.SUPERVISOR,
+      ],
+      addedBy: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.SUPERVISOR,
+      ],
+      viewSimilar: true,
     },
     {
       role: UserRoleEnum.VENDOR,
       name: "Vendors",
+      visibleTo: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.SUPERVISOR,
+      ],
+      addedBy: [
+        UserRoleEnum.SUPER_ADMIN,
+        UserRoleEnum.ADMIN,
+        UserRoleEnum.SUPERVISOR,
+      ],
+      viewSimilar: true,
     },
   ];
 
@@ -86,52 +157,63 @@ const People: React.FC<PeopleProps> = ({ platform }) => {
       {(platform === PlatformEnum.FUNCTION_HALL
         ? functionHallManagementUserRoleData
         : siteManagementUserRoleData
-      ).map((userRole) => (
-        <div
-          key={userRole.role}
-          className="flex flex-col px-[8px] py-[16px] max-w-full"
-        >
-          <div className="flex font-airbnb font-bold text-[18px] justify-between">
-            <div className="flex justify-center items-center">
-              {userRole.name}
-            </div>
-            <div className="flex">
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setAddRoleUser(userRole.role);
-                }}
-              >
-                <PlusIcon />
-              </Button>
-            </div>
-          </div>
-          <div className="md:flex-wrap md:gap-[12px] gap-[4px] overflow-x-auto flex max-w-full w-full flex-row overflow-y-hidden mt-[8px]">
-            {users
-              .filter((user) => user.role === userRole.role)
-              .map((user) => (
-                <div
-                  key={user.username}
-                  onClick={() => {
-                    setAddRoleUser(userRole.role);
-                    setEditUser(user);
-                  }}
-                  className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] rounded-xl border bg-card text-card-foreground shadow justify-center items-center cursor-pointer"
-                >
-                  <div className="flex flex-[3] justify-center items-center">
-                    <Avatar name={user.name} round size="72" />
-                  </div>
-                  <div className="flex flex-1 items-center text-[14px] text-center">
-                    {user.name}
-                  </div>
-                  <div className="flex flex-1 text-[12px]">
-                    {user.personalMobileNumber}
-                  </div>
+      )
+        .filter((userRole) => userRole.visibleTo.includes(user.role))
+        .map((userRole) => (
+          <div
+            key={userRole.role}
+            className="flex flex-col px-[8px] py-[16px] max-w-full"
+          >
+            <div className="flex font-airbnb font-bold text-[18px] justify-between">
+              <div className="flex justify-center items-center">
+                {userRole.name}
+              </div>
+              {userRole.addedBy.includes(user.role) && (
+                <div className="flex">
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setAddRoleUser(userRole.role);
+                    }}
+                  >
+                    <PlusIcon />
+                  </Button>
                 </div>
-              ))}
+              )}
+            </div>
+            <div className="md:flex-wrap md:gap-[12px] gap-[4px] overflow-x-auto flex max-w-full w-full flex-row overflow-y-hidden mt-[8px]">
+              {users
+                .filter((us) => us.role === userRole.role)
+                .filter((us) =>
+                  userRole.viewSimilar
+                    ? true
+                    : user.role === userRole.role
+                    ? user._id === us._id
+                    : true,
+                )
+                .map((us) => (
+                  <div
+                    key={us.username}
+                    onClick={() => {
+                      setAddRoleUser(userRole.role);
+                      setEditUser(us);
+                    }}
+                    className="flex flex-col min-w-[120px] max-w-[120px] h-[160px] rounded-xl border bg-card text-card-foreground shadow justify-center items-center cursor-pointer"
+                  >
+                    <div className="flex flex-[3] justify-center items-center">
+                      <Avatar name={us.name} round size="72" />
+                    </div>
+                    <div className="flex flex-1 items-center text-[14px] text-center">
+                      {us.name}
+                    </div>
+                    <div className="flex flex-1 text-[12px]">
+                      {us.personalMobileNumber}
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
       <div>
         <AddPeopleModal
           roleToAdd={addRoleUser!}

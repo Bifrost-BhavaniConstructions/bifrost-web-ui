@@ -7,6 +7,7 @@ import { loginUserWithToken } from "../../adapters/AuthAdapter";
 import { PlatformEnum } from "../../enums/PlatformEnum";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { UserRoleEnum } from "@/enums/UserRoleEnum";
 
 interface SiteManagementHomeProps {}
 
@@ -57,6 +58,26 @@ const FunctionHallManagement: React.FC<SiteManagementHomeProps> = () => {
       navigate("/login");
     }
   }, [dataFetched, user, navigate, setUser, setDataFetched]);
+
+  React.useEffect(() => {
+    if (dataFetched) {
+      if (
+        [
+          UserRoleEnum.SUPER_ADMIN,
+          UserRoleEnum.ADMIN,
+          UserRoleEnum.FH_MANAGER,
+        ].includes(user!.role)
+      ) {
+        if (user!.role === UserRoleEnum.ADMIN) {
+          if (!user!.platforms.includes(PlatformEnum.FUNCTION_HALL)) {
+            navigate("/site-management");
+          }
+        }
+      } else {
+        navigate("/site-management");
+      }
+    }
+  }, [dataFetched]);
 
   return (
     <div className="w-[100%] h-[100%] bg-background">

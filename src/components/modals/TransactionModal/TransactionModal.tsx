@@ -13,12 +13,14 @@ import {
 import { UserRoleEnum } from "../../../enums/UserRoleEnum";
 import ChakraSelect from "../../ChakraSelect";
 import { PlatformEnum } from "../../../enums/PlatformEnum";
+import { CashAccount } from "@/types/CashAccount/CashAccount";
 
 interface TransactionModalProps {
   open: boolean;
   closeCallback: Function;
   transactionType?: TransactionTypeEnum;
   platform: PlatformEnum;
+  cashAccount: CashAccount;
 }
 
 const TransactionModal: React.FC<TransactionModalProps> = ({
@@ -26,6 +28,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   open,
   transactionType,
   platform,
+  cashAccount,
 }) => {
   // Objects
   const emptyTransaction: TransactionCreateWrapper = {
@@ -44,7 +47,6 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   );
   const { sites } = useStoreState((state) => state.siteManagementStore);
 
-  const { user } = useStoreState((state) => state.userStore);
   const { fetchCashAccount, fetchUserTransactions } = useStoreActions(
     (actions) => actions.cashAccountStore,
   );
@@ -63,8 +65,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
       delete transaction.site;
     }
     httpClient.post(`/cash-account/transaction`, transaction).then(() => {
-      fetchCashAccount(user?._id!);
-      fetchUserTransactions(user?._id!);
+      fetchCashAccount(cashAccount.user?._id!);
+      fetchUserTransactions(cashAccount.user?._id!);
       toast(`Transaction Added`, {
         position: toast.POSITION.BOTTOM_CENTER,
       });
@@ -76,34 +78,41 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   React.useEffect(() => {
     if (transactionType)
       setTransaction({ ...transaction, transactionType: transactionType });
-  }, [transactionType, user]);
+  }, [transactionType, cashAccount.user]);
 
   React.useEffect(() => {
     if (
       transaction.transactionType === TransactionTypeEnum.VENDOR_TRANSACTION &&
-      user
+      cashAccount.user
     ) {
-      setTransaction({ ...transaction, from: user._id! });
+      setTransaction({ ...transaction, from: cashAccount.user._id! });
     }
-    if (transaction.transactionType === TransactionTypeEnum.TRANSFER && user) {
-      setTransaction({ ...transaction, from: user._id! });
+    if (
+      transaction.transactionType === TransactionTypeEnum.TRANSFER &&
+      cashAccount.user
+    ) {
+      setTransaction({ ...transaction, from: cashAccount.user._id! });
     }
     if (
       transaction.transactionType === TransactionTypeEnum.ADD_BALANCE &&
-      user
+      cashAccount.user
     ) {
       delete transaction.from;
-      setTransaction({ ...transaction, to: user._id! });
+      setTransaction({ ...transaction, to: cashAccount.user._id! });
     }
     if (
       transaction.transactionType ===
         TransactionTypeEnum.MISCELLANEOUS_TRANSACTION &&
-      user
+      cashAccount.user
     ) {
       delete transaction.to;
-      setTransaction({ ...transaction, from: user._id!, toMisc: "" });
+      setTransaction({
+        ...transaction,
+        from: cashAccount.user._id!,
+        toMisc: "",
+      });
     }
-  }, [transaction.transactionType, user]);
+  }, [transaction.transactionType, cashAccount.user]);
 
   React.useEffect(() => {
     //console.log(transaction);

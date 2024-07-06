@@ -17,7 +17,9 @@ const AllTransactions: React.FC<AllTransactionsProps> = () => {
 
   // State Variables - Hooks
   const { user } = useStoreState((state) => state.userStore);
-  const { userTransactions } = useStoreState((state) => state.cashAccountStore);
+  const { userTransactions, cashAccount } = useStoreState(
+    (state) => state.cashAccountStore,
+  );
   const { functionHalls } = useStoreState((state) => state.functionHallStore);
   const { fetchCashAccount, fetchUserTransactions } = useStoreActions(
     (actions) => actions.cashAccountStore,
@@ -63,7 +65,10 @@ const AllTransactions: React.FC<AllTransactionsProps> = () => {
           All Transactions
         </h3>
         {transactionsWithFunctionHallNames.map((userTransaction) => (
-          <IndividualTransaction transaction={userTransaction} />
+          <IndividualTransaction
+            transaction={userTransaction}
+            cashAccount={cashAccount!}
+          />
         ))}
       </div>
     </div>

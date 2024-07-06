@@ -1,10 +1,8 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import "./Dock.css";
 import { useStoreActions, useStoreState } from "../../store/hooks";
 import {
   ArchiveBoxXMarkIcon,
-  ArrowsUpDownIcon,
-  Bars3Icon,
   BookOpenIcon,
   HomeIcon,
   HomeModernIcon,
@@ -12,20 +10,12 @@ import {
   ShieldCheckIcon,
   ShieldExclamationIcon,
 } from "@heroicons/react/24/solid";
-import SideNav from "../SideNav";
 import httpClient from "../../config/AxiosInterceptors";
 import { PlatformEnum } from "../../enums/PlatformEnum";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CurrencyRupeeIcon, UserIcon } from "@heroicons/react/20/solid";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,8 +31,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { HamburgerMenuIcon, PersonIcon } from "@radix-ui/react-icons";
-import { SearchIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/react";
+import { UserRoleEnum } from "@/enums/UserRoleEnum";
 
 interface DockProps {
   platform: PlatformEnum;
@@ -107,6 +97,7 @@ const Dock: React.FC<DockProps> = ({ platform }) => {
       label: "Function Halls",
       url: "/function-hall-management/function-hall",
       icon: <HomeModernIcon color="white" width={18} />,
+      roles: [UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN],
     },
     {
       label: "Enquiries/Bookings",
@@ -203,22 +194,34 @@ const Dock: React.FC<DockProps> = ({ platform }) => {
               {(platform === PlatformEnum.SITE
                 ? siteManagementHeader
                 : functionHallManagementHeader
-              ).map((headerItem) => (
-                <Link
-                  onClick={() => {
-                    setNavOpened(false);
-                    navigate(headerItem.url);
-                  }}
-                  className={`flex items-center gap-3 ${
-                    window.location.pathname === headerItem.url
-                      ? "bg-muted"
-                      : ""
-                  } rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary`}
-                >
-                  {headerItem.icon}
-                  {headerItem.label}
-                </Link>
-              ))}
+              )
+                .filter(
+                  (headerItem: {
+                    label: string;
+                    url: string;
+                    icon: ReactNode;
+                    roles?: UserRoleEnum[];
+                  }) =>
+                    headerItem.roles
+                      ? headerItem.roles.includes(user!.role)
+                      : true,
+                )
+                .map((headerItem) => (
+                  <Link
+                    onClick={() => {
+                      setNavOpened(false);
+                      navigate(headerItem.url);
+                    }}
+                    className={`flex items-center gap-3 ${
+                      window.location.pathname === headerItem.url
+                        ? "bg-muted"
+                        : ""
+                    } rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary`}
+                  >
+                    {headerItem.icon}
+                    {headerItem.label}
+                  </Link>
+                ))}
             </nav>
           </div>
           <div className="mt-auto p-4">
@@ -232,25 +235,32 @@ const Dock: React.FC<DockProps> = ({ platform }) => {
                 logout
               </span>
             </div>
-            <Card x-chunk="dashboard-02-chunk-0">
-              <CardHeader className="p-2 pt-0 md:p-4">
-                <CardTitle>Switch Application </CardTitle>
-              </CardHeader>
-              <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-                <Button
-                  size="sm"
-                  className="w-full"
-                  onClick={() => {
-                    switchPlatform();
-                  }}
-                >
-                  Switch to
-                  {platform === PlatformEnum.SITE
-                    ? " Function Halls"
-                    : " Site Management"}
-                </Button>
-              </CardContent>
-            </Card>
+            {[UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN].includes(
+              user!.role,
+            ) &&
+              (user!.role === UserRoleEnum.ADMIN
+                ? user!.platforms.length > 1
+                : true) && (
+                <Card x-chunk="dashboard-02-chunk-0">
+                  <CardHeader className="p-2 pt-0 md:p-4">
+                    <CardTitle>Switch Application </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
+                    <Button
+                      size="sm"
+                      className="w-full"
+                      onClick={() => {
+                        switchPlatform();
+                      }}
+                    >
+                      Switch to
+                      {platform === PlatformEnum.SITE
+                        ? " Function Halls"
+                        : " Site Management"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
           </div>
         </div>
       </div>
@@ -313,16 +323,23 @@ const Dock: React.FC<DockProps> = ({ platform }) => {
                 {user!.name}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  switchPlatform();
-                }}
-              >
-                Switch to <br />
-                {platform === PlatformEnum.SITE
-                  ? "Function Halls"
-                  : "Site Management"}
-              </DropdownMenuItem>
+              {[UserRoleEnum.SUPER_ADMIN, UserRoleEnum.ADMIN].includes(
+                user!.role,
+              ) &&
+                (user!.role === UserRoleEnum.ADMIN
+                  ? user!.platforms.length > 1
+                  : true) && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      switchPlatform();
+                    }}
+                  >
+                    Switch to <br />
+                    {platform === PlatformEnum.SITE
+                      ? "Function Halls"
+                      : "Site Management"}
+                  </DropdownMenuItem>
+                )}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {

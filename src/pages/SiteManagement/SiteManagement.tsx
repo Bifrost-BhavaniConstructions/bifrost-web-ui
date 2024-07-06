@@ -8,6 +8,7 @@ import { PlatformEnum } from "../../enums/PlatformEnum";
 import Dock from "@/components/Dock";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { UserRoleEnum } from "@/enums/UserRoleEnum";
 
 interface SiteManagementHomeProps {}
 
@@ -68,6 +69,26 @@ const SiteManagement: React.FC<SiteManagementHomeProps> = () => {
       navigate("/login");
     }
   }, [dataFetched, user, navigate, setUser, setDataFetched]);
+
+  React.useEffect(() => {
+    if (dataFetched) {
+      if (
+        [
+          UserRoleEnum.SUPER_ADMIN,
+          UserRoleEnum.ADMIN,
+          UserRoleEnum.SUPERVISOR,
+        ].includes(user!.role)
+      ) {
+        if (user!.role === UserRoleEnum.ADMIN) {
+          if (!user!.platforms.includes(PlatformEnum.SITE)) {
+            navigate("/function-hall-management");
+          }
+        }
+      } else {
+        navigate("/function-hall-management");
+      }
+    }
+  }, [dataFetched]);
 
   return (
     <div className="w-[100%] h-[100%] bg-background">

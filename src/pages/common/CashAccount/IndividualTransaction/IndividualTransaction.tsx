@@ -10,24 +10,26 @@ import {
 import { PlatformEnum } from "../../../../enums/PlatformEnum";
 import ChakraModal from "../../../../components/modals/ChakraModal";
 import { TransactionWithFunctionHallName } from "../AllTransactions/AllTransactions";
+import { CashAccount } from "@/types/CashAccount/CashAccount";
 
 interface IndividualTransactionProps {
   transaction: TransactionWithFunctionHallName;
   light?: boolean;
   minimal?: boolean;
+  cashAccount: CashAccount;
 }
 
 const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
   transaction,
   light = true,
   minimal = false,
+  cashAccount,
 }) => {
   // Objects
 
   // Variables
 
   // State Variables - Hooks
-  const { user } = useStoreState((state) => state.userStore);
   const [remark, setRemark] = React.useState<string | undefined>();
   const [clicked, setClicked] = React.useState<boolean>();
   // Functions
@@ -55,9 +57,11 @@ const IndividualTransaction: React.FC<IndividualTransactionProps> = ({
             </div>
             <div className="font-medium text-[12px] opacity-50">
               bal ₹
-              {transaction.from && transaction.from.user._id === user?._id
+              {transaction.from &&
+              transaction.from.user._id === cashAccount.user?._id
                 ? transaction.fromBalance
-                : transaction.to && transaction.to.user._id === user?._id
+                : transaction.to &&
+                  transaction.to.user._id === cashAccount.user?._id
                 ? transaction.toBalance
                 : 0}
             </div>

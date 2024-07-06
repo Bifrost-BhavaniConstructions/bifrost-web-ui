@@ -32,7 +32,7 @@ import {
   closeEnquiry,
   restoreEnquiry,
 } from "../../../../adapters/EnquiryAdapter";
-import { useStoreActions } from "../../../../store/hooks";
+import { useStoreActions, useStoreState } from "../../../../store/hooks";
 import CloseEnquiryModal from "../../../../components/modals/CloseEnquiryModal";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { cn } from "@/lib/utils";
@@ -54,6 +54,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { UserRoleEnum } from "@/enums/UserRoleEnum";
 
 interface IndividualEnquiryProps {
   enquiry: Enquiry;
@@ -85,6 +86,7 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
   const { fetchEnquiries } = useStoreActions(
     (actions) => actions.functionHallStore,
   );
+  const { user } = useStoreState((state) => state.userStore);
   // Functions
 
   // Hook Functions
@@ -205,27 +207,28 @@ const IndividualEnquiry: React.FC<IndividualEnquiryProps> = ({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            {!enquiry.isCheckedOut && (
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  if (!closed) {
-                    setCloseEnquiry(true);
-                  } else {
-                    await restoreEnquiry(enquiry._id);
-                    fetchEnquiries();
-                  }
-                }}
-              >
-                {!closed ? (
-                  <TrashIcon color={"white"} width={"14px"} />
-                ) : (
-                  <ArrowUturnUpIcon color={"white"} width={"14px"} />
-                )}
-              </Button>
-            )}
+            {!enquiry.isCheckedOut &&
+              user!.role === UserRoleEnum.SUPER_ADMIN && (
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    if (!closed) {
+                      setCloseEnquiry(true);
+                    } else {
+                      await restoreEnquiry(enquiry._id);
+                      fetchEnquiries();
+                    }
+                  }}
+                >
+                  {!closed ? (
+                    <TrashIcon color={"white"} width={"14px"} />
+                  ) : (
+                    <ArrowUturnUpIcon color={"white"} width={"14px"} />
+                  )}
+                </Button>
+              )}
           </CardHeader>
         </div>
         {enquiryClicked && (

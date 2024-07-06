@@ -11,7 +11,7 @@ import {
 } from "../../../enums/PlatformEnum";
 import httpClient from "../../../config/AxiosInterceptors";
 import { toast } from "react-toastify";
-import { useStoreActions } from "../../../store/hooks";
+import { useStoreActions, useStoreState } from "../../../store/hooks";
 import TailwindButton from "../../TailwindButton";
 import AssetOverview from "@/pages/SiteManagement/Assets/AssetOverview";
 
@@ -32,6 +32,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
   editUser,
   platform,
 }) => {
+  const { functionHalls } = useStoreState((state) => state.functionHallStore);
   // Objects
   const emptyUser: User = {
     aadhaar: "",
@@ -69,6 +70,7 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
       companyMobileNumber: "",
       salary: 0,
       payOT: 0,
+      functionHalls: [],
     },
     securityGuardSecondaryData: {
       aadhaar: "",
@@ -332,6 +334,33 @@ const AddPeopleModal: React.FC<AddPeopleModalProps> = ({
                 <Checkbox value={PlatformEnum.FUNCTION_HALL}>
                   Function Halls
                 </Checkbox>
+              </CheckboxGroup>
+            </Stack>
+          </div>
+        )}
+        {[UserRoleEnum.FH_MANAGER].includes(roleToAdd) && (
+          <div>
+            <div className="font-light text-[12px] opacity-70">
+              Function Halls
+            </div>
+            <Stack spacing={1} direction="column">
+              <CheckboxGroup
+                value={user.managerData?.functionHalls}
+                onChange={(_val: string[]) => {
+                  setUser({
+                    ...user,
+                    managerData: {
+                      ...user.managerData!,
+                      functionHalls: _val,
+                    },
+                  });
+                }}
+              >
+                {functionHalls.map((fH) => (
+                  <Checkbox key={fH._id} value={fH._id}>
+                    {fH.name}
+                  </Checkbox>
+                ))}
               </CheckboxGroup>
             </Stack>
           </div>

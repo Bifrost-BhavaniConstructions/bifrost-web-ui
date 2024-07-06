@@ -84,7 +84,11 @@ const CashAccountOverview: React.FC<CashAccountOverviewProps> = () => {
           {transactionsWithFunctionHallNames
             .slice(0, 5)
             .map((userTransaction) => (
-              <IndividualTransaction transaction={userTransaction} minimal />
+              <IndividualTransaction
+                transaction={userTransaction}
+                minimal
+                cashAccount={cashAccount}
+              />
             ))}
         </div>
         {userTransactions.length > 5 && (
@@ -107,6 +111,7 @@ const CashAccountOverview: React.FC<CashAccountOverviewProps> = () => {
           }}
           transactionType={transactionPopup}
           platform={PlatformEnum.SITE}
+          cashAccount={cashAccount}
         />
       )}
     </div>
