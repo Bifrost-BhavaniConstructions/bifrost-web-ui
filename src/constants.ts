@@ -1,2 +1,2 @@
-export const API = "https://bhavaniconstructions.co";
+export const API = "https://bhavaniconstructions.com";
 // export const API = "http://localhost:8080";
